@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="90" height="15" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="PixelArtTest" tilewidth="8" tileheight="8">
+  <image source="../images/PixelArtTest.png" width="160" height="144"/>
+  <tile id="0">
+   <properties>
+    <property name="behemoth" value=""/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="acid" value=""/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="slime" value=""/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="spawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="197">
+   <properties>
+    <property name="pickup" value=""/>
+   </properties>
+  </tile>
+  <tile id="223">
+   <properties>
+    <property name="warp" value=""/>
+   </properties>
+  </tile>
+  <tile id="235">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="237">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="244">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="245">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="246">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="264">
+   <properties>
+    <property name="platform" value=""/>
+   </properties>
+  </tile>
+  <tile id="271">
+   <properties>
+    <property name="spike" value=""/>
+   </properties>
+  </tile>
+  <tile id="272">
+   <properties>
+    <property name="spring" value=""/>
+   </properties>
+  </tile>
+  <tile id="273">
+   <properties>
+    <property name="button" value=""/>
+   </properties>
+  </tile>
+  <tile id="275">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="284">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="285">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="286">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="304">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="305">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="306">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="308">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="324">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="326">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="328">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="344">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="346">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="clouds" width="90" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3QsQkAMAwDsLyeXt6c0CVQjASePBhcBQBAsp6c4O7V1vZPXyT+CwCw5QIc3mYsGBUAAA==
+  </data>
+ </layer>
+ <layer name="ground" width="90" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2VSw7CMAxEnTuwLaVHoIgjIMQRqtx/yw7YEqRastKQuIn5LOZJoyqSYzsTtyUCAAAAAAAAgP9g54i6oN7V53jt3wq15HqX3ypnJ3q8UloyZjCoy/mmoENDvlvQXejR3toiv1XOfTjnWDgvx3ij+5X+XIxnUAu/T5bzk+M4e5g7L8eU7qOG8w98Zo+naH4+6fVppc/WvvjoG6tR75bf5rVij1naPmprcz2tz7l+eCbkP06uZexmfo4V8gmfvqXW2lqfSz3I+4vXqT1PcQHTyxgVAAA=
+  </data>
+ </layer>
+ <layer name="environment" width="90" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3SQQ5AMBSE4d7/Dj1Er4JDOIQFtqKZeeIR8X9JNzr1RqoUAAAAAADytY++O3NGDT53cupsFZnontvV5fSP6t2de6dnOXW2iUx07+7/z+n/d8O2RrGmFzpdmXn8lqd79+y9FiM3J81fARrQwocYFQAA
+  </data>
+ </layer>
+ <layer name="objects" width="90" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkbBKBgFo2AUjILhDzgZGRi4gJibcXCbOZKA0Gi4jQIqgQc4xLVINOcYFjFxEs0gxWxCdqBnEcEBzjMPBtb6IQ0EGCEYF38UDAwAAI+M2b4YFQAA
+  </data>
+ </layer>
+</map>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="90" height="20" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="PixelArtTest" tilewidth="8" tileheight="8">
+  <image source="PixelArtTest.png" width="160" height="144"/>
+  <tile id="0">
+   <properties>
+    <property name="behemoth" value=""/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="acid" value=""/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="slime" value=""/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="spawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="197">
+   <properties>
+    <property name="pickup" value=""/>
+   </properties>
+  </tile>
+  <tile id="223">
+   <properties>
+    <property name="warp" value=""/>
+   </properties>
+  </tile>
+  <tile id="235">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="237">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="244">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="245">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="246">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="264">
+   <properties>
+    <property name="platform" value=""/>
+   </properties>
+  </tile>
+  <tile id="271">
+   <properties>
+    <property name="spike" value=""/>
+   </properties>
+  </tile>
+  <tile id="272">
+   <properties>
+    <property name="spring" value=""/>
+   </properties>
+  </tile>
+  <tile id="273">
+   <properties>
+    <property name="button" value=""/>
+   </properties>
+  </tile>
+  <tile id="275">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="283">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="284">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="285">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="286">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="303">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="304">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="305">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="306">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="308">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="309">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="320">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="321">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="322">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="323">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="324">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="326">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="328">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="329">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="341">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="342">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="344">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="346">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="clouds" width="90" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3VsQ0AIAhFQVbXyXUIjATuEqpX/JIIAAA6Wfe29qz93p/UAKit0s/o3gAAsh0Cwrt1IBwAAA==
+  </data>
+ </layer>
+ <layer name="ground" width="90" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+1YWw7CIBCEe4iPG1iNHkBtjB5A03j/X//UXzFKgptdClbsgkwyPy2R3enMSitEQUFBQUEOUFKIIcGR7Lu6fHDRvBK89VjXv0M5/K4SywGWZap2uDY2Kr3H7MU52M9kI5Uc2L1QPVFrY6O29tol4lsKC0TnLdETXPttwLw0H+jMdZ5gOh80j0idsXXGshWqM9d5gulM9RRb56WkzyN7Zv4MRYjOdWSdY6PPmYJ5CPPOSl9bJ64z15kCAb3P8f8GYtChvrF8z8DkR73CuZGCN6Ye2mDzxFwzZ55TB63t5+XDRvKfG9C/G486K0tLqld4P5TY7/mSI6B/fXTGzgKc6Hp+bXPbzupZPNn2Pc/nGwHUNQedXaTe3Q0qZJ3rPeWRWSx7cJ8cdb4DC+NlPyAcAAA=
+  </data>
+ </layer>
+ <layer name="environment" width="90" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2XYQqAIAyFvf8dPIRXqc4QnaH6UUGBiDqK5XS+D4b6Q917SjljAACWGAMeHDEGMmi67zVr0XTfNWkBANTFcMZ2B/iPRTqBTpilE+gE+FyG1ej9PttE/808QOMSfYqYz61530K+sTPhqPuet10MLl9s0HKv3wK5fyFX/e6Clnt9Kfz644oxE7tQjtxcmn1dU4E9e3yvhZpL1GBffD4Ap8ui/iAcAAA=
+  </data>
+ </layer>
+ <layer name="objects" width="90" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3UsQmAMBBG4btSbcTGHdx/Buf4R1GwU0QI0SPe+yBFipAXMTHD2xQdkISiA5JQ4bq5ZkQCig5IQtEBDSq5y6odAQAAAOBW52b9PgaPLomV9fijH+NJ1u/zd8tH+6yn+cQPdcFbjBZswSzffCAcAAA=
+  </data>
+ </layer>
+</map>

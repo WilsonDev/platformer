@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="60" height="15" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="PixelArtTest" tilewidth="8" tileheight="8">
+  <image source="../images/PixelArtTest.png" width="160" height="144"/>
+  <tile id="285">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="305">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="clouds" width="60" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztz8EJADAIA0BX18nbJYQgd5BXPkkVAJCif+Zwl7hp8ydAugchRRAx
+  </data>
+ </layer>
+ <layer name="environment" width="60" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzrEJAEAIQ1H338Eh3PBaCwUjXCP/tQkkZgAAAMAfLmZd3wednKu7m0+VELOuH4NOztXdzSfc9AALdA0N
+  </data>
+ </layer>
+ <layer name="ground" width="60" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSigLZBjHGgX0AeA/AnCRiPEv0aMCDxQABbm9EhjA+1fOUZUN9Daz+h20RsbYcH0tg8ZPwOGyQsGwuqw6XuOhMkxg1YY5DYAtqYc1A==
+  </data>
+ </layer>
+</map>

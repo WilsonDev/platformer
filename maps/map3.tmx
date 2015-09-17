@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="90" height="15" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="PixelArtTest" tilewidth="8" tileheight="8">
+  <image source="../images/PixelArtTest.png" width="160" height="144"/>
+  <tile id="0">
+   <properties>
+    <property name="behemoth" value=""/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="slime" value=""/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="spawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="197">
+   <properties>
+    <property name="pickup" value=""/>
+   </properties>
+  </tile>
+  <tile id="223">
+   <properties>
+    <property name="warp" value=""/>
+   </properties>
+  </tile>
+  <tile id="237">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="271">
+   <properties>
+    <property name="spike" value=""/>
+   </properties>
+  </tile>
+  <tile id="272">
+   <properties>
+    <property name="spring" value=""/>
+   </properties>
+  </tile>
+  <tile id="273">
+   <properties>
+    <property name="button" value=""/>
+   </properties>
+  </tile>
+  <tile id="285">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="305">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="clouds2" width="90" height="15" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt0LENADAIA0FWD5OTHVKAyJ3kyt1HAAAAr85dLv66TWqxsS8A/KgAfWwQMQ==
+  </data>
+ </layer>
+ <layer name="clouds" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0LEJADAMA7C8nl7enNAlUIwEnjwYXAUAQLKenODu1db2T18k/gsAsOUC2UUWQw==
+  </data>
+ </layer>
+ <layer name="ground" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztkkEKgDAMBNOrZ895RP//JPENUmihiIYoK5F2B/ZQKCE7RIQQQgghhBDiYUnRG4xPcaw1M6Bd312uo2AnbVaumYHs6Nv/QbguczaJ94y+H4unntFeojxrwt+PxR88a0DOnb7e441na17j7t2yGn1Hj9czMgf5Mym0
+  </data>
+ </layer>
+ <layer name="environment" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztz0EKwCAQQ9G5/x08hFdpe5wubHdSUCYR6uY/cJXAxAgAAAAAALBDEbNRvyQ6fa7edTa5MvtVVcxG/Zro9Ll619nkyuxHxPG8c/KuDXucm99//L175t12L+QrGj44IHU=
+  </data>
+ </layer>
+ <layer name="objects" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt08ENABAMhWE2wMUO9p/BHEZxcBMibYSE/0t60KRPLzUGAAAAAIDzgr29AV5RJv0kzMmDXhRmSLJXf/Qn4pU3o53rlT0xX3K21eyNOyrOawQh
+  </data>
+ </layer>
+</map>

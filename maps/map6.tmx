@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="90" height="15" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="PixelArtTest" tilewidth="8" tileheight="8">
+  <image source="PixelArtTest.png" width="160" height="144"/>
+  <tile id="0">
+   <properties>
+    <property name="behemoth" value=""/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="acid" value=""/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="slime" value=""/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="spawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="197">
+   <properties>
+    <property name="pickup" value=""/>
+   </properties>
+  </tile>
+  <tile id="223">
+   <properties>
+    <property name="warp" value=""/>
+   </properties>
+  </tile>
+  <tile id="227">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="229">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="231">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="271">
+   <properties>
+    <property name="spike" value=""/>
+   </properties>
+  </tile>
+  <tile id="272">
+   <properties>
+    <property name="spring" value=""/>
+   </properties>
+  </tile>
+  <tile id="273">
+   <properties>
+    <property name="button" value=""/>
+   </properties>
+  </tile>
+  <tile id="275">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="285">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="297">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="298">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="305">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="314">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="315">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="316">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="317">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="318">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="337">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+  <tile id="338">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="clouds" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0zsNACAUA0CsgAfwL40g4ZEQfndbp3ZpSgAA8Ka8e8An6u4BHGt8sAQyc8YHWyCv7ge4RQfcGALM
+  </data>
+ </layer>
+ <layer name="ground" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztl2EOgyAMhdkdPIUewQ2OYCL3v4DZIYaJZLUrUATUKU3eD9Ag+foKVT3EKpQZD1VsTYL3njqYs2ufrdHToZdR73meW6nf607A+e3gjPf1z6ECnK3XuLWxxcuNY/2rcx53rEef9MU51/i9G7pERpUzHePC1p5h8sacqX6E2xdw/Clvztny1Qn3L4dbTs5zfcTee9gLLZrD437xGXdM+RSuh/tO2KvMPSKnN9qbs/DsaRJfwXmcF43mdGKNUP07XM/X3zdoDHMWOm+xP1Tg/dgo0Rfn4Azzy+XMzQ+1P0n4hfLW1n/Ds3J21VDMuRzLuQSLksJnS4wHUu43bn6oOynnd6uO0wemi+UW
+  </data>
+ </layer>
+ <layer name="environment" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztl1EOgyAQRPf8vYO9gz2K7RlMr9Daj8qHiVl3toiEQdKXkBBWAg47ZBHZMhpjMTGP1Hm5GOZ2V+1D3VGbOrPXt2hRZxaLjyxSdba8WYtHWaRqGWKWnpPwtLyA8b7oLmxSffyWunKzm9vVibEJeqF740yEnL05sbPQgX5ra7LpQb+1Nf/Ug+Ut5Dc9ruuGB5g3OLHcrOuZUmvGYHkL+e2XD1EdEsaf0Tvaos/Xu3dH0M8N8+73dF5qFNS83NPn6513KZ1Zd/9LsJYxNfORfF8T9jAJ9+1j4b139+TcUXLpXCt7/k9/+wVr82km
+  </data>
+ </layer>
+ <layer name="objects" width="90" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1kEKgCAQheFx1TZX3aH7n6FzeBRBiaAMJkJfwf+Bm0HkMcyAZtVqAP5iUgcAxLbO77NjeGpRBwBQzOE45xqukjrAB3nn5e5Kq55e5BmNfWmLzp7sf1RlC71ZAVQZRdoEXA==
+  </data>
+ </layer>
+</map>
