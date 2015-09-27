@@ -1,125 +1,181 @@
+require "Camera"
 require "Player"
 require "Pickup"
 require "Enemy"
+require "Behemoth"
 require "Button"
 require "Spring"
 require "Spike"
 require "Warp"
-ATL = require "lib/AdvTiledLoader/Loader"
-STI = require "lib/SimpleTiledImpl"
+require "Acid"
+require "Platform"
+sti = require "lib/SimpleTiledImpl"
 
-local g = love.graphics
-score = 0
+World = {}
 
-world = {}
-
-function world:load(level)
-	gravity = 800
-
-	--Mapa
-	ATL.path = "maps/"
-	map = ATL.load(level)
-	map:setDrawRange(0, 0, map.width * map.tileWidth, map.height * map.tileHeight)
-	map.layers["objects"].visible = false --warstwa obiektów
-
-	self:init()
+function World:new()
+	object = {}
+	setmetatable(object, { __index = World})
+	return object
 end
 
-function world:init()
-	p = {} --Bohater
-	buttons = {} --Button
-	enemies = {} --Przeciwnicy
-	pickups = {} --Znajdźki
-	springs = {}
-	spikes = {}
-	warps = {}
+function World:init(level)
+	if level == nil then
+		level = "map6"
+	end
+	-- Mapa
+	Global.map = sti.new("maps/" .. level .. ".lua")
+	-- Chowamy warstwę obiektów
+	Global.map.layers["objects"].visible = false
 
-	for x, y, tile in map("objects"):iterate() do
-		if tile.properties.spawn and not(tile == nil) then
-			p = player:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5))
-		end
-		if tile.properties.button and not(tile == nil) then
-			table.insert(buttons, button:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-		end
-		if tile.properties.spring and not(tile == nil) then
-			table.insert(springs, spring:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-		end
-		if tile.properties.spike and not(tile == nil) then
-			table.insert(spikes, spike:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-		end
-		if tile.properties.warp and not(tile == nil) then
-			table.insert(warps, warp:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-		end
-		if tile.properties.slime and not(tile == nil) then
-			table.insert(enemies, slime:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-		end
-		if tile.properties.behemoth and not(tile == nil) then
-			table.insert(enemies, behemoth:new(map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-		end
-		if tile.properties.pickup and not(tile == nil) then
-			local id = 1
-			table.insert(pickups, pickup:new(id, map.tileWidth * (x + 0.5), map.tileHeight * (y + 0.5)))
-			id = id + 1
+	local layer = Global.map.layers["objects"]
+
+	for y = 1, Global.map.height do
+		for x = 1, Global.map.width do
+			local tile = layer.data[y][x]
+
+			if tile and tile.properties then
+				if tile.properties.spawn and tile then
+					Global.p = Player:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5))
+				end
+				if tile.properties.button and tile then
+					table.insert(Global.buttons, 
+						Button:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.spring and tile then
+					table.insert(Global.springs, 
+						Spring:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.spike and tile then
+					table.insert(Global.spikes, 
+						Spike:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.warp and tile then
+					table.insert(Global.warps, 
+						Warp:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.slime and tile then
+					table.insert(Global.enemies, 
+						Slime:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.behemoth and tile then
+					table.insert(Global.enemies, 
+						Behemoth:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.platform and tile then
+					table.insert(Global.platforms, 
+						Platform:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.acid and tile then
+					table.insert(Global.acids, 
+						Acid:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+				end
+				if tile.properties.pickup and tile then
+					local id = 1
+					table.insert(Global.pickups, 
+						Pickup:new(id, Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
+					id = id + 1
+				end
+			end
 		end
 	end
+
+	-- Kamera
+	Global.camera = Camera:new()
+	Global.camera.scaleX = Global.scale
+	Global.camera.scaleY = Global.scale
+	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (windowWidth * Global.camera.scaleX),
+		(Global.map.height * Global.map.tileheight) - (windowHeight * Global.camera.scaleX))
 end
 
-function world:update(dt)
-	--Aktualizacja bohatera
-	p:update(dt, gravity, map)
-	--Aktualizacja przeciwników
-	for i in ipairs(enemies) do
-		enemies[i]:update(dt, gravity, map)
-	end
-	for j,w in ipairs({pickups, buttons, springs, warps, spikes}) do
-		for i,v in ipairs(w) do
-			v:update(dt)
+function World:update(dt)
+	Global.p:update(dt)
+
+	for _, v in ipairs({
+		Global.pickups, 
+		Global.enemies,
+		Global.buttons, 
+		Global.springs,
+		Global.platforms, 
+		Global.warps,
+		Global.acids,
+		Global.spikes}) do
+
+		for _, w in ipairs(v) do
+			w:update(dt)
 		end
 	end
+
+	Global.camera:setPosition(Global.p.x - windowWidth / Global.map.tilewidth,
+		Global.p.y - windowHeight / Global.map.tileheight)
 end
 
-function world:draw()
-	map.useSpriteBatch = true
-	map:draw()
+function World:draw()
+	Global.camera:set()
+
+	Global.map:setDrawRange(0, 0, Global.map.width * Global.map.tilewidth, Global.map.height * Global.map.tileheight)
+	Global.map:draw()
+
+	for _, v in ipairs({
+		Global.pickups, 
+		Global.enemies,
+		Global.buttons, 
+		Global.springs,
+		Global.platforms,
+		Global.warps,
+		Global.acids, 
+		Global.spikes}) do
+
+		for _, w in ipairs(v) do
+			w:draw()
+		end
+	end
+
+	Global.p:draw()
+
+	Global.camera:unset()
+
+	if Global.debug then
+		debug:info(math.floor(Global.p.x + 0.5), math.floor(Global.p.y + 0.5), Global.score)
+	end
 	
-	--Znajdźki
-	for i in ipairs(pickups) do
-		g.draw(sprite, pickups[i].Quads, pickups[i].x - (pickups[i].width / 2),
-			pickups[i].y - (pickups[i].width / 2))
+	if Global.p.invul then
+		love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
 	end
-	--Przeciwnicy
-	for i in ipairs(enemies) do
-		g.draw(sprite, enemies[i].Quads[enemies[i].iterator], enemies[i].x - (enemies[i].width / 2),
-			enemies[i].y - (enemies[i].height / 2), 0, enemies[i].xScale, 1, enemies[i].xOffset)
+	love.graphics.draw(hud, 792, 10, 0, 4, 4)
+	for i = 1, Global.p.hitpoints do
+		love.graphics.draw(sprite, heart, 940 - (i * 28), 22, 0, 4, 4)
 	end
-	--Buttony
-	for i in ipairs(buttons) do
-		g.draw(sprite, buttons[i].Quads[buttons[i].iterator], buttons[i].x - (buttons[i].width / 2),
-			buttons[i].y - (buttons[i].height / 2))
+	for i = 1,(5 - Global.p.firedShots) do
+		love.graphics.draw(sprite, clip, 940 - (i * 28), 46, 0, 4, 4)
 	end
-	for i in ipairs(springs) do
-		g.draw(sprite, springs[i].Quads[springs[i].iterator], springs[i].x - (springs[i].width / 2),
-			springs[i].y - (springs[i].height / 2))
-	end
-	for i in ipairs(spikes) do
-		g.draw(sprite, spikes[i].Quads[spikes[i].iterator], spikes[i].x - (spikes[i].width / 2),
-			spikes[i].y - (spikes[i].height / 2))
-	end
-	p:draw()
+end
+
+function World:keyreleased(key)
+	Global.p:keyreleased(key)
 end
 
 --Czyszczenie mapy z obiektów
-function world:clean()
-	for j,w in ipairs({pickups, enemies, buttons, springs, warps, spikes}) do
-		for i,v in ipairs(w) do
-			table.remove(w, i)
+function World:clean()
+	for _, v in ipairs({
+		Global.pickups, 
+		Global.enemies,
+		Global.buttons, 
+		Global.springs,
+		Global.platforms,
+		Global.warps,
+		Global.acids,
+		Global.spikes}) do
+
+		for j, w in ipairs(v) do
+			table.remove(v, j)
 		end
 	end
 end
 
-function world:change(level)
+function World:change(level)
 	self:clean()
-	self:load(level)
-	camera:setBounds(0, 0, (map.width * map.tileWidth) - (windowWidth * camera.scaleX),
-		(map.height * map.tileHeight) - (windowHeight * camera.scaleX))
+	self:init(level)
+	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (windowWidth * Global.camera.scaleX),
+		(Global.map.height * Global.map.tileheight) - (windowHeight * Global.camera.scaleX))
 end

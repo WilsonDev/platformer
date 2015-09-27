@@ -1,35 +1,33 @@
 local Quad = love.graphics.newQuad
 
-button = {}
+Button = {}
 
-function button:new(buttonX, buttonY)
+function Button:new(buttonX, buttonY)
 	local object = {
-	x = buttonX,
-	y = buttonY,
-	width = 8,
-	height = 8,
-	iterator = 1,
-	isPressed = false,
-	Quads = { --Klatki animacji
-		Quad(104, 104, 8, 8, 160, 144),
-		Quad(104, 112, 8, 8, 160, 144)}
+		x = buttonX,
+		y = buttonY,
+		width = 8,
+		height = 8,
+		iterator = 1,
+		isPressed = false,
+		Quads = { --Klatki animacji
+			Quad(104, 104, 8, 8, 160, 144),
+			Quad(104, 112, 8, 8, 160, 144)}
 	}
-	setmetatable(object, { __index = button })
+	setmetatable(object, { __index = Button })
 	return object
 end
 
 local clicked = false
 
-function button:update(dt)
-	local player = p
-	if self:touchesObject(player) then
+function Button:update(dt)
+	if self:touchesObject(Global.p) then
 		--[[if player.ySpeed > 0 then
 			player.y = self.y - self.height + 1
 			player:collide("floor")
 		end]]
 		if self.isPressed == false then
-			print("Button clicked")
-			table.insert(enemies, behemoth:new(0, 28))
+			table.insert(Global.enemies, Behemoth:new(0, 28))
 			self.isPressed = true
 			auClickOn:stop() auClickOn:play()
 		end
@@ -37,7 +35,8 @@ function button:update(dt)
 		clicked = true
 	else
 		if clicked == true then
-			auClickOff:stop() auClickOff:play()
+			auClickOff:stop()
+			auClickOff:play()
 			clicked = false
 		end
 		self.isPressed = false
@@ -45,7 +44,12 @@ function button:update(dt)
 	end
 end
 
-function button:touchesObject(object)
+function Button:draw()
+	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+			self.y - (self.height / 2))
+end
+
+function Button:touchesObject(object)
 	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1
 	local ay1, ay2 = self.y - self.height / 2, self.y + self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1

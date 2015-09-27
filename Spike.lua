@@ -1,8 +1,8 @@
 local Quad = love.graphics.newQuad
 
-spike = {}
+Spike = {}
 
-function spike:new(spikeX, spikeY)
+function Spike:new(spikeX, spikeY)
 	local object = {
 	x = spikeX,
 	y = spikeY,
@@ -12,24 +12,28 @@ function spike:new(spikeX, spikeY)
 	Quads = {
 		Quad(88, 104, 8, 8, 160, 144)}
 	}
-	setmetatable(object, { __index = spike })
+	setmetatable(object, { __index = Spike })
 	return object
 end
 
-function spike:update(dt)
-	local player = p
-	if self:touchesObject(player) then
-		if player.invul == false then
-			player.invul = true
-			player.invultime = 2
-			player.hitpoints = player.hitpoints - 1
+function Spike:update(dt)
+	if self:touchesObject(Global.p) then
+		if Global.p.invul == false then
+			Global.p.invul = true
+			Global.p.invultime = 2
+			Global.p.hitpoints = Global.p.hitpoints - 1
 			auPunch:stop() auPunch:play()
 		end
 		--player:jump()
 	end
 end
 
-function spike:touchesObject(object)
+function Spike:draw()
+	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+			self.y - (self.height / 2))
+end
+
+function Spike:touchesObject(object)
 	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1
 	local ay1, ay2 = self.y - self.height / 2, self.y + self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1

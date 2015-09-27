@@ -12,7 +12,7 @@ function debug:info(x, y, score)
 	g.print("R - reload", 10, 130)
 
 	--g.print(tostring(love.timer.getTime()), 463, 10)
-	g.print("score: " .. tostring(score), 450, 10)
+	g.print("score: " .. tostring(score), 430, 10)
 	--g.print("hitpoints: " .. tostring(p.hitpoints), 820, 30)
 	--love.graphics.setColor(255, 255, 255)
 end

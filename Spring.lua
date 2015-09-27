@@ -1,8 +1,8 @@
 local Quad = love.graphics.newQuad
 
-spring = {}
+Spring = {}
 
-function spring:new(springX, springY)
+function Spring:new(springX, springY)
 	local object = {
 	x = springX,
 	y = springY,
@@ -14,22 +14,28 @@ function spring:new(springX, springY)
 		Quad(96, 104, 8, 8, 160, 144),
 		Quad(96, 112, 8, 8, 160, 144)}
 	}
-	setmetatable(object, { __index = spring })
+	setmetatable(object, { __index = Spring })
 	return object
 end
 
-function spring:update(dt)
-	local player = p
+function Spring:update(dt)
+	local player = Global.p
 	if self:touchesObject(player) then
 		self.iterator = 2
-		player.ySpeed  = player.jumpSpeed - 120
-		auJump:stop() auJump:play()
+		player:specialJump(120)
+		auJump:stop() 
+		auJump:play()
 	elseif player.ySpeed > 0 then
 		self.iterator = 1
 	end
 end
 
-function spring:touchesObject(object)
+function Spring:draw()
+	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+			self.y - (self.height / 2))
+end
+
+function Spring:touchesObject(object)
 	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1
 	local ay1, ay2 = self.y - self.height / 2, self.y + self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1

@@ -1,32 +1,29 @@
 local Quad = love.graphics.newQuad
 
---###############--
---#    SLIME    #--
---###############-- 
+Slime = {}
 
-slime = {}
-
-function slime:new(slimeX, slimeY)
+function Slime:new(slimeX, slimeY)
 	local object = {
-	x = slimeX, y = slimeY,
-	width = 8, height = 8,
-	xSpeed = 0, ySpeed = 0,
-	hitpoints = 1,
-	runSpeed = 30,
-	onGround = false,
-	xScale = 1,
-	xOffset = 0,
-	iterator = 1,
-	timer = 0,
-	Quads = { --Klatki animacji
-		Quad( 8, 8, 8, 8, 160, 144),
-		Quad(16, 8, 8, 8, 160, 144)}
+		x = slimeX, y = slimeY,
+		width = 8, height = 8,
+		xSpeed = 0, ySpeed = 0,
+		hitpoints = 1,
+		runSpeed = 30,
+		onGround = false,
+		xScale = 1,
+		xOffset = 0,
+		iterator = 1,
+		timer = 0,
+		Quads = { --Klatki animacji
+			Quad( 8, 8, 8, 8, 160, 144),
+			Quad(16, 8, 8, 8, 160, 144)},
+		animationSpeed = 0.50
 	}
-	setmetatable(object, { __index = slime })
+	setmetatable(object, { __index = Slime })
 	return object
 end
 
-function slime:move()
+function Slime:move()
 	self.xSpeed = self.runSpeed
 	--Orientacja tekstur
 	if self.runSpeed > 0 then
@@ -38,7 +35,7 @@ function slime:move()
 	end
 end
 
-function slime:animation(dt, delay, frames)
+function Slime:animation(dt, delay, frames)
 	self.timer = self.timer + dt
 	if self.timer > delay then
 		self.timer = 0
@@ -49,7 +46,12 @@ function slime:animation(dt, delay, frames)
 	end
 end
 
-function slime:collide(event)
+function Slime:draw()
+	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
+end
+
+function Slime:collide(event)
 	if event == "floor" then
 		self.ySpeed = 0
 		self.onGround = true
@@ -62,178 +64,84 @@ function slime:collide(event)
 	end
 end
 
-function slime:mapColliding(map, x, y)
-	local layer = map.layers["ground"]
-	local tileX = math.floor(x / map.tileWidth)
-	local tileY = math.floor(y / map.tileHeight)
-	local tile = layer(tileX, tileY)
+function Slime:mapColliding(map, x, y)
+	local layer = Global.map.layers["ground"]
+	local tileX = math.floor(x / Global.map.tilewidth) + 1
+	local tileY = math.floor(y / Global.map.tileheight) + 1
+	local tile = layer.data[tileY][tileX]
 
-	return (not(tile == nil) and tile.properties.solid)
+	return tile and (tile.properties or {}).solid
 end
 
-function slime:update(dt, gravity, map)
+function Slime:update(dt, gravity, map)
 	local halfX = math.floor(self.width / 2)
 	local halfY = math.floor(self.height / 2)
 
-	self.ySpeed = self.ySpeed + (gravity * dt)
+	self.ySpeed = self.ySpeed + (Global.gravity * dt)
 
 	--Kolizje z mapą w pionie
 	local nextY = math.floor(self.y + (self.ySpeed * dt))
 	if self.ySpeed < 0 then
-		if not (self:mapColliding(map, self.x - halfX, nextY - halfY))
-		and not (self:mapColliding(map, self.x + halfX - 1, nextY - halfY)) then
+		if not (self:mapColliding(Global.map, self.x - halfX, nextY - halfY))
+		and not (self:mapColliding(Global.map, self.x + halfX - 1, nextY - halfY)) then
 			self.y = nextY
 			self.onGround = false
 		else
-			self.y = nextY + map.tileHeight - ((nextY - halfY) % map.tileHeight)
+			self.y = nextY + Global.map.tileheight - ((nextY - halfY) % Global.map.tileheight)
 			self:collide("ceiling")
 		end
 	elseif self.ySpeed > 0 then
-		if not (self:mapColliding(map, self.x - halfX, nextY + halfY))
-		and not (self:mapColliding(map, self.x + halfX - 1, nextY + halfY)) then
+		if not (self:mapColliding(Global.map, self.x - halfX, nextY + halfY))
+		and not (self:mapColliding(Global.map, self.x + halfX - 1, nextY + halfY)) then
 			self.y = nextY
 			self.onGround = false
 		else
-			self.y = nextY - ((nextY + halfY) % map.tileHeight)
+			self.y = nextY - ((nextY + halfY) % Global.map.tileheight)
 			self:collide("floor")
 		end
 	end
 
 	--Kolizje z mapą w poziomie
-	local nextX = math.floor(self.x + (self.xSpeed * dt) + 0.5) --funkcja math.floor niepoprawnie zaokrągla (dodano 0.5 dla poprawy wyniku)
+	local nextX = self.x + (self.xSpeed * dt)
 	if self.xSpeed > 0 then --prawy bok
-		if not (self:mapColliding(map, nextX + halfX, self.y - halfY))
-		and not (self:mapColliding(map, nextX + halfX, self.y + halfY - 1)) then
+		if not (self:mapColliding(Global.map, nextX + halfX, self.y - halfY))
+		and not (self:mapColliding(Global.map, nextX + halfX, self.y + halfY - 1)) then
 			self.x = nextX
 		else
-			self.x = nextX - ((nextX + halfX) % map.tileWidth)
+			self.x = nextX - ((nextX + halfX) % Global.map.tilewidth)
 			self:collide("wall")
 		end
 	elseif self.xSpeed < 0 then --lewy bok
-		if not (self:mapColliding(map, nextX - halfX, self.y - halfY))
-		and not (self:mapColliding(map, nextX - halfX, self.y + halfY - 1)) then
+		if not (self:mapColliding(Global.map, nextX - halfX, self.y - halfY))
+		and not (self:mapColliding(Global.map, nextX - halfX, self.y + halfY - 1)) then
 			self.x = nextX
 		else
-			self.x = nextX + map.tileWidth - ((nextX - halfX) % map.tileWidth)
+			self.x = nextX + Global.map.tilewidth - ((nextX - halfX) % Global.map.tilewidth)
 			self:collide("wall")
 		end
 	end
 
 	--Sprawdzaj czy natrafi na przepaść
-	if ((self:mapColliding(map, self.x - halfX, nextY + halfY))
-	and not (self:mapColliding(map, self.x + halfX, nextY + halfY)))
-	or ((self:mapColliding(map, self.x + halfX, nextY + halfY))
-	and not (self:mapColliding(map, self.x - halfX - 1, nextY + halfY))) then
+	if ((self:mapColliding(Global.map, self.x - halfX, nextY + halfY)) 
+		and not (self:mapColliding(Global.map, self.x + halfX, nextY + halfY))) 
+	or ((self:mapColliding(Global.map, self.x + halfX, nextY + halfY)) 
+		and not (self:mapColliding(Global.map, self.x - halfX - 1, nextY + halfY))) then
 		self.runSpeed = -1 * self.runSpeed
 	end
 
 	--Animacja
-	self:animation(dt, 0.50, 2)
+	self:animation(dt, self.animationSpeed, #self.Quads)
 
 	--Ruch
 	self:move()
 end
 
 --Kolizje z obiektami
-function slime:touchesObject(object)
+function Slime:touchesObject(object)
 	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1
 	local ay1, ay2 = self.y - self.height / 2, self.y + self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1
 	local by1, by2 = object.y - object.height / 2, object.y + object.height / 2 - 1
 
 	return ((ax2 >= bx1) and (ax1 <= bx2) and (ay2 >= by1) and (ay1 <= by2))
-end
-
---###############--
---#  BEHEMTOTH  #--
---###############-- 
-
-behemoth = {}
---Dziedziczenie po klasie Slime
-setmetatable(behemoth, { __index = slime })
-
-function behemoth:new(behemothX, behemothY)
-	local object = {
-	x = behemothX, y = behemothY,
-	width = 8, height = 8,
-	xSpeed = 0, ySpeed = 0,
-	hitpoints = 2,
-	runSpeed = 50,
-	onGround = false,
-	xScale = 1,
-	xOffset = 0,
-	iterator = 1,
-	timer = 0,
-	Quads = {
-		Quad( 0, 0, 8, 8, 160, 144),
-		Quad(24, 0, 8, 8, 160, 144),
-		Quad(32, 0, 8, 8, 160, 144),
-		Quad(40, 0, 8, 8, 160, 144)}
-	}
-	setmetatable(object, { __index = behemoth })
-	return object
-end
-
---override behemoth:update()
-function behemoth:update(dt, gravity, map)
-	local halfX = math.floor(self.width / 2)
-	local halfY = math.floor(self.height / 2)
-
-	self.ySpeed = self.ySpeed + (gravity * dt)
-
-	--Kolizje z mapą w pionie
-	local nextY = math.floor(self.y + (self.ySpeed * dt))
-	if self.ySpeed < 0 then
-		if not (self:mapColliding(map, self.x - halfX, nextY - halfY))
-		and not (self:mapColliding(map, self.x + halfX - 1, nextY - halfY)) then
-			self.y = nextY
-			self.onGround = false
-		else
-			self.y = nextY + map.tileHeight - ((nextY - halfY) % map.tileHeight)
-			self:collide("ceiling")
-		end
-	elseif self.ySpeed > 0 then
-		if not (self:mapColliding(map, self.x - halfX, nextY + halfY))
-		and not (self:mapColliding(map, self.x + halfX - 1, nextY + halfY)) then
-			self.y = nextY
-			self.onGround = false
-		else
-			self.y = nextY - ((nextY + halfY) % map.tileHeight)
-			self:collide("floor")
-		end
-	end
-
-	--Kolizje z mapą w poziomie
-	local nextX = math.floor(self.x + (self.xSpeed * dt) + 0.5) --funkcja math.floor niepoprawnie zaokrągla (dodano 0.5 dla poprawy wyniku)
-	if self.xSpeed > 0 then --prawy bok
-		if not (self:mapColliding(map, nextX + halfX, self.y - halfY))
-		and not (self:mapColliding(map, nextX + halfX, self.y + halfY - 1)) then
-			self.x = nextX
-		else
-			self.x = nextX - ((nextX + halfX) % map.tileWidth)
-			self:collide("wall")
-		end
-	elseif self.xSpeed < 0 then --lewy bok
-		if not (self:mapColliding(map, nextX - halfX, self.y - halfY))
-		and not (self:mapColliding(map, nextX - halfX, self.y + halfY - 1)) then
-			self.x = nextX
-		else
-			self.x = nextX + map.tileWidth - ((nextX - halfX) % map.tileWidth)
-			self:collide("wall")
-		end
-	end
-
-	--Sprawdzaj czy natrafi na przepaść
-	if ((self:mapColliding(map, self.x - halfX, nextY + halfY))
-	and not (self:mapColliding(map, self.x + halfX, nextY + halfY)))
-	or ((self:mapColliding(map, self.x + halfX, nextY + halfY))
-	and not (self:mapColliding(map, self.x - halfX - 1, nextY + halfY))) then
-		self.runSpeed = -1 * self.runSpeed
-	end
-
-	--Animacja
-	self:animation(dt, 0.14, 4)
-
-	--Ruch
-	self:move()
 end

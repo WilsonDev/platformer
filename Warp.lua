@@ -1,26 +1,30 @@
 local Quad = love.graphics.newQuad
 
-warp = {}
+Warp = {}
 
-function warp:new(warpX, warpY)
+function Warp:new(warpX, warpY)
 	local object = {
 	x = warpX,
 	y = warpY,
 	width = 8,
 	height = 8
 	}
-	setmetatable(object, { __index = warp })
+	setmetatable(object, { __index = Warp })
 	return object
 end
 
-function warp:update(dt)
-	local player = p
+function Warp:update(dt)
+	local player = Global.p
 	if self:touchesObject(player) then
-		world:change("map4.tmx")
+		World:change("map6.tmx")
 	end
 end
 
-function warp:touchesObject(object)
+function Warp:draw()
+	return nil
+end
+
+function Warp:touchesObject(object)
 	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1
 	local ay1, ay2 = self.y - self.height / 2, self.y + self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1
