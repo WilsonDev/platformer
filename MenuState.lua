@@ -50,7 +50,7 @@ function MenuState:draw()
 end
 
 function MenuState:keyreleased(key)
-	
+	return	
 end
 
 function MenuState:keypressed(key)

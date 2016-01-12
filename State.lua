@@ -1,5 +1,6 @@
 require "MenuState"
 require "GameState"
+require "ControlsMenuState"
 require "HighScoreState"
 
 State = {}
@@ -7,6 +8,7 @@ State = {}
 local states = {
 	"menu",
 	"scores",
+	"controls",
 	"game"
 }
 
@@ -29,6 +31,9 @@ function State:set(name)
 		self.currentState:init()
 	elseif not(self.name == name) and name == "scores" then 
 		self.currentState = HighScoreState:new()
+		self.currentState:init()
+	elseif not(self.name == name) and name == "controls" then 
+		self.currentState = ControlsMenuState:new()
 		self.currentState:init()
 	elseif not(self.name == name) and name == "game" then 
 		self.currentState = GameState:new()

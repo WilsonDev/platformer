@@ -37,9 +37,9 @@ function HighScoreState:draw()
 end
 
 function HighScoreState:keyreleased(key)
-	
+	return
 end
 
 function HighScoreState:keypressed(key)
-
+	return
 end
