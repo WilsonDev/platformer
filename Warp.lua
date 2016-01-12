@@ -16,7 +16,7 @@ end
 function Warp:update(dt)
 	local player = Global.p
 	if self:touchesObject(player) then
-		World:change("map6.tmx")
+		World:change("map6")
 	end
 end
 

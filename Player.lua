@@ -169,7 +169,7 @@ function Player:enemyColliding()
 end
 
 function Player:ammoUpdate(dt)
-	for i,v in ipairs(self.shots) do
+	for i, v in ipairs(self.shots) do
 		v:update(dt)
 
 		if (v.distance > v.range or v.distance < - v.range)
@@ -269,11 +269,6 @@ function Player:update(dt)
 		end
 	end
 
-	--Punkty życia
-	if self.hitpoints <= 0 or self.y > Global.map.height * Global.map.tileheight then
-		love.event.quit()
-	end
-
 	--Zmiana animacji
 	if self.state == "move" then
 		self:animation(dt, 0.14, 4)
@@ -281,10 +276,11 @@ function Player:update(dt)
 		self:animation(dt, 0.35, 3)
 	end
 
-	--Ruch
-	self:keypressed()
-
 	self.state = self:getState()
+end
+
+function Player:isAlive()
+	return not (self.hitpoints <= 0 or self.y > Global.map.height * Global.map.tileheight)
 end
 
 function Player:getState()
@@ -297,31 +293,35 @@ function Player:getState()
 	return myState
 end
 
-function Player:keypressed() --player:update()
-	local key = love.keyboard
+function Player:keypressed(key)
 	if not self.isPoked then
-		if love.keyboard.isDown("right") then --prawo
+		if key == "right" then --prawo
 			self:moveRight()
-		elseif love.keyboard.isDown("left") then --lewo
-			self:moveLeft()
-		else
-			self:stop()
 		end
-		if love.keyboard.isDown("z") and not self.hasJumped then --skok
+		if key == "left" then --lewo
+			self:moveLeft()
+		end
+		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true
+		end
+		if key == "r" then
+			self.firedShots = 0
+		end
+		if (key == "x") and (self.firedShots < 5) then
+			self:shot()	
 		end
 	end
 end
 
-function Player:keyreleased(key) --love.keyreleased()
+function Player:keyreleased(key)
 	if key == "z" or key == "up" then
 		self.hasJumped = false
 	end
-	if key == "r" then
-		self.firedShots = 0
+	if key == "right" and not love.keyboard.isDown("left") then --prawo
+		self:stop()
 	end
-	if (key == "x") and (self.firedShots < 5) then
-		self:shot()	
+	if key == "left" and not love.keyboard.isDown("right") then --lewo
+		self:stop()
 	end
 end

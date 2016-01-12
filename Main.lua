@@ -1,5 +1,6 @@
 require "Debug"
 require "State"
+require "Scores"
 require "Global"
 
 local state = {}
@@ -9,6 +10,9 @@ function love.load()
 	windowWidth = love.graphics.getWidth()
 	
 	loadReasources()
+
+	Global.scores = Scores:new("scores", 10)
+	Global.scores:load()
 
 	state = State:new()
 	state:set()
@@ -27,12 +31,16 @@ function love.keyreleased(key)
 	state:keyreleased(key)
 end
 
+function love.keypressed(key, isrepeat)
+	state:keypressed(key)
+end
+
 function loadReasources()
 	love.graphics.setBackgroundColor(31, 31, 31)
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	sprite = love.graphics.newImage("images/PixelArtTest.png")
 	hud = love.graphics.newImage("images/hud.png")
-	font = love.graphics.newFont("images/visitor2.ttf", 28)
+	font = love.graphics.newFont("images/visitor2.ttf", 38)
 	love.graphics.setFont(font)
 
 	heart = love.graphics.newQuad(32, 40, 8, 8, 160, 144)

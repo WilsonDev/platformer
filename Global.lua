@@ -3,6 +3,7 @@
 Global = {
 	debug = true,
 	score = 0,
+	scores = {},
 	gravity = 800,
 
 	map = {},
@@ -19,6 +20,6 @@ Global = {
 	warps = {},
 	acids = {},
 
-	audioMute = false
+	audioMute = true
 }
 

@@ -1,10 +1,12 @@
 require "MenuState"
 require "GameState"
+require "HighScoreState"
 
 State = {}
 
 local states = {
 	"menu",
+	"scores",
 	"game"
 }
 
@@ -18,12 +20,21 @@ function State:new()
 end
 
 function State:set(name)
+	if not name == nil then 
+		print(not(self.name == name) .. " " .. self.name .. " " .. name)
+	end
+
 	if name == nil or (not(self.name == name) and name == "menu") then
 		self.currentState = MenuState:new()
+		self.currentState:init()
+	elseif not(self.name == name) and name == "scores" then 
+		self.currentState = HighScoreState:new()
 		self.currentState:init()
 	elseif not(self.name == name) and name == "game" then 
 		self.currentState = GameState:new()
 		self.currentState:init()
+	elseif not(self.name == name) and name == "exit" then
+		love.event.quit()
 	end
 	self.name = name
 end
@@ -35,18 +46,9 @@ end
 function State:update(dt)
 	self.currentState:update(dt)
 
-
-	if love.keyboard.isDown("return", "enter") then --start
+	if self.currentState.isEnd then
+		Global.scores:add("ABC", Global.score)
 		self:set(states[2])
-	end
-	if love.keyboard.isDown("escape") then --wyjście
-		love.event.quit()
-	end
-	if love.keyboard.isDown("g") then --garbage collector
-		collectgarbage()
-	end
-	if love.keyboard.isDown("p") then --pause
-		self:set(states[1])
 	end
 end
 
@@ -56,4 +58,29 @@ end
 
 function State:keyreleased(key)
 	self.currentState:keyreleased(key)
+end
+
+function State:keypressed(key)
+	self.currentState:keypressed(key)
+
+	if key == "return" or key == "enter" then
+		if (self.currentState.subState) then
+			self:set(self.currentState.subState)
+		elseif self.currentState.parentMenu then
+			self:set(self.currentState.parentMenu)
+		end   
+   	end
+   	if key == "escape" then
+		if self.currentState.parentMenu then
+			self:set(self.currentState.parentMenu)
+		else
+		    self:set(states[1])
+		end
+	end
+	if key == "g" then --garbage collector
+		collectgarbage()
+	end
+	if key == "p" then --pause
+		--self:set(states[1])
+	end
 end

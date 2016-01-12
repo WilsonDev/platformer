@@ -73,8 +73,8 @@ function Platform:touchesObject(object)
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1
 	local by1, by2 = object.y - object.height / 2, object.y + object.height / 2 - 1
 
-	print("object1: " .. ax1 .. " " .. ax2 .. " " .. ay1 .. " " .. ay2)
-	print("object2: " .. bx1 .. " " .. bx2 .. " " .. by1 .. " " .. by2)
+	--print("object1: " .. ax1 .. " " .. ax2 .. " " .. ay1 .. " " .. ay2)
+	--print("object2: " .. bx1 .. " " .. bx2 .. " " .. by1 .. " " .. by2)
 
 	return ((ax2 >= bx1) and (ax1 <= bx2) and (ay2 > by1) and (ay1 <= by2))
 end

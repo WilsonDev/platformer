@@ -20,8 +20,10 @@ function World:new()
 end
 
 function World:init(level)
+	self:clean()
+
 	if level == nil then
-		level = "map6"
+		level = "map5"
 	end
 	-- Mapa
 	Global.map = sti.new("maps/" .. level .. ".lua")
@@ -134,13 +136,12 @@ function World:draw()
 	Global.p:draw()
 
 	Global.camera:unset()
-
-	if Global.debug then
-		debug:info(math.floor(Global.p.x + 0.5), math.floor(Global.p.y + 0.5), Global.score)
-	end
 	
 	if Global.p.invul then
 		love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
+	end
+	if Global.debug then
+		Debug:info(math.floor(Global.p.x + 0.5), math.floor(Global.p.y + 0.5), Global.score)
 	end
 	love.graphics.draw(hud, 792, 10, 0, 4, 4)
 	for i = 1, Global.p.hitpoints do
@@ -155,9 +156,13 @@ function World:keyreleased(key)
 	Global.p:keyreleased(key)
 end
 
+function World:keypressed(key)
+	Global.p:keypressed(key)
+end
+
 --Czyszczenie mapy z obiektów
 function World:clean()
-	for _, v in ipairs({
+	for i, v in ipairs({
 		Global.pickups, 
 		Global.enemies,
 		Global.buttons, 
@@ -167,14 +172,13 @@ function World:clean()
 		Global.acids,
 		Global.spikes}) do
 
-		for j, w in ipairs(v) do
-			table.remove(v, j)
+		for i = 0, #v do
+			v[i] = nil
 		end
 	end
 end
 
 function World:change(level)
-	self:clean()
 	self:init(level)
 	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (windowWidth * Global.camera.scaleX),
 		(Global.map.height * Global.map.tileheight) - (windowHeight * Global.camera.scaleX))

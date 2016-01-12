@@ -6,13 +6,14 @@ function menuItem:new(menuItemName, menuItemY)
 		x = 0, 
 		y = menuItemY,
 		selected = false,
+		redirectTo = nil,
 		timer = 0,
-		charWidth = 14
+		charWidth = 20
 	}
 
 	(function ()
 		if not(string.find(menuItemName, "i") == nil) then
-			object.x = (960 - string.len(menuItemName) * object.charWidth + 10) / 2
+			object.x = (960 - string.len(menuItemName) * object.charWidth + 16) / 2
 		else
 			object.x = (960 - string.len(menuItemName) * object.charWidth) / 2
 		end

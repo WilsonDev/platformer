@@ -17,12 +17,15 @@ function Spike:new(spikeX, spikeY)
 end
 
 function Spike:update(dt)
-	if self:touchesObject(Global.p) then
-		if Global.p.invul == false then
-			Global.p.invul = true
-			Global.p.invultime = 2
-			Global.p.hitpoints = Global.p.hitpoints - 1
-			auPunch:stop() auPunch:play()
+	local player = Global.p
+
+	if self:touchesObject(player) then
+		if player.invul == false then
+			player.invul = true
+			player.invultime = 2
+			player.hitpoints = player.hitpoints - 1
+			auPunch:stop() 
+			auPunch:play()
 		end
 		--player:jump()
 	end

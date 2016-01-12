@@ -66,6 +66,8 @@ function Acid:getState()
 end
 
 function Acid:update(dt)
+	local player = Global.p
+
 	if self:mapColliding(Global.map, self.x, self.y + (self.height / 2)) and not self.isFallen then
 		local tileY = math.floor(self.y / Global.map.tileheight)
 		self.y = tileY * Global.map.tileheight + 4
@@ -95,6 +97,16 @@ function Acid:update(dt)
 		self.iterator = 1
 	end
 
+	if self:touchesObject(player) then
+		if player.invul == false then
+			auPunch:stop()
+			auPunch:play()
+			player.invul = true
+			player.invultime = 2
+			player.hitpoints = player.hitpoints - 1
+		end
+	end
+
 	self.state = self:getState()
 end
 
@@ -105,4 +117,13 @@ function Acid:mapColliding(map, x, y)
 	local tile = layer.data[tileY][tileX]
 
 	return tile and (tile.properties or {}).solid
+end
+
+function Acid:touchesObject(object)
+	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1
+	local ay1, ay2 = self.y - self.height / 2, self.y + self.height / 2 - 1
+	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1
+	local by1, by2 = object.y - object.height / 2, object.y + object.height / 2 - 1
+
+	return ((ax2 >= bx1) and (ax1 <= bx2) and (ay2 >= by1) and (ay1 <= by2))
 end
