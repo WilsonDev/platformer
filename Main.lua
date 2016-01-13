@@ -8,11 +8,17 @@ local state = {}
 function love.load()
 	windowHeight = love.graphics.getHeight()
 	windowWidth = love.graphics.getWidth()
-	
+
 	loadReasources()
 
 	Global.scores = Scores:new("scores", 10)
 	Global.scores:load()
+	if #Global.scores == 0 then
+		for i = 1,10 do
+			Global.scores:add("AAA", 0)
+		end
+		Global.scores:save()
+	end
 
 	state = State:new()
 	state:set()
@@ -53,7 +59,7 @@ function loadReasources()
 	auClickOff = love.audio.newSource("sounds/clickoff.wav","static")
 	auPunch = love.audio.newSource("sounds/punch.wav","static")
 	auJump = love.audio.newSource("sounds/jump.wav","static")
-	
+
 	mainTheme = love.audio.newSource("sounds/Underclocked.mp3")
 	mainTheme:setLooping(true)
 	mainTheme:setVolume(0.4)

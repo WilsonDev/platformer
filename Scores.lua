@@ -6,7 +6,7 @@ function Scores:new(scoresFilename, scoresPlaces)
 		places = scoresPlaces,
 		scores = {}
 	}
-	setmetatable(object, { __index = Scores, 
+	setmetatable(object, { __index = Scores,
 		__call = function(self)
 			local i = 0
 			return function()
@@ -15,17 +15,17 @@ function Scores:new(scoresFilename, scoresPlaces)
 					return i, unpack(self.scores[i])
 				end
 			end
-		end 
+		end
 	})
-	
+
 	return object
 end
 
 function Scores:load()
 	local file = love.filesystem.newFile(self.filename)
 
-	if not love.filesystem.exists(self.filename) or not file:open("r") then 
-		return 
+	if not love.filesystem.exists(self.filename) or not file:open("r") then
+		return
 	end
 
 	for line in file:lines() do
@@ -48,8 +48,8 @@ end
 function Scores:save()
 	local file = love.filesystem.newFile(self.filename)
 
-	if not file:open("w") then 
-		return 
+	if not file:open("w") then
+		return
 	end
 
 	for i = 1, #self.scores do

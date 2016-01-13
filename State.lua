@@ -2,6 +2,7 @@ require "MenuState"
 require "GameState"
 require "ControlsMenuState"
 require "HighScoreState"
+require "SubmitScoreState"
 
 State = {}
 
@@ -9,6 +10,7 @@ local states = {
 	"menu",
 	"scores",
 	"controls",
+	"submit",
 	"game"
 }
 
@@ -22,23 +24,20 @@ function State:new()
 end
 
 function State:set(name)
-	if not name == nil then 
-		print(not(self.name == name) .. " " .. self.name .. " " .. name)
-	end
-
 	if name == nil or (not(self.name == name) and name == "menu") then
 		self.currentState = MenuState:new()
 		self.currentState:init()
-	elseif not(self.name == name) and name == "scores" then 
+	elseif not(self.name == name) and name == "scores" then
 		self.currentState = HighScoreState:new()
 		self.currentState:init()
-	elseif not(self.name == name) and name == "controls" then 
+	elseif not(self.name == name) and name == "controls" then
 		self.currentState = ControlsMenuState:new()
 		self.currentState:init()
-	elseif not(self.name == name) and name == "game" then 
+	elseif not(self.name == name) and name == "game" then
 		self.currentState = GameState:new()
 		self.currentState:init()
 	elseif not(self.name == name) and name == "exit" then
+		Global.scores:save()
 		love.event.quit()
 	end
 	self.name = name
@@ -53,7 +52,7 @@ function State:update(dt)
 
 	if self.currentState.isEnd then
 		Global.scores:add("ABC", Global.score)
-		self:set(states[2])
+		self:set("scores")
 	end
 end
 
@@ -73,13 +72,13 @@ function State:keypressed(key)
 			self:set(self.currentState.subState)
 		elseif self.currentState.parentMenu then
 			self:set(self.currentState.parentMenu)
-		end   
+		end
    	end
    	if key == "escape" then
 		if self.currentState.parentMenu then
 			self:set(self.currentState.parentMenu)
 		else
-		    self:set(states[1])
+		    self:set("menu")
 		end
 	end
 	if key == "g" then --garbage collector
