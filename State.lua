@@ -30,6 +30,9 @@ function State:set(name)
 	elseif not(self.name == name) and name == "scores" then
 		self.currentState = HighScoreState:new()
 		self.currentState:init()
+	elseif not(self.name == name) and name == "submit" then
+		self.currentState = SubmitScoreState:new()
+		self.currentState:init()
 	elseif not(self.name == name) and name == "controls" then
 		self.currentState = ControlsMenuState:new()
 		self.currentState:init()
@@ -51,8 +54,9 @@ function State:update(dt)
 	self.currentState:update(dt)
 
 	if self.currentState.isEnd then
-		Global.scores:add("ABC", Global.score)
-		self:set("scores")
+		self:set("submit")
+		--Global.scores:add("ABC", Global.score)
+		--self:set("scores")
 	end
 end
 

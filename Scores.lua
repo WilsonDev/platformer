@@ -17,7 +17,6 @@ function Scores:new(scoresFilename, scoresPlaces)
 			end
 		end
 	})
-
 	return object
 end
 
