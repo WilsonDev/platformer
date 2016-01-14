@@ -41,10 +41,18 @@ end
 
 function SubmitScoreState:keypressed(key)
 	if key == "up" then
-		self.charSelected = self.charSelected + 1
+		if self.charSelected == #alphabet then
+			self.charSelected = 1
+		else
+			self.charSelected = self.charSelected + 1
+		end
 	end
 	if key == "down" then
-		self.charSelected = self.charSelected - 1
+		if self.charSelected == 1 then
+			self.charSelected = #alphabet
+		else
+			self.charSelected = self.charSelected - 1
+		end
 	end
 	if key == "enter" then
 		self.charSelected = 1

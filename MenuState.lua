@@ -9,11 +9,11 @@ local subStates = {
 	"exit"
 }
 
-function MenuState:new()
+function MenuState:new(stateItemSelected)
 	local object = {
 		menuItems = {},
-		itemSelected = 1,
-		subState = "game"
+		itemSelected = stateItemSelected,
+		subState = subStates[stateItemSelected]
 	}
 	setmetatable(object, { __index = MenuState })
 	return object
@@ -25,7 +25,7 @@ function MenuState:init()
 	table.insert(self.menuItems, menuItem:new("Controls", 155))
 	table.insert(self.menuItems, menuItem:new("Exit", 185))
 
-	self.menuItems[1]:select(true)
+	self.menuItems[self.itemSelected]:select(true)
 end
 
 function MenuState:update(dt)
@@ -54,10 +54,16 @@ function MenuState:keypressed(key)
 		self.menuItems[self.itemSelected]:select(false)
 		self.itemSelected = self.itemSelected - 1
 		self.subState = subStates[self.itemSelected]
+
+		auSelect:stop()
+		auSelect:play()
 	end
 	if key == "down" and self.itemSelected < #self.menuItems then
 		self.menuItems[self.itemSelected]:select(false)
 		self.itemSelected = self.itemSelected + 1
 		self.subState = subStates[self.itemSelected]
+		
+		auSelect:stop()
+		auSelect:play()
 	end
 end
