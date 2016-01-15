@@ -23,7 +23,7 @@ function HighScoreState:draw()
   	love.graphics.print("(C) 2016 WILSON", 10, 285)
 
 	local prefix = ""
-	for i, score, name in Global.kscores() do
+	for i, score, name in Global.scores() do
 		if i == 1 then
 			prefix = "1ST"
 		elseif i == 2 then
