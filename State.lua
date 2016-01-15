@@ -61,9 +61,6 @@ function State:update(dt)
 	if self.currentState.itemSelected then
 		self.lastSelectedItem = self.currentState.itemSelected
 	end
-	if self.currentState.itemSelected then
-		self.lastSelectedItem = self.currentState.itemSelected
-	end
 end
 
 function State:draw()

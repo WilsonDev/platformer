@@ -16,6 +16,7 @@ function GameState:init()
 	self.world:init()
 
 	self.isEnd = false
+	Global.score = 0
 end
 
 function GameState:update(dt)
@@ -31,9 +32,9 @@ function GameState:draw()
 end
 
 function GameState:keyreleased(key)
-	self.world:keyreleased(key)	
+	self.world:keyreleased(key)
 end
 
 function GameState:keypressed(key)
-	self.world:keypressed(key)	
+	self.world:keypressed(key)
 end

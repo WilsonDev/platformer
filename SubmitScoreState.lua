@@ -3,20 +3,23 @@ SubmitScoreState = {}
 local alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
             'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
             's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0',
-            '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+            '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
 function SubmitScoreState:new()
 	object = {
 		charSelected = 1,
 		itemSelected = 1,
-		submitName = {}
+		submitName = {},
+    parentMenu = "scores"
 	}
 	setmetatable(object, { __index = SubmitScoreState })
 	return object
 end
 
 function SubmitScoreState:init()
-	return
+  for i = 1, 3 do
+    self.submitName[i] = alphabet[1]
+  end
 end
 
 function SubmitScoreState:update(dt)
@@ -30,13 +33,26 @@ function SubmitScoreState:draw()
 	love.graphics.print("Enter initials", 350, 100)
 
 	for i, char in ipairs(self.submitName) do
-		love.graphics.print(char, 440 + 30 * i, 160)
-		love.graphics.rectangle("fill", 438 + 30 * i, 190, 16, 3)
+		love.graphics.print(char, 400 + 30 * i, 160)
 	end
+  for i = 1, 3 do
+    if i == self.itemSelected then
+      love.graphics.rectangle("fill", 400 + 30 * i, 190, 16, 3)
+    end
+  end
 end
 
 function SubmitScoreState:keyreleased(key)
 	return
+end
+
+local function findIndexOfChar(char)
+  for i, v in ipairs(alphabet) do
+    if v == char then
+      return i
+    end
+  end
+  return 1
 end
 
 function SubmitScoreState:keypressed(key)
@@ -55,10 +71,22 @@ function SubmitScoreState:keypressed(key)
     end
 	end
 	if key == "right" then
-		self.charSelected = 1
-		self.itemSelected = self.itemSelected + 1
+    if self.itemSelected < 3 then
+		  self.charSelected = findIndexOfChar(self.submitName[self.itemSelected + 1])
+		  self.itemSelected = self.itemSelected + 1
+    end
+	end
+  if key == "left" then
+    if self.itemSelected > 1 then
+		  self.charSelected = findIndexOfChar(self.submitName[self.itemSelected - 1])
+		  self.itemSelected = self.itemSelected - 1
+    end
 	end
   if key == "return" or key == "enter" then
-
+    local name = ""
+    for i = 1, 3 do
+      name = name .. self.submitName[i]
+    end
+    Global.scores:add(name, Global.score)
   end
 end
