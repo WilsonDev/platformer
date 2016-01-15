@@ -47,6 +47,7 @@ function State:set(name)
 	self.name = name
 end
 
+
 function State:init()
 	self.currentState:init()
 end
@@ -56,6 +57,9 @@ function State:update(dt)
 
 	if self.currentState.isEnd then
 		self:set("submit")
+	end
+	if self.currentState.itemSelected then
+		self.lastSelectedItem = self.currentState.itemSelected
 	end
 	if self.currentState.itemSelected then
 		self.lastSelectedItem = self.currentState.itemSelected

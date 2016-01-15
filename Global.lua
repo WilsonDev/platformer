@@ -20,6 +20,6 @@ Global = {
 	warps = {},
 	acids = {},
 
-	audioMute = true
+	audioMute = false
 }
 
