@@ -3,7 +3,7 @@ menuItem = {}
 function menuItem:new(menuItemName, menuItemY)
 	local object = {
 		name = menuItemName,
-		x = 0, 
+		x = 0,
 		y = menuItemY,
 		selected = false,
 		redirectTo = nil,
@@ -12,8 +12,9 @@ function menuItem:new(menuItemName, menuItemY)
 	}
 
 	(function ()
-		if not(string.find(menuItemName, "i") == nil) then
-			object.x = (960 - string.len(menuItemName) * object.charWidth + 16) / 2
+		local _, occurence = string.gsub(menuItemName, "[1]", "")
+		if occurence > 0 then
+			object.x = (960 - string.len(menuItemName) * object.charWidth + (occurence * 18)) / 2
 		else
 			object.x = (960 - string.len(menuItemName) * object.charWidth) / 2
 		end
@@ -36,7 +37,7 @@ function menuItem:draw()
 		love.graphics.push()
 		love.graphics.translate(0, math.sin(self.timer * 12) * 2.5)
 		love.graphics.print(self.name, self.x, self.y)
-		love.graphics.pop()	
+		love.graphics.pop()
 	else
 		love.graphics.print(self.name, self.x, self.y)
 	end

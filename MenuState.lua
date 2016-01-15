@@ -21,10 +21,10 @@ function MenuState:new(stateItemSelected)
 end
 
 function MenuState:init()
-	table.insert(self.menuItems, menuItem:new("New", 95))
-	table.insert(self.menuItems, menuItem:new("Scores", 125))
-	table.insert(self.menuItems, menuItem:new("Controls", 155))
-	table.insert(self.menuItems, menuItem:new("Exit", 185))
+	table.insert(self.menuItems, menuItem:new("NEW", 95))
+	table.insert(self.menuItems, menuItem:new("SCORES", 125))
+	table.insert(self.menuItems, menuItem:new("CONTROLS", 155))
+	table.insert(self.menuItems, menuItem:new("EXIT", 185))
 
 	self.menuItems[self.itemSelected]:select(true)
 end
@@ -38,8 +38,8 @@ function MenuState:update(dt)
 end
 
 function MenuState:draw()
-	love.graphics.print("Nothing to fear", 10, 5)
-  	love.graphics.print("(C) 2016 Wilson", 10, 285)
+	love.graphics.print("NOTHING TO FEAR", 10, 5)
+  	love.graphics.print("(C) 2016 WILSON", 10, 285)
 
 	for _, v in ipairs(self.menuItems) do
 		v:draw()

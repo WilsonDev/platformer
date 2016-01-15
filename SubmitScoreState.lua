@@ -1,8 +1,8 @@
 SubmitScoreState = {}
 
-local alphabet = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-            'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-            's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0',
+local alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+            'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+            'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0',
             '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
 function SubmitScoreState:new()
@@ -27,10 +27,10 @@ function SubmitScoreState:update(dt)
 end
 
 function SubmitScoreState:draw()
-	love.graphics.print("Nothing to fear", 10, 5)
-  	love.graphics.print("(C) 2016 Wilson", 10, 285)
+  love.graphics.print("NOTHING TO FEAR", 10, 5)
+  	love.graphics.print("(C) 2016 WILSON", 10, 285)
 
-	love.graphics.print("Enter initials", 350, 100)
+	love.graphics.print("ENTER INITIALS", 350, 100)
 
 	for i, char in ipairs(self.submitName) do
 		love.graphics.print(char, 400 + 30 * i, 160)

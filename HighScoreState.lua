@@ -4,7 +4,6 @@ HighScoreState = {}
 
 function HighScoreState:new()
 	local object = {
-		menuItems = {},
 		parentMenu = "menu"
 	}
 	setmetatable(object, { __index = HighScoreState })
@@ -12,33 +11,31 @@ function HighScoreState:new()
 end
 
 function HighScoreState:init()
-	local prefix
-	for i, score, name in Global.scores() do
-		if i == 1 then
-			prefix = "1st"
-		elseif i == 2 then
-			prefix = "2nd"
-		elseif i == 3 then
-			prefix = "3rd"
-		else
-			prefix = i .. "th"
-		end
-		table.insert(self.menuItems, menuItem:new(prefix .. " " .. name .. " " .. score, 10 + 30 * (i - 1)))
-	end
+	return
 end
 
 function HighScoreState:update(dt)
-	for _, v in ipairs(self.menuItems) do
-		v:update(dt)
-	end
+	return
 end
 
 function HighScoreState:draw()
-	love.graphics.print("Nothing to fear", 10, 5)
-  	love.graphics.print("(C) 2016 Wilson", 10, 285)
+	love.graphics.print("NOTHING TO FEAR", 10, 5)
+  	love.graphics.print("(C) 2016 WILSON", 10, 285)
 
-	for _, v in ipairs(self.menuItems) do
-		v:draw()
+	local prefix = ""
+	for i, score, name in Global.kscores() do
+		if i == 1 then
+			prefix = "1ST"
+		elseif i == 2 then
+			prefix = "2ND"
+		elseif i == 3 then
+			prefix = "3RD"
+		else
+			prefix = i .. "TH"
+		end
+		love.graphics.print(prefix, 355, 10 + 30 * (i - 1))
+		love.graphics.print(name, 455, 10 + 30 * (i - 1))
+		love.graphics.print(score, 555, 10 + 30 * (i - 1))
 	end
 end
 
