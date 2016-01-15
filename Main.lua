@@ -59,6 +59,7 @@ function loadReasources()
 	auClickOff = love.audio.newSource("sounds/clickoff.wav","static")
 	auPunch = love.audio.newSource("sounds/punch.wav","static")
 	auJump = love.audio.newSource("sounds/jump.wav","static")
+	auWarp = love.audio.newSource("sounds/warp.wav","static")
 
 	mainTheme = love.audio.newSource("sounds/Underclocked.mp3")
 	mainTheme:setLooping(true)

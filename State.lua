@@ -17,7 +17,8 @@ local states = {
 function State:new()
 	object = {
 		name = "",
-		currentState = {}
+		currentState = {},
+		lastSelectedItem = 1
 	}
 	setmetatable(object, { __index = State })
 	return object
@@ -25,7 +26,7 @@ end
 
 function State:set(name)
 	if name == nil or (not(self.name == name) and name == "menu") then
-		self.currentState = MenuState:new()
+		self.currentState = MenuState:new(self.lastSelectedItem)
 		self.currentState:init()
 	elseif not(self.name == name) and name == "scores" then
 		self.currentState = HighScoreState:new()
@@ -55,8 +56,9 @@ function State:update(dt)
 
 	if self.currentState.isEnd then
 		self:set("submit")
-		--Global.scores:add("ABC", Global.score)
-		--self:set("scores")
+	end
+	if self.currentState.itemSelected then
+		self.lastSelectedItem = self.currentState.itemSelected
 	end
 end
 
@@ -77,12 +79,12 @@ function State:keypressed(key)
 		elseif self.currentState.parentMenu then
 			self:set(self.currentState.parentMenu)
 		end
-   	end
-   	if key == "escape" then
+  end
+	if key == "escape" then
 		if self.currentState.parentMenu then
 			self:set(self.currentState.parentMenu)
 		else
-		    self:set("menu")
+			self:set("menu")
 		end
 	end
 	if key == "g" then --garbage collector

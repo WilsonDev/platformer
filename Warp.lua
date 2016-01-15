@@ -17,11 +17,14 @@ function Warp:update(dt)
 	local player = Global.p
 	if self:touchesObject(player) then
 		World:change("map6")
+
+		auWarp:stop()
+		auWarp:play()
 	end
 end
 
 function Warp:draw()
-	return nil
+	return
 end
 
 function Warp:touchesObject(object)
