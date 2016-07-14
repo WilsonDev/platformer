@@ -82,6 +82,7 @@ function State:keypressed(key)
 		end
   end
 	if key == "escape" then
+		mainTheme:stop()
 		if self.currentState.parentMenu then
 			self:set(self.currentState.parentMenu)
 		else

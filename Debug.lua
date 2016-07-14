@@ -6,7 +6,7 @@ function Debug:info(x, y, score)
 	g.print("fps: " .. tostring(love.timer.getFPS()) .. " dt: " .. string.format("%.3f", love.timer.getDelta()), 10, 5)
 	g.print("x: " .. tostring(x) .. " y: " .. tostring(y), 10, 25)
 	g.print("mem: " .. tostring(math.floor(collectgarbage("count"))) .. " kb", 10, 45)
-	
+
 	--g.print("Z - jump", 10, 90)
 	--g.print("X - shoot", 10, 110)
 	--g.print("R - reload", 10, 130)
