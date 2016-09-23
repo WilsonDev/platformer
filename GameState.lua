@@ -15,6 +15,8 @@ function GameState:init()
 	self.world = World:new()
 	self.world:init()
 
+	mainTheme:play()
+
 	self.isEnd = false
 	Global.score = 0
 end
