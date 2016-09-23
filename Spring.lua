@@ -20,11 +20,11 @@ end
 
 function Spring:update(dt)
 	local player = Global.p
-	
+
 	if self:touchesObject(player) then
 		self.iterator = 2
 		player:specialJump(120)
-		auJump:stop() 
+		auJump:stop()
 		auJump:play()
 	elseif player.ySpeed > 0 then
 		self.iterator = 1

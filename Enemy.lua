@@ -28,7 +28,7 @@ function Slime:move()
 	--Orientacja tekstur
 	if self.runSpeed > 0 then
 		self.xScale = 1
-		self.xOffset = 0 
+		self.xOffset = 0
 	else
 		self.xScale = -1
 		self.xOffset = 8
@@ -122,9 +122,9 @@ function Slime:update(dt, gravity, map)
 	end
 
 	--Sprawdzaj czy natrafi na przepaść
-	if ((self:mapColliding(Global.map, self.x - halfX, nextY + halfY)) 
-		and not (self:mapColliding(Global.map, self.x + halfX, nextY + halfY))) 
-	or ((self:mapColliding(Global.map, self.x + halfX, nextY + halfY)) 
+	if ((self:mapColliding(Global.map, self.x - halfX, nextY + halfY))
+		and not (self:mapColliding(Global.map, self.x + halfX, nextY + halfY)))
+	or ((self:mapColliding(Global.map, self.x + halfX, nextY + halfY))
 		and not (self:mapColliding(Global.map, self.x - halfX - 1, nextY + halfY))) then
 		self.runSpeed = -1 * self.runSpeed
 	end

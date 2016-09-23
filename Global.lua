@@ -23,3 +23,4 @@ Global = {
 	audioMute = false
 }
 
+return Global

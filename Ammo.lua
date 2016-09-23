@@ -29,7 +29,7 @@ function Ammo:new(ammoX, ammoY, ammoClass, ammoRange)
 				Quad(64, 32, 8, 8, 160, 144),
 				Quad(72, 32, 8, 8, 160, 144),
 				Quad(80, 32, 8, 8, 160, 144)
-			}	
+			}
 		}
 	}
 	setmetatable(object, { __index = Ammo })

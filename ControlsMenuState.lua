@@ -12,10 +12,10 @@ function ControlsMenuState:new()
 end
 
 function ControlsMenuState:init()
-	table.insert(self.menuItems, menuItem:new("Z - JUMP", 95))
-	table.insert(self.menuItems, menuItem:new("X - SHOT", 125))
-	table.insert(self.menuItems, menuItem:new("R - RELOAD", 155))
-	table.insert(self.menuItems, menuItem:new("M - MUTE/UNMUTE", 185))
+	table.insert(self.menuItems, MenuItem:new("Z - JUMP", 95))
+	table.insert(self.menuItems, MenuItem:new("X - SHOT", 125))
+	table.insert(self.menuItems, MenuItem:new("R - RELOAD", 155))
+	table.insert(self.menuItems, MenuItem:new("M - MUTE/UNMUTE", 185))
 end
 
 function ControlsMenuState:update(dt)
@@ -24,7 +24,7 @@ end
 
 function ControlsMenuState:draw()
 	love.graphics.print("NOTHING TO FEAR", 10, 5)
-  	love.graphics.print("(C) 2016 WILSON", 10, 285)
+  love.graphics.print("(C) 2016 WILSON", 10, 285)
 
 	for _, v in ipairs(self.menuItems) do
 		v:draw()
