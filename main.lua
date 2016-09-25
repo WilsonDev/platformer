@@ -7,8 +7,8 @@ require "MathUtils"
 local state = {}
 
 function love.load()
-	windowHeight = love.graphics.getHeight()
-	windowWidth = love.graphics.getWidth()
+	Global.windowHeight = love.graphics.getHeight()
+	Global.windowWidth = love.graphics.getWidth()
 
 	loadReasources()
 

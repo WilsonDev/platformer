@@ -9,6 +9,8 @@ Global = {
 	map = {},
 	camera = {},
 	scale = 0.25,
+	windowHeight = 0,
+	windowWidth = 0,
 
 	p = {},
 	buttons = {},

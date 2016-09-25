@@ -86,8 +86,8 @@ function World:init(level)
 	Global.camera = Camera:new()
 	Global.camera.scaleX = Global.scale
 	Global.camera.scaleY = Global.scale
-	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (windowWidth * Global.camera.scaleX),
-		(Global.map.height * Global.map.tileheight) - (windowHeight * Global.camera.scaleX))
+	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (Global.windowWidth * Global.camera.scaleX),
+		(Global.map.height * Global.map.tileheight) - (Global.windowHeight * Global.camera.scaleX))
 end
 
 function World:update(dt)
@@ -109,11 +109,11 @@ function World:update(dt)
 	end
 
 	if Global.camera.activated then
-		Global.camera:flowX(dt, Global.p.x - windowWidth / Global.map.tilewidth,
-			Global.p.y - windowHeight / Global.map.tileheight, 80)
+		Global.camera:flowX(dt, Global.p.x - Global.windowWidth / Global.map.tilewidth,
+			Global.p.y - Global.windowHeight / Global.map.tileheight, 80)
 	else
-		Global.camera:setPosition(Global.p.x - windowWidth / Global.map.tilewidth,
-			Global.p.y - windowHeight / Global.map.tileheight)
+		Global.camera:setPosition(Global.p.x - Global.windowWidth / Global.map.tilewidth,
+			Global.p.y - Global.windowHeight / Global.map.tileheight)
 	end
 end
 
@@ -194,6 +194,6 @@ end
 
 function World:change(level)
 	self:init(level)
-	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (windowWidth * Global.camera.scaleX),
-		(Global.map.height * Global.map.tileheight) - (windowHeight * Global.camera.scaleX))
+	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (Global.windowWidth * Global.camera.scaleX),
+		(Global.map.height * Global.map.tileheight) - (Global.windowHeight * Global.camera.scaleX))
 end
