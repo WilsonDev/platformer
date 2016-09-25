@@ -71,7 +71,7 @@ function Player:moveLeft()
 end
 
 function Player:sprint()
-	self.xSpeed = self.xSpeed + self.direction * 20
+	self.xSpeed = self.xSpeed + self.direction  20
 end
 
 function Player:stop()
@@ -308,9 +308,9 @@ function Player:keypressed(key)
 		if key == "left" then --lewo
 			self:moveLeft()
 		end
-		--if key == "lshift" then
-		--	self:sprint()
-		--end
+		if key == "lshift" then
+			self:sprint()
+		end
 		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true
