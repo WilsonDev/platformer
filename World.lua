@@ -9,7 +9,7 @@ require "Spike"
 require "Warp"
 require "Acid"
 require "Platform"
-sti = require "lib/SimpleTiledImpl"
+local STI = require "lib/SimpleTiledImpl/sti"
 
 World = {}
 
@@ -26,7 +26,7 @@ function World:init(level)
 		level = "map" .. Global.currentMap
 	end
 	-- Mapa
-	Global.map = sti.new("maps/" .. level .. ".lua")
+	Global.map = STI("maps/" .. level .. ".lua")
 	-- Chowamy warstwę obiektów
 	Global.map.layers["objects"].visible = false
 
@@ -108,8 +108,13 @@ function World:update(dt)
 		end
 	end
 
-	Global.camera:setPosition(Global.p.x - windowWidth / Global.map.tilewidth,
-		Global.p.y - windowHeight / Global.map.tileheight)
+	if Global.camera.activated then
+		Global.camera:flowX(dt, Global.p.x - windowWidth / Global.map.tilewidth,
+			Global.p.y - windowHeight / Global.map.tileheight, 80)
+	else
+		Global.camera:setPosition(Global.p.x - windowWidth / Global.map.tilewidth,
+			Global.p.y - windowHeight / Global.map.tileheight)
+	end
 end
 
 function World:draw()
@@ -158,6 +163,15 @@ end
 
 function World:keypressed(key)
 	Global.p:keypressed(key)
+
+	if key == "l" then
+		if Global.camera.stop == false then
+			Global.camera.stop = true
+		else
+			Global.camera.stop = false
+			Global.camera.activated = true
+		end
+	end
 end
 
 --Czyszczenie mapy z obiektów

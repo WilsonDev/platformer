@@ -1,6 +1,6 @@
-menuItem = {}
+MenuItem = {}
 
-function menuItem:new(menuItemName, menuItemY)
+function MenuItem:new(menuItemName, menuItemY)
 	local object = {
 		name = menuItemName,
 		x = 0,
@@ -20,11 +20,11 @@ function menuItem:new(menuItemName, menuItemY)
 		end
 	end)()
 
-	setmetatable(object, { __index = menuItem })
+	setmetatable(object, { __index = MenuItem })
 	return object
 end
 
-function menuItem:update(dt)
+function MenuItem:update(dt)
 	if self.selected then
 		self.timer = self.timer + dt
 	else
@@ -32,7 +32,7 @@ function menuItem:update(dt)
 	end
 end
 
-function menuItem:draw()
+function MenuItem:draw()
 	if self.selected then
 		love.graphics.push()
 		love.graphics.translate(0, math.sin(self.timer * 12) * 2.5)
@@ -43,7 +43,7 @@ function menuItem:draw()
 	end
 end
 
-function menuItem:select(selected)
+function MenuItem:select(selected)
 	if not self.selected and selected then
 		-- Odtwarzany dźwięk
 	end

@@ -23,7 +23,7 @@ function Pickup:update(dt)
 		if player.hitpoints < 3 then
 			player.hitpoints = player.hitpoints + 1
 		end
-		auSelect:stop() 
+		auSelect:stop()
 		auSelect:play()
 	end
 end

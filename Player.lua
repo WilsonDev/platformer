@@ -18,6 +18,7 @@ function Player:new(playerX, playerY)
 		xOffset = 0,
 		iterator = 1,
 		timer = 0,
+		direction = 1,
 		onGround = false,
 		jumpCount = 0, hasJumped = false,
 		shots = {}, firedShots = 0,
@@ -71,7 +72,7 @@ function Player:moveLeft()
 end
 
 function Player:sprint()
-	self.xSpeed = self.xSpeed + self.direction  20
+	self.xSpeed = self.xSpeed + self.direction * 50
 end
 
 function Player:stop()
@@ -283,6 +284,15 @@ function Player:update(dt)
 		self:animation(dt, 0.35, 3)
 	end
 
+	if direction == 1 then
+		self:moveRight()
+	elseif direction == -1 then
+		self:moveLeft()
+	end
+	if not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
+		self:stop()
+	end
+
 	self.state = self:getState()
 end
 
@@ -302,15 +312,14 @@ end
 
 function Player:keypressed(key)
 	if not self.isPoked then
-		if key == "right" then --prawo
-			self:moveRight()
+		if key == "right" and not love.keyboard.isDown("left") then --prawo
+			direction = 1
+		elseif key == "left" and not love.keyboard.isDown("right") then --lewo
+			direction = -1
 		end
-		if key == "left" then --lewo
-			self:moveLeft()
-		end
-		if key == "lshift" then
-			self:sprint()
-		end
+		--if key == "lshift" then
+			--self:sprint()
+		--end
 		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true
@@ -325,13 +334,16 @@ function Player:keypressed(key)
 end
 
 function Player:keyreleased(key)
-	if key == "z" or key == "up" then
+	if key == "z" then
 		self.hasJumped = false
 	end
-	if key == "right" and not love.keyboard.isDown("left") then --prawo
-		self:stop()
-	end
-	if key == "left" and not love.keyboard.isDown("right") then --lewo
-		self:stop()
+	if key == "right" then --prawo
+		if love.keyboard.isDown("left") then
+			direction = -1
+		end
+	elseif key == "left" then --lewo
+		if love.keyboard.isDown("right") then
+			direction = 1
+		end
 	end
 end

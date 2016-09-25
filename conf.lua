@@ -1,4 +1,4 @@
-function love.conf(t)
+  function love.conf(t)
 	t.title = "8 Bit"
 
 	t.window.fullscreen = false
@@ -8,4 +8,5 @@ function love.conf(t)
 	t.modules.joystick = false
 	t.modules.mouse = false
 	t.modules.physics = false
+  t.console = true
 end

@@ -2,6 +2,7 @@ require "Debug"
 require "State"
 require "Scores"
 require "Global"
+require "MathUtils"
 
 local state = {}
 
@@ -25,7 +26,7 @@ function love.load()
 end
 
 function love.update(dt)
-	dt = math.min(dt, 0.016)
+	dt = MathUtils.clamp(dt, 0, 0.05) --math.min(dt, 0.016)
 	state:update(dt)
 end
 
@@ -63,7 +64,7 @@ function loadReasources()
 
 	mainTheme = love.audio.newSource("sounds/Underclocked.mp3")
 	mainTheme:setLooping(true)
-	mainTheme:setVolume(0.4)
+	mainTheme:setVolume(0.5)
 
 	if not Global.audioMute then
 		love.audio.setVolume(1.0)

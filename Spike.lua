@@ -24,7 +24,7 @@ function Spike:update(dt)
 			player.invul = true
 			player.invultime = 2
 			player.hitpoints = player.hitpoints - 1
-			auPunch:stop() 
+			auPunch:stop()
 			auPunch:play()
 		end
 		--player:jump()

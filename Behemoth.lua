@@ -1,5 +1,3 @@
-require "Enemy"
-
 local Quad = love.graphics.newQuad
 
 Behemoth = {}

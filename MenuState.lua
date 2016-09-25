@@ -21,10 +21,10 @@ function MenuState:new(stateItemSelected)
 end
 
 function MenuState:init()
-	table.insert(self.menuItems, menuItem:new("NEW", 95))
-	table.insert(self.menuItems, menuItem:new("SCORES", 125))
-	table.insert(self.menuItems, menuItem:new("CONTROLS", 155))
-	table.insert(self.menuItems, menuItem:new("EXIT", 185))
+	table.insert(self.menuItems, MenuItem:new("NEW", 95))
+	table.insert(self.menuItems, MenuItem:new("SCORES", 125))
+	table.insert(self.menuItems, MenuItem:new("CONTROLS", 155))
+	table.insert(self.menuItems, MenuItem:new("EXIT", 185))
 
 	self.menuItems[self.itemSelected]:select(true)
 end

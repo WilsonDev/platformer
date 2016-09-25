@@ -26,3 +26,5 @@ Global = {
 
 	audioMute = true
 }
+
+return Global
