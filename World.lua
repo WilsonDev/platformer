@@ -23,7 +23,7 @@ function World:init(level)
 	self:clean()
 
 	if level == nil then
-		level = "map5"
+		level = "map" .. Global.currentMap
 	end
 	-- Mapa
 	Global.map = STI("maps/" .. level .. ".lua")

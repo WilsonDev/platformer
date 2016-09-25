@@ -23,9 +23,8 @@ function ControlsMenuState:update(dt)
 end
 
 function ControlsMenuState:draw()
-	love.graphics.print("NOTHING TO FEAR", 10, 5)
+	love.graphics.print(Global.title, 10, 5)
   love.graphics.print("(C) 2016 WILSON", 10, 285)
-
 	for _, v in ipairs(self.menuItems) do
 		v:draw()
 	end

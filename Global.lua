@@ -1,6 +1,8 @@
 -- Zmienne globalne
 
 Global = {
+	title = "GENERIC PLATFORMER",
+
 	debug = true,
 	score = 0,
 	scores = {},
@@ -22,7 +24,9 @@ Global = {
 	warps = {},
 	acids = {},
 
-	audioMute = false
+	currentMap = 5, --indeks
+
+	audioMute = true
 }
 
 return Global
