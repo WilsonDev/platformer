@@ -9,7 +9,7 @@ require "Spike"
 require "Warp"
 require "Acid"
 require "Platform"
-local STI = require "lib/SimpleTiledImpl"
+local STI = require "lib/SimpleTiledImpl/sti"
 
 World = {}
 
@@ -26,7 +26,7 @@ function World:init(level)
 		level = "map5"
 	end
 	-- Mapa
-	Global.map = STI.new("maps/" .. level .. ".lua")
+	Global.map = STI("maps/" .. level .. ".lua")
 	-- Chowamy warstwę obiektów
 	Global.map.layers["objects"].visible = false
 
