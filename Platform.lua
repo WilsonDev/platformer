@@ -8,15 +8,22 @@ function Platform:new(PlatformX, PlatformY)
 		y = PlatformY,
 		width = 8,
 		height = 8,
+		size = 1, --rozmiar platformy
 		xSpeed = 20,
-		Quad = {
-			Quad(32, 104, 8, 8, 160, 144),
-			Quad(40, 104, 8, 8, 160, 144),
-			Quad(48, 104, 8, 8, 160, 144)
-		}
+		Quad = { } --metoda init
 	}
+	init(object)
 	setmetatable(object, { __index = Platform })
 	return object
+end
+
+--tablica, rozmiar platformy
+function init(object)
+	table.insert(object.Quad, Quad(32, 104, 8, 8, 160, 144))
+	for i = 1, object.size do
+		table.insert(object.Quad, Quad(40, 104, 8, 8, 160, 144))
+	end
+	table.insert(object.Quad, Quad(48, 104, 8, 8, 160, 144))
 end
 
 function Platform:mapColliding(map, x, y)
@@ -35,8 +42,8 @@ function Platform:update(dt)
 	--Kolizje w poziomie
 	local nextX = self.x + (self.xSpeed * dt)
 	if self.xSpeed > 0 then
-		if not (self:mapColliding(Global.map, nextX + halfX + 18, self.y - halfY))
-		and not (self:mapColliding(Global.map, nextX + halfX + 18, self.y + halfY - 1)) then
+		if not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y - halfY))
+		and not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y + halfY - 1)) then
 			self.x = nextX
 		else
 			self.xSpeed = -self.xSpeed
@@ -68,7 +75,7 @@ function Platform:draw()
 end
 
 function Platform:touchesObject(object)
-	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 - 1 + 16
+	local ax1, ax2 = self.x - self.width / 2, self.x + self.width / 2 + ((self.size + 1) * self.width) - 1
 	local ay1, ay2 = self.y - self.height / 2 - 1, self.y - self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1
 	local by1, by2 = object.y - object.height / 2, object.y + object.height / 2 - 1

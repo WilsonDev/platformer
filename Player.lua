@@ -13,11 +13,12 @@ function Player:new(playerX, playerY)
 		hitpoints = 3,
 		jumpSpeed = -160,
 		runSpeed = 70,
+		direction = 1,
 		xScale = 1,
 		xOffset = 0,
 		iterator = 1,
 		timer = 0,
-		onGround = false, 
+		onGround = false,
 		jumpCount = 0, hasJumped = false,
 		shots = {}, firedShots = 0,
 		invul = false, invultime = 2, isPoked = false,
@@ -50,21 +51,27 @@ end
 
 function Player:specialJump(strenght)
 	self.ySpeed = self.jumpSpeed - strenght
-    self.jumpCount = 1
+  self.jumpCount = 1
 end
 
 function Player:moveRight()
 	self.isMoving = true
-	self.xSpeed = self.runSpeed
-	self.xScale = 1
+	self.direction = 1
+	self.xSpeed = self.direction * self.runSpeed
+	self.xScale = self.direction
 	self.xOffset = 0
 end
 
 function Player:moveLeft()
 	self.isMoving = true
-	self.xSpeed = -1 * self.runSpeed
-	self.xScale = -1
+	self.direction = -1
+	self.xSpeed = self.direction * self.runSpeed
+	self.xScale = self.direction
 	self.xOffset = 8
+end
+
+function Player:sprint()
+	self.xSpeed = self.xSpeed + self.direction * 20
 end
 
 function Player:stop()
@@ -90,8 +97,8 @@ function Player:shot()
 
 	table.insert(self.shots, bullet)
 
-	auShot:stop() 
-	auShot:play()	
+	auShot:stop()
+	auShot:play()
 end
 
 function Player:draw()
@@ -100,7 +107,7 @@ function Player:draw()
 		self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 	--Strzały
 	for i, v in ipairs(self.shots) do
-		v:draw()	
+		v:draw()
 	end
 end
 
@@ -140,7 +147,7 @@ function Player:enemyColliding()
 	for i,v in ipairs(Global.enemies) do
 		if v:touchesObject(self) and not self.invul then
 			self.isPoked = true
-			auPunch:stop() 
+			auPunch:stop()
 			auPunch:play()
 
 			if self.invul == false then
@@ -152,7 +159,7 @@ function Player:enemyColliding()
 			self.runSpeed = self.runSpeed + 30
 			self:jump()
 
-			if love.keyboard.isDown("right") 
+			if love.keyboard.isDown("right")
 				or (v.xScale == -1 and not love.keyboard.isDown("left")) then
 				self:moveLeft()
 			elseif love.keyboard.isDown("left") or v.xScale == 1 then
@@ -301,6 +308,9 @@ function Player:keypressed(key)
 		if key == "left" then --lewo
 			self:moveLeft()
 		end
+		--if key == "lshift" then
+		--	self:sprint()
+		--end
 		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true
@@ -309,7 +319,7 @@ function Player:keypressed(key)
 			self.firedShots = 0
 		end
 		if (key == "x") and (self.firedShots < 5) then
-			self:shot()	
+			self:shot()
 		end
 	end
 end

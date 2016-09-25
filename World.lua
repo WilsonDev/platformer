@@ -23,7 +23,7 @@ function World:init(level)
 	self:clean()
 
 	if level == nil then
-		level = "map5"
+		level = "map" .. Global.currentMap
 	end
 	-- Mapa
 	Global.map = sti.new("maps/" .. level .. ".lua")
@@ -41,40 +41,40 @@ function World:init(level)
 					Global.p = Player:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5))
 				end
 				if tile.properties.button and tile then
-					table.insert(Global.buttons, 
+					table.insert(Global.buttons,
 						Button:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.spring and tile then
-					table.insert(Global.springs, 
+					table.insert(Global.springs,
 						Spring:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.spike and tile then
-					table.insert(Global.spikes, 
+					table.insert(Global.spikes,
 						Spike:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.warp and tile then
-					table.insert(Global.warps, 
+					table.insert(Global.warps,
 						Warp:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.slime and tile then
-					table.insert(Global.enemies, 
+					table.insert(Global.enemies,
 						Slime:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.behemoth and tile then
-					table.insert(Global.enemies, 
+					table.insert(Global.enemies,
 						Behemoth:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.platform and tile then
-					table.insert(Global.platforms, 
+					table.insert(Global.platforms,
 						Platform:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.acid and tile then
-					table.insert(Global.acids, 
+					table.insert(Global.acids,
 						Acid:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 				end
 				if tile.properties.pickup and tile then
 					local id = 1
-					table.insert(Global.pickups, 
+					table.insert(Global.pickups,
 						Pickup:new(id, Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
 					id = id + 1
 				end
@@ -94,11 +94,11 @@ function World:update(dt)
 	Global.p:update(dt)
 
 	for _, v in ipairs({
-		Global.pickups, 
+		Global.pickups,
 		Global.enemies,
-		Global.buttons, 
+		Global.buttons,
 		Global.springs,
-		Global.platforms, 
+		Global.platforms,
 		Global.warps,
 		Global.acids,
 		Global.spikes}) do
@@ -119,13 +119,13 @@ function World:draw()
 	Global.map:draw()
 
 	for _, v in ipairs({
-		Global.pickups, 
+		Global.pickups,
 		Global.enemies,
-		Global.buttons, 
+		Global.buttons,
 		Global.springs,
 		Global.platforms,
 		Global.warps,
-		Global.acids, 
+		Global.acids,
 		Global.spikes}) do
 
 		for _, w in ipairs(v) do
@@ -136,7 +136,7 @@ function World:draw()
 	Global.p:draw()
 
 	Global.camera:unset()
-	
+
 	if Global.p.invul then
 		love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
 	end
@@ -163,9 +163,9 @@ end
 --Czyszczenie mapy z obiektów
 function World:clean()
 	for i, v in ipairs({
-		Global.pickups, 
+		Global.pickups,
 		Global.enemies,
-		Global.buttons, 
+		Global.buttons,
 		Global.springs,
 		Global.platforms,
 		Global.warps,

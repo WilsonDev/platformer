@@ -27,8 +27,8 @@ function SubmitScoreState:update(dt)
 end
 
 function SubmitScoreState:draw()
-  love.graphics.print("NOTHING TO FEAR", 10, 5)
-  	love.graphics.print("(C) 2016 WILSON", 10, 285)
+  love.graphics.print(Global.title, 10, 5)
+  love.graphics.print("(C) 2016 WILSON", 10, 285)
 
 	love.graphics.print("ENTER INITIALS", 350, 100)
 

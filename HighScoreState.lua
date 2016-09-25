@@ -19,7 +19,7 @@ function HighScoreState:update(dt)
 end
 
 function HighScoreState:draw()
-	love.graphics.print("NOTHING TO FEAR", 10, 5)
+	love.graphics.print(Global.title, 10, 5)
   	love.graphics.print("(C) 2016 WILSON", 10, 285)
 
 	local prefix = ""
