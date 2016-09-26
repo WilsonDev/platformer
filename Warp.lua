@@ -16,7 +16,8 @@ end
 function Warp:update(dt)
 	local player = Global.p
 	if self:touchesObject(player) then
-		World:change("map6")
+		Global.currentMap = Global.currentMap + 1
+		World:change("map" .. Global.currentMap)
 
 		auWarp:stop()
 		auWarp:play()

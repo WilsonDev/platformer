@@ -1,8 +1,9 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "0.13.1",
+  tiledversion = "0.17.0",
   orientation = "orthogonal",
+  renderorder = "right-down",
   width = 90,
   height = 15,
   tilewidth = 8,
@@ -209,6 +210,8 @@ return {
       height = 15,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -238,6 +241,8 @@ return {
       height = 15,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -267,6 +272,8 @@ return {
       height = 15,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {
@@ -296,6 +303,8 @@ return {
       height = 15,
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
       properties = {},
       encoding = "lua",
       data = {

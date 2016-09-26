@@ -64,7 +64,7 @@ function loadReasources()
 
 	mainTheme = love.audio.newSource("sounds/Underclocked.mp3")
 	mainTheme:setLooping(true)
-	mainTheme:setVolume(0.4)
+	mainTheme:setVolume(0.5)
 
 	if not Global.audioMute then
 		love.audio.setVolume(1.0)

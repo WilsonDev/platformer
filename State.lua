@@ -95,4 +95,7 @@ function State:keypressed(key)
 	if key == "p" then --pause
 		--self:set(states[1])
 	end
+	if key == "m" then
+
+	end
 end

@@ -13,6 +13,7 @@ function Player:new(playerX, playerY)
 		hitpoints = 3,
 		jumpSpeed = -160,
 		runSpeed = 70,
+		direction = 1,
 		xScale = 1,
 		xOffset = 0,
 		iterator = 1,
@@ -51,21 +52,27 @@ end
 
 function Player:specialJump(strenght)
 	self.ySpeed = self.jumpSpeed - strenght
-    self.jumpCount = 1
+  self.jumpCount = 1
 end
 
 function Player:moveRight()
 	self.isMoving = true
-	self.xSpeed = self.runSpeed
-	self.xScale = 1
+	self.direction = 1
+	self.xSpeed = self.direction * self.runSpeed
+	self.xScale = self.direction
 	self.xOffset = 0
 end
 
 function Player:moveLeft()
 	self.isMoving = true
-	self.xSpeed = -1 * self.runSpeed
-	self.xScale = -1
+	self.direction = -1
+	self.xSpeed = self.direction * self.runSpeed
+	self.xScale = self.direction
 	self.xOffset = 8
+end
+
+function Player:sprint()
+	self.xSpeed = self.xSpeed + self.direction * 50
 end
 
 function Player:stop()
@@ -285,8 +292,7 @@ function Player:update(dt)
 	if not love.keyboard.isDown("left")
 			and not love.keyboard.isDown("right")
 			and not self.isPoked then
-		direction = 0
-		self:stop()
+				self:stop()
 	end
 
 	self.state = self:getState()
@@ -312,9 +318,10 @@ function Player:keypressed(key)
 			direction = 1
 		elseif key == "left" and not love.keyboard.isDown("right") then --lewo
 			direction = -1
-		elseif not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
-			direction = 0
 		end
+		--if key == "lshift" then
+			--self:sprint()
+		--end
 		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true
