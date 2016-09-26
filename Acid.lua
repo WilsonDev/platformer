@@ -5,8 +5,8 @@ Acid = {}
 function Acid:new(acidX, acidY)
 	object = {
 		x = acidX,
-		y = acidY,
-		initY = acidY,
+		y = acidY + 1,
+		initY = acidY + 1,
 		width = 8,
 		height = 8,
 		xScale = 1,

@@ -22,7 +22,7 @@ Global = {
 	warps = {},
 	acids = {},
 
-	currentMap = 5, --indeks
+	currentMap = 7, --indeks
 
 	audioMute = true
 }

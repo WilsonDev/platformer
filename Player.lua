@@ -138,6 +138,10 @@ function Player:mapColliding(map, x, y)
 	local layer = Global.map.layers["ground"]
 	local tileX = math.floor(x / Global.map.tilewidth) + 1
 	local tileY = math.floor(y / Global.map.tileheight) + 1
+	print(tileX .. " " .. tileY)
+	if (Global.map.width < tileX or Global.map.height < tileY or tileX <= 0 or tileY <= 0) then
+		return false
+	end
 	local tile = layer.data[tileY][tileX]
 
 	return tile and (tile.properties or {}).solid
@@ -299,7 +303,8 @@ function Player:update(dt)
 end
 
 function Player:isAlive()
-	return not (self.hitpoints <= 0 or self.y > Global.map.height * Global.map.tileheight)
+	return not (self.hitpoints <= 0
+		or (self.y + math.floor(self.height / 2)) > Global.map.height * Global.map.tileheight)
 end
 
 function Player:getState()
