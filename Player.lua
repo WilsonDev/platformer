@@ -282,7 +282,9 @@ function Player:update(dt)
 	elseif direction == -1 then
 		self:moveLeft()
 	end
-	if not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
+	if not love.keyboard.isDown("left")
+			and not love.keyboard.isDown("right")
+			and not self.isPoked then
 		direction = 0
 		self:stop()
 	end
