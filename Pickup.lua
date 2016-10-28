@@ -2,13 +2,14 @@ local Quad = love.graphics.newQuad
 
 Pickup = {}
 
-function Pickup:new(id, pickupX, pickupY)
+function Pickup:new(id, pickupX, pickupY, pickupValue)
 	local object = {
 		id = 1,
 		x = pickupX,
 		y = pickupY,
 		width = 8,
 		height = 8,
+		value = pickupValue,
 		Quads = Quad(136, 72, 8, 8, 160, 144) --Klatki animacji
 	}
 	setmetatable(object, { __index = Pickup })
@@ -19,7 +20,7 @@ function Pickup:update(dt)
 	local player = Global.p
 	if self:touchesObject(player) then
 		table.remove(Global.pickups, self.id)
-		Global.score = Global.score + 10
+		Global.score = Global.score + self.value
 		if player.hitpoints < 3 then
 			player.hitpoints = player.hitpoints + 1
 		end

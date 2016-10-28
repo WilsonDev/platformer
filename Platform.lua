@@ -1,16 +1,22 @@
+require "Checkpoint"
+
 local Quad = love.graphics.newQuad
+local init
 
 Platform = {}
 
-function Platform:new(PlatformX, PlatformY)
+function Platform:new(platformX, platformY, platformPath)
 	object = {
-		x = PlatformX,
-		y = PlatformY,
+		x = platformX,
+		y = platformY,
 		width = 8,
 		height = 8,
 		size = 1, --rozmiar platformy
-		xSpeed = 20,
-		Quad = { } --metoda init
+		speed = 0,
+		stringPath = platformPath,
+		currentCheckpoint = 1,
+		path = {}, --metoda init
+		Quad = {} --metoda init
 	}
 	init(object)
 	setmetatable(object, { __index = Platform })
@@ -24,6 +30,19 @@ function init(object)
 		table.insert(object.Quad, Quad(40, 104, 8, 8, 160, 144))
 	end
 	table.insert(object.Quad, Quad(48, 104, 8, 8, 160, 144))
+
+	local checkpoints = StringUtils.split(object.stringPath, ";")
+	local lastX = object.x
+	local lastY = object.y
+	table.insert(object.path, Checkpoint:new(lastX, lastY))
+	for i = 1, #checkpoints do
+		local checkpoint = StringUtils.split(checkpoints[i], ",")
+		local checkpointX = checkpoint[1] + lastX
+		local checkpointY = checkpoint[2] + lastY
+		lastX = checkpointX
+		lastY = checkpointY
+		table.insert(object.path, Checkpoint:new(checkpointX, checkpointY))
+	end
 end
 
 function Platform:mapColliding(map, x, y)
@@ -39,21 +58,24 @@ function Platform:update(dt)
 	local halfX = math.floor(self.width / 2)
 	local halfY = math.floor(self.height / 2)
 
-	--Kolizje w poziomie
-	local nextX = self.x + (self.xSpeed * dt)
-	if self.xSpeed > 0 then
+	--TODO
+	local checkpoint = self.path[self.currentCheckpoint]
+
+	local nextX = self.x + (self.speed * dt)
+	local nextY = self.y + (self.speed * dt)
+	if self.speed > 0 then
 		if not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y - halfY))
 		and not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y + halfY - 1)) then
 			self.x = nextX
 		else
-			self.xSpeed = -self.xSpeed
+			self.speed = -self.speed
 		end
-	elseif self.xSpeed < 0 then
+	elseif self.speed < 0 then
 		if not (self:mapColliding(Global.map, nextX - halfX - 2, self.y - halfY))
 		and not (self:mapColliding(Global.map, nextX - halfX - 2, self.y + halfY - 1)) then
 			self.x = nextX
 		else
-			self.xSpeed = -self.xSpeed
+			self.speed = -self.speed
 		end
 	end
 
@@ -62,7 +84,7 @@ function Platform:update(dt)
 			Global.p.y = Global.p.y - ((Global.p.y + (self.height / 2)) % self.height)
 			Global.p:collide("floor")
 			if not Global.p.isMoving then
-				Global.p.xSpeed = self.xSpeed
+				Global.p.xSpeed = self.speed
 			end
 		end
 	end

@@ -21,8 +21,9 @@ Global = {
 	platforms = {},
 	warps = {},
 	acids = {},
+	clouds = {},
 
-	currentMap = 7, --indeks
+	currentMap = 5, --indeks
 
 	audioMute = true
 }

@@ -9,6 +9,7 @@ require "Spike"
 require "Warp"
 require "Acid"
 require "Platform"
+require "Cloud"
 local STI = require "lib/SimpleTiledImpl/sti"
 
 World = {}
@@ -27,57 +28,54 @@ function World:init(level)
 	end
 	-- Mapa
 	Global.map = STI("maps/" .. level .. ".lua")
+
 	-- Chowamy warstwę obiektów
 	Global.map.layers["objects"].visible = false
+	local objectLayer = Global.map.layers["objects"]
 
-	local layer = Global.map.layers["objects"]
 
-	for y = 1, Global.map.height do
-		for x = 1, Global.map.width do
-			local tile = layer.data[y][x]
-
-			if tile and tile.properties then
-				if tile.properties.spawn and tile then
-					Global.p = Player:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5))
-				end
-				if tile.properties.button and tile then
-					table.insert(Global.buttons,
-						Button:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.spring and tile then
-					table.insert(Global.springs,
-						Spring:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.spike and tile then
-					table.insert(Global.spikes,
-						Spike:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.warp and tile then
-					table.insert(Global.warps,
-						Warp:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.slime and tile then
-					table.insert(Global.enemies,
-						Slime:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.behemoth and tile then
-					table.insert(Global.enemies,
-						Behemoth:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.platform and tile then
-					table.insert(Global.platforms,
-						Platform:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.acid and tile then
-					table.insert(Global.acids,
-						Acid:new(Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-				end
-				if tile.properties.pickup and tile then
-					local id = 1
-					table.insert(Global.pickups,
-						Pickup:new(id, Global.map.tilewidth * (x - 0.5), Global.map.tileheight * (y - 0.5)))
-					id = id + 1
-				end
+	for k, object in pairs(objectLayer.objects) do
+		if object.properties then
+			if object.properties.type == 'player' then
+					Global.p = Player:new(object.x + object.width / 2, object.y - object.height / 2)
+			end
+			if object.properties.type == 'button' then
+				table.insert(Global.buttons,
+					Button:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type == 'spring' then
+				table.insert(Global.springs,
+					Spring:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type == 'spike' then
+				table.insert(Global.spikes,
+					Spike:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type == 'warp' then
+				table.insert(Global.warps,
+					Warp:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type =='slime' then
+				table.insert(Global.enemies,
+					Slime:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type == 'behemoth' then
+				table.insert(Global.enemies,
+					Behemoth:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type == 'platform' then
+				table.insert(Global.platforms,
+					Platform:new(object.x + object.width / 2, object.y - object.height / 2, object.properties.path))
+			end
+			if object.properties.type == 'acid' then
+				table.insert(Global.acids,
+					Acid:new(object.x + object.width / 2, object.y - object.height / 2))
+			end
+			if object.properties.type == 'pickup' then
+				local id = 1
+				table.insert(Global.pickups,
+					Pickup:new(id, object.x + object.width / 2, object.y - object.height / 2, object.properties.value))
+				id = id + 1
 			end
 		end
 	end

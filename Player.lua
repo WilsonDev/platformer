@@ -138,7 +138,7 @@ function Player:mapColliding(map, x, y)
 	local layer = Global.map.layers["ground"]
 	local tileX = math.floor(x / Global.map.tilewidth) + 1
 	local tileY = math.floor(y / Global.map.tileheight) + 1
-	print(tileX .. " " .. tileY)
+	--print(tileX .. " " .. tileY)
 	if (Global.map.width < tileX or Global.map.height < tileY or tileX <= 0 or tileY <= 0) then
 		return false
 	end
