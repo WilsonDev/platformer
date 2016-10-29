@@ -3,6 +3,7 @@ require "State"
 require "Scores"
 require "Global"
 require "MathUtils"
+require "StringUtils"
 
 local state = {}
 

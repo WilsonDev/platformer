@@ -23,6 +23,7 @@ Global = {
 	platforms = {},
 	warps = {},
 	acids = {},
+	clouds = {},
 
 	currentMap = 5, --indeks
 
