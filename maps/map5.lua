@@ -324,6 +324,7 @@ return {
           visible = true,
           properties = {
             ["path"] = "16,0;0,-16;16,0",
+            ["size"] = "1",
             ["type"] = "platform"
           }
         },
@@ -434,6 +435,7 @@ return {
           visible = true,
           properties = {
             ["path"] = "16,0;0,-16;16,0",
+            ["size"] = "1",
             ["type"] = "platform"
           }
         },

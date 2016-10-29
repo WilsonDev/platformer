@@ -5,13 +5,13 @@ local init
 
 Platform = {}
 
-function Platform:new(platformX, platformY, platformPath)
+function Platform:new(platformX, platformY, platformPath, platformSize)
 	object = {
 		x = platformX,
 		y = platformY,
 		width = 8,
 		height = 8,
-		size = 1, --rozmiar platformy
+		size = tonumber(platformSize), --rozmiar platformy
 		speed = 0,
 		stringPath = platformPath,
 		currentCheckpoint = 1,
@@ -26,8 +26,10 @@ end
 --tablica, rozmiar platformy
 function init(object)
 	table.insert(object.Quad, Quad(32, 104, 8, 8, 160, 144))
-	for i = 1, object.size do
-		table.insert(object.Quad, Quad(40, 104, 8, 8, 160, 144))
+	if object.size > 0 then
+		for i = 1, object.size do
+			table.insert(object.Quad, Quad(40, 104, 8, 8, 160, 144))
+		end
 	end
 	table.insert(object.Quad, Quad(48, 104, 8, 8, 160, 144))
 

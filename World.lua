@@ -65,7 +65,7 @@ function World:init(level)
 			end
 			if object.properties.type == 'platform' then
 				table.insert(Global.platforms,
-					Platform:new(object.x + object.width / 2, object.y - object.height / 2, object.properties.path))
+					Platform:new(object.x + object.width / 2, object.y - object.height / 2, object.properties.path, object.properties.size))
 			end
 			if object.properties.type == 'acid' then
 				table.insert(Global.acids,

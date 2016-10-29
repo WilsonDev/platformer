@@ -209,6 +209,7 @@
   <object id="6" gid="265" x="168" y="80" width="8" height="8">
    <properties>
     <property name="path" value="16,0;0,-16;16,0"/>
+    <property name="size" value="1"/>
     <property name="type" value="platform"/>
    </properties>
   </object>
@@ -238,6 +239,7 @@
   <object id="20" gid="265" x="336" y="80" width="8" height="8">
    <properties>
     <property name="path" value="16,0;0,-16;16,0"/>
+    <property name="size" value="1"/>
     <property name="type" value="platform"/>
    </properties>
   </object>

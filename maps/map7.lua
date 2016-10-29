@@ -8,7 +8,7 @@ return {
   height = 20,
   tilewidth = 8,
   tileheight = 8,
-  nextobjectid = 16,
+  nextobjectid = 20,
   properties = {},
   tilesets = {
     {
@@ -619,6 +619,38 @@ return {
           properties = {
             ["type"] = "warp"
           }
+        },
+        {
+          id = 18,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 64,
+          y = 152,
+          width = 8,
+          height = 8,
+          rotation = 0,
+          gid = 265,
+          visible = true,
+          properties = {
+            ["path"] = "40,0",
+            ["size"] = "0",
+            ["type"] = "platform"
+          }
+        },
+        {
+          id = 19,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 72,
+          y = 152,
+          width = 8,
+          height = 8,
+          rotation = 0,
+          gid = 267,
+          visible = true,
+          properties = {}
         }
       }
     }

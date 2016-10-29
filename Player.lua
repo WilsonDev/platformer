@@ -52,7 +52,7 @@ end
 
 function Player:specialJump(strenght)
 	self.ySpeed = self.jumpSpeed - strenght
-  self.jumpCount = 1
+  	self.jumpCount = 1
 end
 
 function Player:moveRight()
