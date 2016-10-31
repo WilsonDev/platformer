@@ -323,7 +323,8 @@ return {
           gid = 265,
           visible = true,
           properties = {
-            ["path"] = "16,0;0,-16;16,0",
+            ["name"] = "platform_1",
+            ["path"] = "16,0;8,-16;16,0",
             ["size"] = "1",
             ["type"] = "platform"
           }
@@ -369,6 +370,7 @@ return {
           gid = 42,
           visible = true,
           properties = {
+            ["name"] = "player_1",
             ["type"] = "player"
           }
         },
@@ -385,6 +387,7 @@ return {
           gid = 198,
           visible = true,
           properties = {
+            ["name"] = "pickup_1",
             ["type"] = "pickup",
             ["value"] = "10"
           }
@@ -402,6 +405,7 @@ return {
           gid = 23,
           visible = true,
           properties = {
+            ["name"] = "slime_1",
             ["type"] = "slime"
           }
         },
@@ -418,6 +422,7 @@ return {
           gid = 274,
           visible = true,
           properties = {
+            ["name"] = "button_1",
             ["type"] = "button"
           }
         },
@@ -434,6 +439,7 @@ return {
           gid = 265,
           visible = true,
           properties = {
+            ["name"] = "platform_2",
             ["path"] = "16,0;0,-16;16,0",
             ["size"] = "1",
             ["type"] = "platform"
@@ -480,6 +486,7 @@ return {
           gid = 198,
           visible = true,
           properties = {
+            ["name"] = "pickup_2",
             ["type"] = "pickup",
             ["value"] = "10"
           }
@@ -497,6 +504,7 @@ return {
           gid = 23,
           visible = true,
           properties = {
+            ["name"] = "slime_2",
             ["type"] = "slime"
           }
         },
@@ -513,6 +521,7 @@ return {
           gid = 1,
           visible = true,
           properties = {
+            ["name"] = "behemoth_1",
             ["type"] = "behemoth"
           }
         },
@@ -529,6 +538,7 @@ return {
           gid = 273,
           visible = true,
           properties = {
+            ["name"] = "spring_1",
             ["type"] = "spring"
           }
         },
@@ -545,6 +555,7 @@ return {
           gid = 272,
           visible = true,
           properties = {
+            ["name"] = "spike_1",
             ["type"] = "spike"
           }
         },
@@ -561,6 +572,7 @@ return {
           gid = 272,
           visible = true,
           properties = {
+            ["name"] = "spike_2",
             ["type"] = "spike"
           }
         },
@@ -577,6 +589,7 @@ return {
           gid = 272,
           visible = true,
           properties = {
+            ["name"] = "spike_3",
             ["type"] = "spike"
           }
         },
@@ -593,6 +606,7 @@ return {
           gid = 272,
           visible = true,
           properties = {
+            ["name"] = "spike_4",
             ["type"] = "spike"
           }
         },
@@ -609,6 +623,7 @@ return {
           gid = 224,
           visible = true,
           properties = {
+            ["name"] = "warp_2",
             ["type"] = "warp"
           }
         },
@@ -625,6 +640,7 @@ return {
           gid = 224,
           visible = true,
           properties = {
+            ["name"] = "warp_1",
             ["type"] = "warp"
           }
         }

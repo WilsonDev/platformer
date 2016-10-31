@@ -51,19 +51,27 @@ function MenuState:keyreleased(key)
 end
 
 function MenuState:keypressed(key)
-	if key == "up" and self.itemSelected > 1 then
+	if key == "up" then
 		self.menuItems[self.itemSelected]:select(false)
-		self.itemSelected = self.itemSelected - 1
-		self.subState = subStates[self.itemSelected]
+		if self.itemSelected > 1 then
+			self.itemSelected = self.itemSelected - 1
+		else
+			self.itemSelected = #self.menuItems
+		end
 
+		self.subState = subStates[self.itemSelected]
 		auSelect:stop()
 		auSelect:play()
 	end
-	if key == "down" and self.itemSelected < #self.menuItems then
+	if key == "down" then
 		self.menuItems[self.itemSelected]:select(false)
-		self.itemSelected = self.itemSelected + 1
-		self.subState = subStates[self.itemSelected]
+		if self.itemSelected < #self.menuItems then
+			self.itemSelected = self.itemSelected + 1
+		else
+			self.itemSelected = 1
+		end
 
+		self.subState = subStates[self.itemSelected]
 		auSelect:stop()
 		auSelect:play()
 	end

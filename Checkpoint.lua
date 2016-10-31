@@ -1,11 +1,10 @@
 Checkpoint = {}
 
-function Checkpoint:new(checkpointX, checkpointY, checkpointYDiffX, checkpointDiffY)
+function Checkpoint:new(checkpointId, checkpointX, checkpointY)
     local object = {
-        x = CheckpointX,
-        y = CheckpointY,
-        diffX = checkpointYDiffX,
-        diffY = checkpointDiffY
+        id = checkpointId,
+        x = checkpointX,
+        y = checkpointY
     }
     setmetatable(object, { __index = Checkpoint })
     return object
