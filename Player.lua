@@ -11,7 +11,7 @@ function Player:new(playerX, playerY)
 		xSpeed = 0, ySpeed = 0,
 		state = "stand",
 		hitpoints = 3,
-		jumpSpeed = -160,
+		jumpSpeed = -150,
 		runSpeed = 70,
 		direction = 1,
 		xScale = 1,

@@ -156,7 +156,7 @@ function Platform:update(dt)
 			self.isMoving = true
 			Global.p.y = (self.y - self.height / 2) - (Global.p.height / 2)
 			Global.p:collide("platform")
-			if self.ySpeed > 0 then
+			if self.ySpeed >= 0 then
 				Global.p.ySpeed = self.ySpeed
 			else
 				Global.p.ySpeed = 0
