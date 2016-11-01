@@ -9,4 +9,6 @@
 	t.modules.mouse = false
 	t.modules.physics = false
   t.console = true
+
+	io.stdout:setvbuf("no")
 end

@@ -60,10 +60,7 @@ function Platform:mapColliding(map, x, y)
 	return tile and (tile.properties or {}).solid
 end
 
-function Platform:update(dt)
-	local halfX = math.floor(self.width / 2)
-	local halfY = math.floor(self.height / 2)
-
+function Platform:move(dt)
 	local nextX = self.x + (self.xSpeed * dt)
 	local nextY = self.y + (self.ySpeed * dt)	
 
@@ -134,6 +131,11 @@ function Platform:update(dt)
 			self.ySpeed = 0
 		end
 	end
+end
+
+function Platform:update(dt)
+	-- local halfX = math.floor(self.width / 2)
+	-- local halfY = math.floor(self.height / 2)
 
 	-- if self.xSpeed > 0 then
 	-- 	if not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y - halfY))
@@ -150,6 +152,7 @@ function Platform:update(dt)
 	-- 		self.xSpeed = -self.xSpeed
 	-- 	end
 	-- end
+	self:move(dt)
 
 	if self:touchesObject(Global.p) then
 		if Global.p.ySpeed > 0 then
