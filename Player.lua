@@ -132,6 +132,10 @@ function Player:collide(event)
 	if event == "ceiling" then
 		self.ySpeed = 0
 	end
+	if event == "platform" then
+		self.onGround = true
+		self.jumpCount = 0
+	end
 end
 
 function Player:mapColliding(map, x, y)

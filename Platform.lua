@@ -78,8 +78,6 @@ function Platform:update(dt)
 			checkpointTo = self.path[self.currentCheckpoint + 1]
 		end
 
-		--print(self.currentCheckpoint, checkpointFrom.id, checkpointTo.id)
-
 		if checkpointTo ~= nil then
 			local xModifier = 1 
 			local yModifier = 1
@@ -120,9 +118,10 @@ function Platform:update(dt)
 				self.ySpeed = 0
 			end
 
-			if d < math.max(math.abs(self.xSpeed * dt), math.abs(self.ySpeed * dt)) then
-				self.x = checkpointTo.x
-				self.y = checkpointTo.y
+			if d < math.max(math.abs(self.xSpeed), math.abs(self.ySpeed)) * dt then
+				--powoduje minimalne przesuniecie gracza podczas zmiany punktu
+				--self.x = checkpointTo.x
+				--self.y = checkpointTo.y
 				self.lastCheckpoint = self.currentCheckpoint
 				if checkpointFrom.id < checkpointTo.id then
 					self.currentCheckpoint = self.currentCheckpoint + 1
@@ -156,7 +155,12 @@ function Platform:update(dt)
 		if Global.p.ySpeed > 0 then
 			self.isMoving = true
 			Global.p.y = (self.y - self.height / 2) - (Global.p.height / 2)
-			Global.p:collide("floor")
+			Global.p:collide("platform")
+			if self.ySpeed > 0 then
+				Global.p.ySpeed = self.ySpeed
+			else
+				Global.p.ySpeed = 0
+			end
 			if not Global.p.isMoving then
 				Global.p.xSpeed = self.xSpeed
 			end
