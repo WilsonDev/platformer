@@ -2,17 +2,18 @@ local Quad = love.graphics.newQuad
 
 Spring = {}
 
-function Spring:new(springX, springY)
+function Spring:new(objectName, springX, springY)
 	local object = {
-	x = springX,
-	y = springY,
-	width = 8,
-	height = 8,
-	iterator = 1,
-	isPressed = false,
-	Quads = { --Klatki animacji
-		Quad(96, 104, 8, 8, 160, 144),
-		Quad(96, 112, 8, 8, 160, 144)}
+		name = objectName,
+		x = springX,
+		y = springY,
+		width = 8,
+		height = 8,
+		iterator = 1,
+		isPressed = false,
+		Quads = { --Klatki animacji
+			Quad(96, 104, 8, 8, 160, 144),
+			Quad(96, 112, 8, 8, 160, 144)}
 	}
 	setmetatable(object, { __index = Spring })
 	return object

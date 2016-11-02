@@ -4,8 +4,9 @@ local Quad = love.graphics.newQuad
 
 Player = {}
 
-function Player:new(playerX, playerY)
+function Player:new(objectName, playerX, playerY)
 	local object = {
+		name = objectName,
 		x = playerX, y = playerY,
 		width = 8, height = 8,
 		xSpeed = 0, ySpeed = 0,

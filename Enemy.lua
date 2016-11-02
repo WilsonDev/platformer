@@ -2,8 +2,9 @@ local Quad = love.graphics.newQuad
 
 Slime = {}
 
-function Slime:new(slimeX, slimeY)
+function Slime:new(objectName, slimeX, slimeY)
 	local object = {
+		name = objectName,
 		x = slimeX, y = slimeY,
 		width = 8, height = 8,
 		xSpeed = 0, ySpeed = 0,

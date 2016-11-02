@@ -2,15 +2,16 @@ local Quad = love.graphics.newQuad
 
 Spike = {}
 
-function Spike:new(spikeX, spikeY)
+function Spike:new(objectName, spikeX, spikeY)
 	local object = {
-	x = spikeX,
-	y = spikeY,
-	width = 8,
-	height = 8,
-	iterator = 1,
-	Quads = {
-		Quad(88, 104, 8, 8, 160, 144)}
+		name = objectName,
+		x = spikeX,
+		y = spikeY,
+		width = 8,
+		height = 8,
+		iterator = 1,
+		Quads = {
+			Quad(88, 104, 8, 8, 160, 144)}
 	}
 	setmetatable(object, { __index = Spike })
 	return object

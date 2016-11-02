@@ -36,46 +36,46 @@ function World:init(level)
 
 	for k, object in pairs(objectLayer.objects) do
 		if object.properties then
+			local objectName = object.properties.name
 			if object.properties.type == 'player' then
-					Global.p = Player:new(object.x + object.width / 2, object.y - object.height / 2)
+					Global.p = Player:new(oobjectName, object.x + object.width / 2, object.y - object.height / 2)
 			end
 			if object.properties.type == 'button' then
 				table.insert(Global.buttons,
-					Button:new(object.x + object.width / 2, object.y - object.height / 2))
+					Button:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'spring' then
 				table.insert(Global.springs,
-					Spring:new(object.x + object.width / 2, object.y - object.height / 2))
+					Spring:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'spike' then
 				table.insert(Global.spikes,
-					Spike:new(object.x + object.width / 2, object.y - object.height / 2))
+					Spike:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'warp' then
 				table.insert(Global.warps,
-					Warp:new(object.x + object.width / 2, object.y - object.height / 2))
+					Warp:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type =='slime' then
 				table.insert(Global.enemies,
-					Slime:new(object.x + object.width / 2, object.y - object.height / 2))
+					Slime:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'behemoth' then
 				table.insert(Global.enemies,
-					Behemoth:new(object.x + object.width / 2, object.y - object.height / 2))
+					Behemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'platform' then
 				table.insert(Global.platforms,
-					Platform:new(object.x + object.width / 2, object.y - object.height / 2, object.properties.path, object.properties.size))
+					Platform:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.path, object.properties.size))
 			end
 			if object.properties.type == 'acid' then
 				table.insert(Global.acids,
-					Acid:new(object.x + object.width / 2, object.y - object.height / 2))
+					Acid:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'pickup' then
-				local id = 1
-				table.insert(Global.pickups,
-					Pickup:new(id, object.x + object.width / 2, object.y - object.height / 2, object.properties.value))
-				id = id + 1
+				Global.pickups[objectName] = Pickup:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.value)
+				-- table.insert(Global.pickups,
+				-- 	Pickup:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.value))
 			end
 		end
 	end
@@ -91,7 +91,7 @@ end
 function World:update(dt)
 	Global.p:update(dt)
 
-	for _, v in ipairs({
+	for _, v in pairs({
 		Global.pickups,
 		Global.enemies,
 		Global.buttons,
@@ -101,7 +101,7 @@ function World:update(dt)
 		Global.acids,
 		Global.spikes}) do
 
-		for _, w in ipairs(v) do
+		for _, w in pairs(v) do
 			w:update(dt)
 		end
 	end
@@ -121,7 +121,7 @@ function World:draw()
 	Global.map:setDrawRange(0, 0, Global.map.width * Global.map.tilewidth, Global.map.height * Global.map.tileheight)
 	Global.map:draw()
 
-	for _, v in ipairs({
+	for _, v in pairs({
 		Global.pickups,
 		Global.enemies,
 		Global.buttons,
@@ -131,7 +131,7 @@ function World:draw()
 		Global.acids,
 		Global.spikes}) do
 
-		for _, w in ipairs(v) do
+		for _, w in pairs(v) do
 			w:draw()
 		end
 	end
@@ -174,7 +174,7 @@ end
 
 --Czyszczenie mapy z obiektów
 function World:clean()
-	for i, v in ipairs({
+	for i, v in pairs({
 		Global.pickups,
 		Global.enemies,
 		Global.buttons,

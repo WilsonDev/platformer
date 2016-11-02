@@ -2,9 +2,9 @@ local Quad = love.graphics.newQuad
 
 Pickup = {}
 
-function Pickup:new(id, pickupX, pickupY, pickupValue)
+function Pickup:new(objectName, pickupX, pickupY, pickupValue)
 	local object = {
-		id = 1,
+		name = objectName,
 		x = pickupX,
 		y = pickupY,
 		width = 8,
@@ -19,7 +19,8 @@ end
 function Pickup:update(dt)
 	local player = Global.p
 	if self:touchesObject(player) then
-		table.remove(Global.pickups, self.id)
+		Global.pickups[self.name] = nil
+		--table.remove(Global.pickups, self.name)
 		Global.score = Global.score + self.value
 		if player.hitpoints < 3 then
 			player.hitpoints = player.hitpoints + 1

@@ -2,12 +2,13 @@ local Quad = love.graphics.newQuad
 
 Warp = {}
 
-function Warp:new(warpX, warpY)
+function Warp:new(objectName, warpX, warpY)
 	local object = {
-	x = warpX,
-	y = warpY,
-	width = 8,
-	height = 8
+		name = objectName,
+		x = warpX,
+		y = warpY,
+		width = 8,
+		height = 8
 	}
 	setmetatable(object, { __index = Warp })
 	return object

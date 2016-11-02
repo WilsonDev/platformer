@@ -2,8 +2,9 @@ local Quad = love.graphics.newQuad
 
 Button = {}
 
-function Button:new(buttonX, buttonY)
+function Button:new(objectName, buttonX, buttonY)
 	local object = {
+		name = objectName,
 		x = buttonX,
 		y = buttonY,
 		width = 8,
@@ -27,14 +28,14 @@ function Button:update(dt)
 			player:collide("floor")
 		end]]
 		if self.isPressed == false then
-			table.insert(Global.enemies, Behemoth:new(0, 28))
+			table.insert(Global.enemies, Behemoth:new('behemoth_0', 0, 28))
 			self.isPressed = true
 			auClickOn:stop() auClickOn:play()
 		end
 		self.iterator = 2
 		clicked = true
 	else
-		if clicked == true then
+		if clicked then
 			auClickOff:stop()
 			auClickOff:play()
 			clicked = false

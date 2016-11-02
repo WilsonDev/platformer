@@ -5,8 +5,9 @@ local init
 
 Platform = {}
 
-function Platform:new(platformX, platformY, platformPath, platformSize)
+function Platform:new(objectName, platformX, platformY, platformPath, platformSize)
 	object = {
+		name = objectName,
 		x = platformX,
 		y = platformY,
 		width = 8,
@@ -174,16 +175,16 @@ end
 function Platform:draw()
 	for i, v in ipairs(self.Quad) do
 		love.graphics.draw(sprite, v, (self.x - (self.width / 2)) + 8 * (i - 1), self.y - (self.height / 2))
-		love.graphics.setPointSize(8)
-		love.graphics.points(self.x, self.y)
+		--love.graphics.setPointSize(8)
+		--love.graphics.points(self.x, self.y)
 	end
 
-	love.graphics.setLineWidth(0.25)
-	for i, v in ipairs(self.path) do
-		if self.path[i + 1] ~= nil then
-			love.graphics.line(self.path[i].x, self.path[i].y, self.path[i + 1].x, self.path[i + 1].y)
-		end
-	end
+	-- love.graphics.setLineWidth(0.25)
+	-- for i, v in ipairs(self.path) do
+	-- 	if self.path[i + 1] ~= nil then
+	-- 		love.graphics.line(self.path[i].x, self.path[i].y, self.path[i + 1].x, self.path[i + 1].y)
+	-- 	end
+	-- end
 end
 
 function Platform:touchesObject(object)
