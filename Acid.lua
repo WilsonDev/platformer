@@ -2,8 +2,9 @@ local Quad = love.graphics.newQuad
 
 Acid = {}
 
-function Acid:new(acidX, acidY)
+function Acid:new(objectName, acidX, acidY)
 	object = {
+		name = objectName,
 		x = acidX,
 		y = acidY + 1,
 		initY = acidY + 1,

@@ -15,8 +15,8 @@ local STI = require "lib/SimpleTiledImpl/sti"
 World = {}
 
 function World:new()
-	object = {}
-	setmetatable(object, { __index = World})
+	local object = {}
+	setmetatable(object, { __index = World })
 	return object
 end
 
@@ -33,7 +33,6 @@ function World:init(level)
 	Global.map.layers["objects"].visible = false
 	local objectLayer = Global.map.layers["objects"]
 
-
 	for k, object in pairs(objectLayer.objects) do
 		if object.properties then
 			local objectName = object.properties.name
@@ -45,8 +44,12 @@ function World:init(level)
 					Button:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
 			end
 			if object.properties.type == 'spring' then
-				table.insert(Global.springs,
-					Spring:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local spring = Spring:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				if object.properties.power then
+					spring.power = object.properties.power
+				end
+				table.insert(Global.springs, spring)
+			
 			end
 			if object.properties.type == 'spike' then
 				table.insert(Global.spikes,
@@ -90,6 +93,7 @@ end
 
 function World:update(dt)
 	Global.p:update(dt)
+	Global.map:update(dt)
 
 	for _, v in pairs({
 		Global.pickups,

@@ -14,7 +14,8 @@ function MenuState:new(stateItemSelected)
 	local object = {
 		menuItems = {},
 		itemSelected = stateItemSelected,
-		subState = subStates[stateItemSelected]
+		subState = subStates[stateItemSelected],
+		pause = false,
 	}
 	setmetatable(object, { __index = MenuState })
 	return object

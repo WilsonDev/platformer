@@ -10,6 +10,7 @@ function Spring:new(objectName, springX, springY)
 		width = 8,
 		height = 8,
 		iterator = 1,
+		power = 120,
 		isPressed = false,
 		Quads = { --Klatki animacji
 			Quad(96, 104, 8, 8, 160, 144),
@@ -24,7 +25,7 @@ function Spring:update(dt)
 
 	if self:touchesObject(player) then
 		self.iterator = 2
-		player:specialJump(120)
+		player:specialJump(self.power)
 		auJump:stop()
 		auJump:play()
 	elseif player.ySpeed > 0 then

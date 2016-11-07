@@ -12,7 +12,7 @@ function GameState:new()
 end
 
 function GameState:init()
-	Global.currentMap = 5
+	Global.currentMap = Global.firstMap
 	self.world = World:new()
 	self.world:init()
 

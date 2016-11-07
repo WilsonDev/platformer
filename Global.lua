@@ -25,6 +25,7 @@ Global = {
 	acids = {},
 	clouds = {},
 
+	firstMap = 5,
 	currentMap = 5, --indeks
 
 	audioMute = true
