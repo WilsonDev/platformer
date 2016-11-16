@@ -422,6 +422,7 @@ return {
           gid = 274,
           visible = true,
           properties = {
+            ["interact"] = "platform_1",
             ["name"] = "button_1",
             ["type"] = "button"
           }

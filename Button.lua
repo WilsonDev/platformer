@@ -11,6 +11,7 @@ function Button:new(objectName, buttonX, buttonY)
 		height = 8,
 		iterator = 1,
 		isPressed = false,
+		interact = "",
 		Quads = { --Klatki animacji
 			Quad(104, 104, 8, 8, 160, 144),
 			Quad(104, 112, 8, 8, 160, 144)}
@@ -28,7 +29,10 @@ function Button:update(dt)
 			player:collide("floor")
 		end]]
 		if self.isPressed == false then
-			table.insert(Global.enemies, Behemoth:new('behemoth_0', 0, 28))
+			if self.interact ~= nil then
+				Global.objects["platform"][self.interact].isMoving = true
+			end
+			--table.insert(Global.enemies, Behemoth:new('behemoth_0', 0, 28))
 			self.isPressed = true
 			auClickOn:stop() auClickOn:play()
 		end

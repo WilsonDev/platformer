@@ -11,6 +11,7 @@ require "Acid"
 require "Platform"
 require "Cloud"
 local STI = require "lib/SimpleTiledImpl/sti"
+local addToTable
 
 World = {}
 
@@ -37,48 +38,47 @@ function World:init(level)
 		if object.properties then
 			local objectName = object.properties.name
 			if object.properties.type == 'player' then
-					Global.p = Player:new(oobjectName, object.x + object.width / 2, object.y - object.height / 2)
+				Global.p = Player:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
 			end
 			if object.properties.type == 'button' then
-				table.insert(Global.buttons,
-					Button:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local button = Button:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				button.interact = object.properties.interact
+				addToTable(Global.objects, object.properties.type, objectName, button)
 			end
 			if object.properties.type == 'spring' then
 				local spring = Spring:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
 				if object.properties.power then
 					spring.power = object.properties.power
 				end
-				table.insert(Global.springs, spring)
-			
+				addToTable(Global.objects, object.properties.type, objectName, spring)		
 			end
 			if object.properties.type == 'spike' then
-				table.insert(Global.spikes,
-					Spike:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local spike = Spike:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				addToTable(Global.objects, object.properties.type, objectName, spike)
 			end
 			if object.properties.type == 'warp' then
-				table.insert(Global.warps,
-					Warp:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local warp = Warp:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				addToTable(Global.objects, object.properties.type, objectName, warp)
 			end
 			if object.properties.type =='slime' then
-				table.insert(Global.enemies,
-					Slime:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local slime = Slime:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				addToTable(Global.objects, object.properties.type, objectName, slime)
 			end
 			if object.properties.type == 'behemoth' then
-				table.insert(Global.enemies,
-					Behemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local behemoth = Behemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				addToTable(Global.objects, object.properties.type, objectName, behemoth)
 			end
 			if object.properties.type == 'platform' then
-				table.insert(Global.platforms,
-					Platform:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.path, object.properties.size))
+				local platform = Platform:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.path, object.properties.size)
+				addToTable(Global.objects, object.properties.type, objectName, platform)
 			end
 			if object.properties.type == 'acid' then
-				table.insert(Global.acids,
-					Acid:new(objectName, object.x + object.width / 2, object.y - object.height / 2))
+				local acid = Acid:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				addToTable(Global.objects, object.properties.type, objectName, acid)
 			end
 			if object.properties.type == 'pickup' then
-				Global.pickups[objectName] = Pickup:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.value)
-				-- table.insert(Global.pickups,
-				-- 	Pickup:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.value))
+				local pickup = Pickup:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.value)
+				addToTable(Global.objects, object.properties.type, objectName, pickup)
 			end
 		end
 	end
@@ -91,20 +91,18 @@ function World:init(level)
 		(Global.map.height * Global.map.tileheight) - (Global.windowHeight * Global.camera.scaleX))
 end
 
+function addToTable(table, k1, k2, value)
+	if table[k1] == nil then
+		rawset(table, k1, {})
+	end
+	rawset(table[k1], k2, value)
+end
+
 function World:update(dt)
 	Global.p:update(dt)
 	Global.map:update(dt)
 
-	for _, v in pairs({
-		Global.pickups,
-		Global.enemies,
-		Global.buttons,
-		Global.springs,
-		Global.platforms,
-		Global.warps,
-		Global.acids,
-		Global.spikes}) do
-
+	for _, v in pairs(Global.objects) do
 		for _, w in pairs(v) do
 			w:update(dt)
 		end
@@ -125,16 +123,7 @@ function World:draw()
 	Global.map:setDrawRange(0, 0, Global.map.width * Global.map.tilewidth, Global.map.height * Global.map.tileheight)
 	Global.map:draw()
 
-	for _, v in pairs({
-		Global.pickups,
-		Global.enemies,
-		Global.buttons,
-		Global.springs,
-		Global.platforms,
-		Global.warps,
-		Global.acids,
-		Global.spikes}) do
-
+	for _, v in pairs(Global.objects) do
 		for _, w in pairs(v) do
 			w:draw()
 		end
@@ -154,7 +143,7 @@ function World:draw()
 	for i = 1, Global.p.hitpoints do
 		love.graphics.draw(sprite, heart, 940 - (i * 28), 22, 0, 4, 4)
 	end
-	for i = 1,(5 - Global.p.firedShots) do
+	for i = 1, (5 - Global.p.firedShots) do
 		love.graphics.draw(sprite, clip, 940 - (i * 28), 46, 0, 4, 4)
 	end
 end
@@ -178,19 +167,11 @@ end
 
 --Czyszczenie mapy z obiektów
 function World:clean()
-	for i, v in pairs({
-		Global.pickups,
-		Global.enemies,
-		Global.buttons,
-		Global.springs,
-		Global.platforms,
-		Global.warps,
-		Global.acids,
-		Global.spikes}) do
-
-		for i = 0, #v do
-			v[i] = nil
+	for k, v in pairs(Global.objects) do
+		for l, w in pairs(v) do
+			Global.objects[k][l] = nil
 		end
+		Global.objects[k] = nil
 	end
 end
 

@@ -19,7 +19,7 @@ end
 function Pickup:update(dt)
 	local player = Global.p
 	if self:touchesObject(player) then
-		Global.pickups[self.name] = nil
+		Global.objects["pickup"][self.name] = nil
 		--table.remove(Global.pickups, self.name)
 		Global.score = Global.score + self.value
 		if player.hitpoints < 3 then

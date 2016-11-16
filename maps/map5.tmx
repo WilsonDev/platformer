@@ -237,6 +237,7 @@
   </object>
   <object id="18" gid="274" x="256" y="88" width="8" height="8">
    <properties>
+    <property name="interact" value="platform_1"/>
     <property name="name" value="button_1"/>
     <property name="type" value="button"/>
    </properties>

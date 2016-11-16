@@ -154,34 +154,36 @@ end
 
 function Player:enemyColliding()
 	--Kolizja z przeciwnikiem
-	for i,v in ipairs(Global.enemies) do
-		if v:touchesObject(self) and not self.invul then
-			self.isPoked = true
-			auPunch:stop()
-			auPunch:play()
+	for _, v in pairs({Global.objects["behemoth"], Global.objects["slime"]}) do
+		for _, w in pairs(v) do	
+			if w:touchesObject(self) and not self.invul then
+				self.isPoked = true
+				auPunch:stop()
+				auPunch:play()
 
-			if self.invul == false then
-				self.invul = true
-				self.invultime = 2
-				self.hitpoints = self.hitpoints - 1
-			end
+				if self.invul == false then
+					self.invul = true
+					self.invultime = 2
+					self.hitpoints = self.hitpoints - 1
+				end
 
-			self.runSpeed = self.runSpeed + 30
-			self:jump()
+				self.runSpeed = self.runSpeed + 30
+				self:jump()
 
-			if love.keyboard.isDown("right")
-				or (v.xScale == -1 and not love.keyboard.isDown("left")) then
-				self:moveLeft()
-			elseif love.keyboard.isDown("left") or v.xScale == 1 then
-				self:moveRight()
+				if love.keyboard.isDown("right")
+					or (w.xScale == -1 and not love.keyboard.isDown("left")) then
+					self:moveLeft()
+				elseif love.keyboard.isDown("left") or w.xScale == 1 then
+					self:moveRight()
+				end
 			end
 		end
-	end
 
-	if self.onGround and self.isPoked then
-		self.isPoked = false
-		self.runSpeed = self.runSpeed - 30
-		self:stop()
+		if self.onGround and self.isPoked then
+			self.isPoked = false
+			self.runSpeed = self.runSpeed - 30
+			self:stop()
+		end
 	end
 end
 
@@ -194,16 +196,20 @@ function Player:ammoUpdate(dt)
 			v.toRemove = true
 		end
 
-		for j in ipairs(Global.enemies) do
-			if v:touchesObject(Global.enemies[j]) and not v.toRemove then
-				Global.enemies[j].hitpoints = Global.enemies[j].hitpoints - v.damage
-				if Global.enemies[j].hitpoints <= 0 then
-					table.remove(Global.enemies, j)
-				end
+		for _, w in pairs({Global.objects["behemoth"], Global.objects["slime"]}) do
+			for _, u in pairs(w) do 
+				if v:touchesObject(u) and not v.toRemove then
+					u.hitpoints = u.hitpoints - v.damage
+					if u.hitpoints <= 0 then
+						Global.objects["behemoth"][u.name] = nil
+						Global.objects["slime"][u.name] = nil
+						--table.remove(Global.enemies, w)
+					end
 
-				v.toRemove = true
-				Global.score = Global.score + 50
-				auHit:stop() auHit:play()
+					v.toRemove = true
+					Global.score = Global.score + 50
+					auHit:stop() auHit:play()
+				end
 			end
 		end
 
@@ -298,10 +304,11 @@ function Player:update(dt)
 	elseif direction == -1 then
 		self:moveLeft()
 	end
+
 	if not love.keyboard.isDown("left")
-			and not love.keyboard.isDown("right")
-			and not self.isPoked then
-				self:stop()
+	and not love.keyboard.isDown("right")
+	and not self.isPoked then
+		self:stop()
 	end
 
 	self.state = self:getState()

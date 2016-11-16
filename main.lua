@@ -4,6 +4,7 @@ require "Scores"
 require "Global"
 require "MathUtils"
 require "StringUtils"
+local initScores
 
 local state = {}
 
@@ -15,15 +16,20 @@ function love.load()
 
 	Global.scores = Scores:new("scores", 10)
 	Global.scores:load()
+
+	initScores()
+
+	state = State:new()
+	state:set()
+end
+
+function initScores() 
 	if #Global.scores == 0 then
 		for i = 1,10 do
 			Global.scores:add("AAA", 0)
 		end
 		Global.scores:save()
 	end
-
-	state = State:new()
-	state:set()
 end
 
 function love.update(dt)
