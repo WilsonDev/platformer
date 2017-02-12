@@ -1,4 +1,4 @@
-require "Checkpoint"
+require "PlatformCheckpoint"
 
 local Quad = love.graphics.newQuad
 local init
@@ -39,12 +39,12 @@ function init(object)
 	local checkpoints = StringUtils.split(object.stringPath, ";")
 	local lastX = object.x
 	local lastY = object.y
-	table.insert(object.path, Checkpoint:new(1, lastX, lastY))
+	table.insert(object.path, PlatformCheckpoint:new(1, lastX, lastY))
 	for i = 1, #checkpoints do
 		local checkpoint = StringUtils.split(checkpoints[i], ",")
 		lastX = checkpoint[1] + lastX
 		lastY = checkpoint[2] + lastY
-		table.insert(object.path, Checkpoint:new(i + 1, lastX, lastY))
+		table.insert(object.path, PlatformCheckpoint:new(i + 1, lastX, lastY))
 	end
 
 	-- for k, v in pairs(object.path) do

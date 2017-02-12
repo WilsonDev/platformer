@@ -8,7 +8,7 @@ function MenuItem:new(menuItemName, menuItemY)
 		selected = false,
 		redirectTo = nil,
 		timer = 0,
-		charWidth = 20
+		charWidth = 18
 	}
 
 	(function ()

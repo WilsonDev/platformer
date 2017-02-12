@@ -6,6 +6,7 @@ MenuState = {}
 local subStates = {
 	"game",
 	"scores",
+	"settings",
 	"controls",
 	"exit"
 }
@@ -22,10 +23,11 @@ function MenuState:new(stateItemSelected)
 end
 
 function MenuState:init()
-	table.insert(self.menuItems, MenuItem:new("NEW", 95))
-	table.insert(self.menuItems, MenuItem:new("SCORES", 125))
-	table.insert(self.menuItems, MenuItem:new("CONTROLS", 155))
-	table.insert(self.menuItems, MenuItem:new("EXIT", 185))
+	table.insert(self.menuItems, MenuItem:new("NEW", 90))
+	table.insert(self.menuItems, MenuItem:new("SCORES", 120))
+	table.insert(self.menuItems, MenuItem:new("SETTINGS", 150))
+	table.insert(self.menuItems, MenuItem:new("CONTROLS", 180))
+	table.insert(self.menuItems, MenuItem:new("EXIT", 210))
 
 	self.menuItems[self.itemSelected]:select(true)
 end
