@@ -7,15 +7,15 @@
 local STI = {
 	_LICENSE     = "MIT/X11",
 	_URL         = "https://github.com/karai17/Simple-Tiled-Implementation",
-	_VERSION     = "0.16.0.3",
+	_VERSION     = "0.18.1.0",
 	_DESCRIPTION = "Simple Tiled Implementation is a Tiled Map Editor library designed for the *awesome* LÖVE framework.",
 	cache        = {}
 }
 STI.__index = STI
 
-local path       = (...):gsub('%.init$', '') .. "."
-local pluginPath = string.gsub(path, "[.]", "/") .. "plugins/"
-local utils      = require(path .. "utils")
+local cwd       = (...):gsub('%.init$', '') .. "."
+local pluginDir = string.gsub(cwd, "[.]", "/") .. "plugins/"
+local utils      = require(cwd .. "utils")
 local ceil       = math.ceil
 local floor      = math.floor
 local lg         = love.graphics
@@ -23,34 +23,41 @@ local Map        = {}
 Map.__index      = Map
 
 local function new(map, plugins, ox, oy)
-	-- Check for valid map type
-	local ext = map:sub(-4, -1)
-	assert(ext == ".lua", string.format(
-		"Invalid file type: %s. File must be of type: lua.",
-		ext
-	))
+	local dir = ""
 
-	-- Get path to map
-	local path = map:reverse():find("[/\\]") or ""
-	if path ~= "" then
-		path = map:sub(1, 1 + (#map - path))
+	if type(map) == "table" then
+		map = setmetatable(map, Map)
+	else
+		-- Check for valid map type
+		local ext = map:sub(-4, -1)
+		assert(ext == ".lua", string.format(
+			"Invalid file type: %s. File must be of type: lua.",
+			ext
+		))
+
+		-- Get directory of map
+		dir = map:reverse():find("[/\\]") or ""
+		if dir ~= "" then
+			dir = map:sub(1, 1 + (#map - dir))
+		end
+
+		-- Load map
+		map = setmetatable(love.filesystem.load(map)(), Map)
 	end
 
-	-- Load map
-	map = setmetatable(love.filesystem.load(map)(), Map)
-	map:init(path, plugins, ox, oy)
+	map:init(dir, plugins, ox, oy)
 
 	return map
 end
 
 --- Instance a new map.
--- @param path Path to the map file
+-- @param map Path to the map file or the map table itself
 -- @param plugins A list of plugins to load
 -- @param ox Offset of map on the X axis (in pixels)
 -- @param oy Offset of map on the Y axis (in pixels)
 -- @return table The loaded Map
-function STI.__call(self, path, plugins, ox, oy)
-	return new(path, plugins, ox, oy)
+function STI:__call(map, plugins, ox, oy)
+	return new(map, plugins, ox, oy)
 end
 
 --- Flush image cache.
@@ -98,11 +105,13 @@ function Map:init(path, plugins, ox, oy)
 		-- Pull images from cache
 		tileset.image = STI.cache[formatted_path]
 
+		utils.fixTransparentColor(tileset)
+
 		gid = self:setTiles(i, tileset, gid)
 	end
 
 	-- Set layers
-	for i, layer in ipairs(self.layers) do
+	for _, layer in ipairs(self.layers) do
 		self:setLayer(layer, path)
 	end
 end
@@ -112,9 +121,9 @@ end
 -- @return nil
 function Map:loadPlugins(plugins)
 	for _, plugin in ipairs(plugins) do
-		local p = pluginPath .. plugin .. ".lua"
+		local p = pluginDir .. plugin .. ".lua"
 		if love.filesystem.isFile(p) then
-			local file = love.filesystem.load(p)(path)
+			local file = love.filesystem.load(p)(cwd)
 			for k, func in pairs(file) do
 				if not self[k] then
 					self[k] = func
@@ -201,7 +210,7 @@ end
 function Map:setLayer(layer, path)
 	if layer.encoding then
 		if layer.encoding == "base64" then
-			local ffi = assert(require "ffi", "Compressed maps require LuaJIT FFI.\nPlease Switch your interperator to LuaJIT or your Tile Layer Format to \"CSV\".")
+			assert(require "ffi", "Compressed maps require LuaJIT FFI.\nPlease Switch your interperator to LuaJIT or your Tile Layer Format to \"CSV\".")
 			local fd  = love.filesystem.newFileData(layer.data, "data", "base64"):getString()
 
 			if not layer.compression then
@@ -224,7 +233,7 @@ function Map:setLayer(layer, path)
 
 	layer.x      = (layer.x or 0) + layer.offsetx + self.offsetx
 	layer.y      = (layer.y or 0) + layer.offsety + self.offsety
-	layer.update = function(dt) return end
+	layer.update = function() end
 
 	if layer.type == "tilelayer" then
 		self:setTileData(layer)
@@ -341,73 +350,86 @@ end
 -- @param layer The Tile Layer
 -- @return nil
 function Map:setSpriteBatches(layer)
-	local newBatch   = lg.newSpriteBatch
-	local w          = lg.getWidth()
-	local h          = lg.getHeight()
-	local tileW      = self.tilewidth
-	local tileH      = self.tileheight
-	local batchW     = ceil(w / tileW)
-	local batchH     = ceil(h / tileH)
-	local startX     = 1
-	local startY     = 1
-	local endX       = layer.width
-	local endY       = layer.height
-	local incrementX = 1
-	local incrementY = 1
+	local newBatch = lg.newSpriteBatch
+	local tileW    = self.tilewidth
+	local tileH    = self.tileheight
+	local batches  = {}
 
-	-- Determine order to add tiles to sprite batch
-	-- Defaults to right-down
-	if self.renderorder == "right-up" then
-		startX, endX, incrementX = startX, endX,  1
-		startY, endY, incrementY = endY, startY, -1
-	elseif self.renderorder == "left-down" then
-		startX, endX, incrementX = endX, startX, -1
-		startY, endY, incrementY = startY, endY,  1
-	elseif self.renderorder == "left-up" then
-		startX, endX, incrementX = endX, startX, -1
-		startY, endY, incrementY = endY, startY, -1
-	end
+	if self.orientation == "orthogonal" or self.orientation == "isometric" then
+		local startX     = 1
+		local startY     = 1
+		local endX       = layer.width
+		local endY       = layer.height
+		local incrementX = 1
+		local incrementY = 1
 
-	-- Minimum of 400 tiles per batch
-	if batchW < 20 then batchW = 20 end
-	if batchH < 20 then batchH = 20 end
+		-- Determine order to add tiles to sprite batch
+		-- Defaults to right-down
+		if self.renderorder == "right-up" then
+			startX, endX, incrementX = startX, endX,  1
+			startY, endY, incrementY = endY, startY, -1
+		elseif self.renderorder == "left-down" then
+			startX, endX, incrementX = endX, startX, -1
+			startY, endY, incrementY = startY, endY,  1
+		elseif self.renderorder == "left-up" then
+			startX, endX, incrementX = endX, startX, -1
+			startY, endY, incrementY = endY, startY, -1
+		end
 
-	local batchSize = batchW * batchH
-	local batches   = {
-		width  = batchW,
-		height = batchH,
-		data   = {},
-	}
+		for y = startY, endY, incrementY do
+			for x = startX, endX, incrementX do
+				local tile = layer.data[y][x]
 
-	for y = startY, endY, incrementY do
-		local batchY = ceil(y / batchH)
+				if tile then
+					local tileset = tile.tileset
+					local image   = self.tilesets[tile.tileset].image
 
-		for x = startX, endX, incrementX do
-			local tile   = layer.data[y][x]
-			local batchX = ceil(x / batchW)
+					batches[tileset] = batches[tileset] or newBatch(image, layer.width * layer.height)
 
-			if tile then
-				local tileset = tile.tileset
-				local image   = self.tilesets[tile.tileset].image
+					local batch = batches[tileset]
+					local tileX, tileY
 
-				batches.data[tileset]                 = batches.data[tileset] or {}
-				batches.data[tileset][batchY]         = batches.data[tileset][batchY] or {}
-				batches.data[tileset][batchY][batchX] = batches.data[tileset][batchY][batchX] or newBatch(image, batchSize)
+					if self.orientation == "orthogonal" then
+						tileX = (x - 1) * tileW + tile.offset.x
+						tileY = (y - 1) * tileH + tile.offset.y
+						tileX, tileY = utils.compensate(tile, tileX, tileY, tileW, tileH)
+					else
+						tileX = (x - y) * (tileW / 2) + tile.offset.x + layer.width * tileW / 2 - self.tilewidth / 2
+						tileY = (x + y - 2) * (tileH / 2) + tile.offset.y
+					end
 
-				local batch = batches.data[tileset][batchY][batchX]
-				local tileX, tileY
+					local id = batch:add(tile.quad, tileX, tileY, tile.r, tile.sx, tile.sy)
+					self.tileInstances[tile.gid] = self.tileInstances[tile.gid] or {}
+					table.insert(self.tileInstances[tile.gid], {
+						layer = layer,
+						batch = batch,
+						id    = id,
+						gid   = tile.gid,
+						x     = tileX,
+						y     = tileY,
+						r     = tile.r,
+						oy    = 0
+					})
+				end
+			end
+		end
+	else
+		local sideLen = self.hexsidelength or 0
 
-				if self.orientation == "orthogonal" then
-					tileX = (x - 1) * tileW + tile.offset.x
-					tileY = (y - 1) * tileH + tile.offset.y
-					tileX, tileY = utils.compensate(tile, tileX, tileY, tileW, tileH)
-				elseif self.orientation == "isometric" then
-					tileX = (x - y) * (tileW / 2) + tile.offset.x + layer.width * tileW / 2 - self.tilewidth / 2
-					tileY = (x + y - 2) * (tileH / 2) + tile.offset.y
-				elseif self.orientation == "staggered" or self.orientation == "hexagonal" then
-					local sideLen = self.hexsidelength or 0
+		if self.staggeraxis == "y" then
+			for y = 1, layer.height do
+				for x = 1, layer.width do
+					local tile = layer.data[y][x]
 
-					if self.staggeraxis == "y" then
+					if tile then
+						local tileset = tile.tileset
+						local image   = self.tilesets[tile.tileset].image
+
+						batches[tileset] = batches[tileset] or newBatch(image, layer.width * layer.height)
+
+						local batch = batches[tileset]
+						local tileX, tileY
+
 						if self.staggerindex == "odd" then
 							if y % 2 == 0 then
 								tileX = (x - 1) * tileW + tileW / 2 + tile.offset.x
@@ -424,38 +446,87 @@ function Map:setSpriteBatches(layer)
 
 						local rowH = tileH - (tileH - sideLen) / 2
 						tileY = (y - 1) * rowH + tile.offset.y
-					else
-						if self.staggerindex == "odd" then
-							if x % 2 == 0 then
-								tileY = (y - 1) * tileH + tileH / 2 + tile.offset.y
-							else
-								tileY = (y - 1) * tileH + tile.offset.y
-							end
-						else
-							if x % 2 == 0 then
-								tileY = (y - 1) * tileH + tile.offset.y
-							else
-								tileY = (y - 1) * tileH + tileH / 2 + tile.offset.y
-							end
-						end
 
-						local colW = tileW - (tileW - sideLen) / 2
-						tileX = (x - 1) * colW + tile.offset.x
+						local id = batch:add(tile.quad, tileX, tileY, tile.r, tile.sx, tile.sy)
+						self.tileInstances[tile.gid] = self.tileInstances[tile.gid] or {}
+						table.insert(self.tileInstances[tile.gid], {
+							layer = layer,
+							batch = batch,
+							id    = id,
+							gid   = tile.gid,
+							x     = tileX,
+							y     = tileY,
+							r     = tile.r,
+							oy    = 0
+						})
 					end
 				end
+			end
+		else
+			local i = 0
+			local _x
 
-				local id = batch:add(tile.quad, tileX, tileY, tile.r, tile.sx, tile.sy)
-				self.tileInstances[tile.gid] = self.tileInstances[tile.gid] or {}
-				table.insert(self.tileInstances[tile.gid], {
-					layer = layer,
-					batch = batch,
-					id    = id,
-					gid   = tile.gid,
-					x     = tileX,
-					y     = tileY,
-					r     = tile.r,
-					oy    = 0
-				})
+			if self.staggerindex == "odd" then
+				_x = 1
+			else
+				_x = 2
+			end
+
+			while i < layer.width * layer.height do
+				for _y = 1, layer.height + 0.5, 0.5 do
+					local y = floor(_y)
+
+					for x = _x, layer.width, 2 do
+						i = i + 1
+						local tile = layer.data[y][x]
+
+						if tile then
+							local tileset = tile.tileset
+							local image   = self.tilesets[tile.tileset].image
+
+							batches[tileset] = batches[tileset] or newBatch(image, layer.width * layer.height)
+
+							local batch = batches[tileset]
+							local tileX, tileY
+
+							if self.staggerindex == "odd" then
+								if x % 2 == 0 then
+									tileY = (y - 1) * tileH + tileH / 2 + tile.offset.y
+								else
+									tileY = (y - 1) * tileH + tile.offset.y
+								end
+							else
+								if x % 2 == 0 then
+									tileY = (y - 1) * tileH + tile.offset.y
+								else
+									tileY = (y - 1) * tileH + tileH / 2 + tile.offset.y
+								end
+							end
+
+							local colW = tileW - (tileW - sideLen) / 2
+							tileX = (x - 1) * colW + tile.offset.x
+
+							local id = batch:add(tile.quad, tileX, tileY, tile.r, tile.sx, tile.sy)
+							self.tileInstances[tile.gid] = self.tileInstances[tile.gid] or {}
+							table.insert(self.tileInstances[tile.gid], {
+								layer = layer,
+								batch = batch,
+								id    = id,
+								gid   = tile.gid,
+								x     = tileX,
+								y     = tileY,
+								r     = tile.r,
+								oy    = 0
+							})
+						end
+					end
+
+					if _x == 1 then
+						_x = 2
+					else
+						_x = 1
+					end
+				end
 			end
 		end
 	end
@@ -472,13 +543,19 @@ function Map:setObjectSpriteBatches(layer)
 	local tileH    = self.tileheight
 	local batches  = {}
 
+	if layer.draworder == "topdown" then
+		table.sort(layer.objects, function(a, b)
+			return a.y + a.height < b.y + b.height
+		end)
+	end
+
 	for _, object in ipairs(layer.objects) do
 		if object.gid then
 			local tile    = self.tiles[object.gid] or self:setFlippedGID(object.gid)
 			local tileset = tile.tileset
 			local image   = self.tilesets[tile.tileset].image
 
-			batches[tileset] = batches[tileset] or newBatch(image, 100)
+			batches[tileset] = batches[tileset] or newBatch(image)
 
 			local batch = batches[tileset]
 			local tileX = object.x + tile.offset.x
@@ -517,46 +594,12 @@ function Map:setObjectSpriteBatches(layer)
 	layer.batches = batches
 end
 
---- Only draw what is visible on screen for improved draw speed
--- @param transX Translate X axis (in pixels)
--- @param transY Translate Y axis (in pixels)
--- @param w Width of screen (in pixels)
--- @param h Height of screen (in pixels)
--- @return nil
-function Map:setDrawRange(transX, transY, w, h)
-	local tileW = self.tilewidth
-	local tileH = self.tileheight
-	local startX, startY, endX, endY
-
-	if self.orientation == "orthogonal" then
-		startX = ceil(transX / tileW)
-		startY = ceil(transY / tileH)
-		endX   = ceil(startX + w / tileW)
-		endY   = ceil(startY + h / tileH)
-	elseif self.orientation == "isometric" then
-		startX = ceil(((transY / (tileH / 2)) + (transX / (tileW / 2))) / 2)
-		startY = ceil(((transY / (tileH / 2)) - (transX / (tileW / 2))) / 2 - h / tileH)
-		endX   = ceil(startX + (h / tileH) + (w / tileW))
-		endY   = ceil(startY + (h / tileH) * 2 + (w / tileW))
-	elseif self.orientation == "staggered" or self.orientation == "hexagonal" then
-		startX = ceil(transX / tileW - 1)
-		startY = ceil(transY / tileH)
-		endX   = ceil(startX + w / tileW + 1)
-		endY   = ceil(startY + h / tileH * 2)
-	end
-
-	self.drawRange.sx = startX
-	self.drawRange.sy = startY
-	self.drawRange.ex = endX
-	self.drawRange.ey = endY
-end
-
 --- Create a Custom Layer to place userdata in (such as player sprites)
 -- @param name Name of Custom Layer
 -- @param index Draw order within Layer stack
 -- @return table Custom Layer
 function Map:addCustomLayer(name, index)
-	local index = index or #self.layers + 1
+	index = index or #self.layers + 1
 	local layer = {
       type       = "customlayer",
       name       = name,
@@ -565,8 +608,8 @@ function Map:addCustomLayer(name, index)
       properties = {},
     }
 
-	function layer:draw() return end
-	function layer:update(dt) return end
+	function layer.draw() end
+	function layer.update() end
 
 	table.insert(self.layers, index, layer)
 	self.layers[name] = self.layers[index]
@@ -590,8 +633,8 @@ function Map:convertToCustomLayer(index)
 	layer.objects  = nil
 	layer.image    = nil
 
-	function layer:draw() return end
-	function layer:update(dt) return end
+	function layer.draw() end
+	function layer.update() end
 
 	return layer
 end
@@ -603,8 +646,8 @@ function Map:removeLayer(index)
 	local layer = assert(self.layers[index], "Layer not found: " .. index)
 
 	if type(index) == "string" then
-		for i, layer in ipairs(self.layers) do
-			if layer.name == index then
+		for i, l in ipairs(self.layers) do
+			if l.name == index then
 				table.remove(self.layers, i)
 				self.layers[index] = nil
 				break
@@ -618,7 +661,7 @@ function Map:removeLayer(index)
 
 	-- Remove tile instances
 	if layer.batches then
-		for gid, tiles in pairs(self.tileInstances) do
+		for _, tiles in pairs(self.tileInstances) do
 			for i = #tiles, 1, -1 do
 				local tile = tiles[i]
 				if tile.layer == layer then
@@ -642,7 +685,7 @@ end
 -- @param dt Delta Time
 -- @return nil
 function Map:update(dt)
-	for gid, tile in pairs(self.tiles) do
+	for _, tile in pairs(self.tiles) do
 		local update = false
 
 		if tile.animation then
@@ -664,7 +707,6 @@ function Map:update(dt)
 			end
 		end
 	end
-
 
 	for _, layer in ipairs(self.layers) do
 		layer:update(dt)
@@ -695,9 +737,10 @@ end
 -- @param layer The Layer to draw
 -- @return nil
 function Map:drawLayer(layer)
-	lg.setColor(255, 255, 255, 255 * layer.opacity)
+	local r,g,b,a = lg.getColor()
+	lg.setColor(r, g, b, a * layer.opacity)
 	layer:draw()
-	lg.setColor(255, 255, 255, 255)
+	lg.setColor(r,g,b,a)
 end
 
 --- Default draw function for Tile Layers
@@ -710,43 +753,8 @@ function Map:drawTileLayer(layer)
 
 	assert(layer.type == "tilelayer", "Invalid layer type: " .. layer.type .. ". Layer must be of type: tilelayer")
 
-	local batchW     = layer.batches.width
-	local batchH     = layer.batches.height
-	local tileW      = self.tilewidth
-	local tileH      = self.tileheight
-	local startX     = ceil((self.drawRange.sx - layer.x / tileW - 1) / batchW)
-	local startY     = ceil((self.drawRange.sy - layer.y / tileH - 1) / batchH)
-	local endX       = ceil((self.drawRange.ex - layer.x / tileW + 1) / batchW)
-	local endY       = ceil((self.drawRange.ey - layer.y / tileH + 1) / batchH)
-	local incrementX = 1
-	local incrementY = 1
-	local maxX       = ceil(self.width  / batchW)
-	local maxY       = ceil(self.height / batchH)
-
-	-- Determine order to draw batches
-	-- Defaults to right-down
-	if self.renderorder == "right-up" then
-		startX, endX, incrementX = startX, endX,  1
-		startY, endY, incrementY = endY, startY, -1
-	elseif self.renderorder == "left-down" then
-		startX, endX, incrementX = endX, startX, -1
-		startY, endY, incrementY = startY, endY,  1
-	elseif self.renderorder == "left-up" then
-		startX, endX, incrementX = endX, startX, -1
-		startY, endY, incrementY = endY, startY, -1
-	end
-
-	for batchY = startY, endY, incrementY do
-		for batchX = startX, endX, incrementX do
-			if batchX >= 1 and batchX <= maxX and batchY >= 1 and batchY <= maxY then
-				for _, batches in pairs(layer.batches.data) do
-					local batch = batches[batchY] and batches[batchY][batchX]
-					if batch then
-						lg.draw(batch, floor(layer.x), floor(layer.y))
-					end
-				end
-			end
-		end
+	for _, batch in pairs(layer.batches) do
+		lg.draw(batch, floor(layer.x), floor(layer.y))
 	end
 end
 
@@ -762,7 +770,8 @@ function Map:drawObjectLayer(layer)
 
 	local line  = { 160, 160, 160, 255 * layer.opacity       }
 	local fill  = { 160, 160, 160, 255 * layer.opacity * 0.5 }
-	local reset = { 255, 255, 255, 255 * layer.opacity       }
+	local r,g,b,a = lg.getColor()
+	local reset = {   r,   g,   b,   a * layer.opacity       }
 
 	local function sortVertices(obj)
 		local vertex = {}
@@ -817,6 +826,7 @@ function Map:drawObjectLayer(layer)
 	for _, batch in pairs(layer.batches) do
 		lg.draw(batch, 0, 0)
 	end
+	lg.setColor(r,g,b,a)
 end
 
 --- Default draw function for Image Layers

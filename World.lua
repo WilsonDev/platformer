@@ -60,7 +60,7 @@ function World:init(level)
 				local warp = Warp:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
 				addToTable(Global.objects, object.properties.type, objectName, warp)
 			end
-			if object.properties.type =='slime' then
+			if object.properties.type == 'slime' then
 				local slime = Slime:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
 				addToTable(Global.objects, object.properties.type, objectName, slime)
 			end
@@ -120,7 +120,8 @@ end
 function World:draw()
 	Global.camera:set()
 
-	Global.map:setDrawRange(0, 0, Global.map.width * Global.map.tilewidth, Global.map.height * Global.map.tileheight)
+	--removed in STI v0.18.1.0
+	--Global.map:setDrawRange(0, 0, Global.map.width * Global.map.tilewidth, Global.map.height * Global.map.tileheight)
 	Global.map:draw()
 
 	for _, v in pairs(Global.objects) do

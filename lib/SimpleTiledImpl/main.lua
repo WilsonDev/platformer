@@ -1,5 +1,9 @@
 io.stdout:setvbuf("no")
 local sti = require "sti"
+local map
+local world
+local tx, ty
+local points
 
 function love.load()
 	-- Load map
@@ -7,6 +11,7 @@ function love.load()
 	--map = sti("tests/iso.lua",   { "box2d" })
 	--map = sti("tests/stag.lua",  { "box2d" })
 	--map = sti("tests/hex.lua",   { "box2d" })
+	--map = sti("tests/bench.lua", { "box2d" }) -- this might crash your system!
 
 	-- Print versions
 	print("STI: " .. sti._VERSION)
@@ -60,6 +65,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.translate(-tx, -ty)
 	map:draw()
 
