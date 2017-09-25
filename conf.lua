@@ -4,7 +4,7 @@
 	t.window.fullscreen = false
 	t.window.width = 960
 	t.window.height = 320
-	t.window.vsync = false
+	t.window.vsync = true
 	t.modules.joystick = false
 	t.modules.mouse = false
 	t.modules.physics = false

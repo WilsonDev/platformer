@@ -12,7 +12,7 @@ function Player:new(objectName, playerX, playerY)
 		xSpeed = 0, ySpeed = 0,
 		state = "stand",
 		hitpoints = 3,
-		jumpSpeed = -150,
+		jumpSpeed = -140,
 		runSpeed = 70,
 		direction = 1,
 		xScale = 1,
@@ -53,7 +53,7 @@ end
 
 function Player:specialJump(strenght)
 	self.ySpeed = self.jumpSpeed - strenght
-  	self.jumpCount = 1
+  	-- self.jumpCount = 1
 end
 
 function Player:moveRight()
@@ -77,9 +77,9 @@ function Player:sprint()
 end
 
 function Player:stop()
-	if self.isMoving then
-		self.iterator = 1
-	end
+	-- if self.isMoving then
+	-- 	self.iterator = 1
+	-- end
 	self.isMoving = false
 	self.xSpeed = 0
 end
@@ -360,9 +360,11 @@ function Player:keyreleased(key)
 		if love.keyboard.isDown("left") then
 			direction = -1
 		end
+		self.iterator = 1
 	elseif key == "left" then --lewo
 		if love.keyboard.isDown("right") then
 			direction = 1
 		end
+		self.iterator = 1
 	end
 end

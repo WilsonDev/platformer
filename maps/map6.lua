@@ -1,7 +1,7 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "0.17.0",
+  tiledversion = "1.0.3",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 90,
@@ -24,6 +24,11 @@ return {
       tileoffset = {
         x = 0,
         y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 8,
+        height = 8
       },
       properties = {},
       terrains = {},
@@ -87,12 +92,12 @@ return {
           id = 255,
           animation = {
             {
-              tileid = "255",
-              duration = "500"
+              tileid = 255,
+              duration = 500
             },
             {
-              tileid = "256",
-              duration = "400"
+              tileid = 256,
+              duration = 400
             }
           }
         },
@@ -511,6 +516,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "spring_2",
+            ["power"] = "150",
             ["type"] = "spring"
           }
         },

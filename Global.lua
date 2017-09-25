@@ -29,7 +29,7 @@ Global = {
 	firstMap = 5,
 	currentMap = 5, --indeks
 
-	audioMute = true
+	audioMute = false
 }
 
 return Global
