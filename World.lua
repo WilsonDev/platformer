@@ -1,15 +1,17 @@
 require "Camera"
-require "Player"
-require "Pickup"
-require "Enemy"
-require "Behemoth"
-require "Button"
-require "Spring"
-require "Spike"
-require "Warp"
-require "Acid"
-require "Platform"
-require "Cloud"
+require "entity.Player"
+require "entity.Pickup"
+require "entity.Enemy"
+require "entity.Behemoth"
+require "entity.Button"
+require "entity.Spring"
+require "entity.Spike"
+require "entity.Warp"
+require "entity.Acid"
+require "entity.Platform"
+require "entity.Cloud"
+
+local Global = require "Global"
 local STI = require "lib/SimpleTiledImpl/sti"
 local addToTable
 
@@ -28,7 +30,7 @@ function World:init(level)
 		level = "map" .. Global.currentMap
 	end
 	-- Mapa
-	Global.map = STI("maps/" .. level .. ".lua")
+	Global.map = STI("resources/maps/" .. level .. ".lua")
 
 	-- Chowamy warstwę obiektów
 	Global.map.layers["objects"].visible = false

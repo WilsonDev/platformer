@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Pickup = {}
@@ -10,7 +11,7 @@ function Pickup:new(objectName, pickupX, pickupY, pickupValue)
 		width = 8,
 		height = 8,
 		value = pickupValue,
-		Quads = Quad(136, 72, 8, 8, 160, 144) --Klatki animacji
+		animationQuads = Quad(136, 72, 8, 8, 160, 144) --Klatki animacji
 	}
 	setmetatable(object, { __index = Pickup })
 	return object
@@ -25,13 +26,12 @@ function Pickup:update(dt)
 		if player.hitpoints < 3 then
 			player.hitpoints = player.hitpoints + 1
 		end
-		auSelect:stop()
-		auSelect:play()
+		soundEvents:play("select")
 	end
 end
 
 function Pickup:draw()
-	love.graphics.draw(sprite, self.Quads, self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads, self.x - (self.width / 2),
 			self.y - (self.width / 2))
 end
 

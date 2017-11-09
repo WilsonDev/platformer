@@ -1,3 +1,5 @@
+local Global = require "Global"
+
 SubmitScoreState = {}
 
 local alphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
@@ -28,7 +30,7 @@ end
 
 function SubmitScoreState:draw()
   love.graphics.print(Global.title, 10, 5)
-  love.graphics.print("(C) 2016 WILSON", 10, 285)
+  love.graphics.print(Global.copyright, 10, 285)
 
 	love.graphics.print("ENTER INITIALS", 350, 100)
 

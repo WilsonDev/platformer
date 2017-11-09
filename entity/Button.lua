@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Button = {}
@@ -12,7 +13,7 @@ function Button:new(objectName, buttonX, buttonY)
 		iterator = 1,
 		isPressed = false,
 		interact = "",
-		Quads = { --Klatki animacji
+		animationQuads = { --Klatki animacji
 			Quad(104, 104, 8, 8, 160, 144),
 			Quad(104, 112, 8, 8, 160, 144)}
 	}
@@ -34,14 +35,13 @@ function Button:update(dt)
 			end
 			--table.insert(Global.enemies, Behemoth:new('behemoth_0', 0, 28))
 			self.isPressed = true
-			auClickOn:stop() auClickOn:play()
+			soundEvents:play("click_on")
 		end
 		self.iterator = 2
 		clicked = true
 	else
 		if clicked then
-			auClickOff:stop()
-			auClickOff:play()
+			soundEvents:play("click_off")
 			clicked = false
 		end
 		self.isPressed = false
@@ -50,7 +50,7 @@ function Button:update(dt)
 end
 
 function Button:draw()
-	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads[self.iterator], self.x - (self.width / 2),
 			self.y - (self.height / 2))
 end
 

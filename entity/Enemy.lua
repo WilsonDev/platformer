@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Slime = {}
@@ -15,7 +16,7 @@ function Slime:new(objectName, slimeX, slimeY)
 		xOffset = 0,
 		iterator = 1,
 		timer = 0,
-		Quads = { --Klatki animacji
+		animationQuads = { --Klatki animacji
 			Quad( 8, 8, 8, 8, 160, 144),
 			Quad(16, 8, 8, 8, 160, 144)},
 		animationSpeed = 0.50
@@ -48,7 +49,7 @@ function Slime:animation(dt, delay, frames)
 end
 
 function Slime:draw()
-	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads[self.iterator], self.x - (self.width / 2),
 			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 end
 
@@ -131,7 +132,7 @@ function Slime:update(dt, gravity, map)
 	end
 
 	--Animacja
-	self:animation(dt, self.animationSpeed, #self.Quads)
+	self:animation(dt, self.animationSpeed, #self.animationQuads)
 
 	--Ruch
 	self:move()

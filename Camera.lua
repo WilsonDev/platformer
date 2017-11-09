@@ -1,3 +1,5 @@
+local MathUtils = require "utils.MathUtils"
+
 Camera = {}
 
 function Camera:new()

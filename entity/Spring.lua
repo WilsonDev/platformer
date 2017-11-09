@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Spring = {}
@@ -12,7 +13,7 @@ function Spring:new(objectName, springX, springY)
 		iterator = 1,
 		power = 120,
 		isPressed = false,
-		Quads = { --Klatki animacji
+		animationQuads = { --Klatki animacji
 			Quad(96, 104, 8, 8, 160, 144),
 			Quad(96, 112, 8, 8, 160, 144)}
 	}
@@ -26,15 +27,14 @@ function Spring:update(dt)
 	if self:touchesObject(player) then
 		self.iterator = 2
 		player:specialJump(self.power)
-		auJump:stop()
-		auJump:play()
+		soundEvents:play("jump")
 	elseif player.ySpeed > 0 then
 		self.iterator = 1
 	end
 end
 
 function Spring:draw()
-	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads[self.iterator], self.x - (self.width / 2),
 			self.y - (self.height / 2))
 end
 

@@ -1,12 +1,13 @@
 -- Zmienne globalne
 
-Global = {
+local Global = {
 	title = "GENERIC PLATFORMER",
+	copyright = "(C) 2017 WILSON",
 
 	debug = true,
 	score = 0,
 	scores = {},
-	gravity = 800,
+	gravity = 760, --800
 
 	map = {},
 	camera = {},

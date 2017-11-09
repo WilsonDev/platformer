@@ -1,5 +1,6 @@
-require "Ammo"
+require "entity.Ammo"
 
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Player = {}
@@ -25,7 +26,7 @@ function Player:new(objectName, playerX, playerY)
 		shots = {}, firedShots = 0,
 		invul = false, invultime = 2, isPoked = false,
 		isMoving = false,
-		Quads = { --Klatki animacji
+		animationQuads = { --Klatki animacji
 			move = {
 				Quad( 0, 16, 8, 8, 160, 144),
 				Quad(24, 16, 8, 8, 160, 144),
@@ -99,18 +100,19 @@ function Player:shot()
 
 	table.insert(self.shots, bullet)
 
-	auShot:stop()
-	auShot:play()
+	soundEvents:play("shot")
 end
 
 function Player:draw()
 	--Bohater
-	love.graphics.draw(sprite, self.Quads[self.state][self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads[self.state][self.iterator], self.x - (self.width / 2),
 		self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 	--Strzały
 	for i, v in ipairs(self.shots) do
 		v:draw()
 	end
+
+	-- love.graphics.rectangle("line", self.x - (self.width / 2), self.y - (self.height / 2), self.width, self.height)
 end
 
 function Player:animation(dt, delay, frames)
@@ -158,8 +160,7 @@ function Player:enemyColliding()
 		for _, w in pairs(v) do	
 			if w:touchesObject(self) and not self.invul then
 				self.isPoked = true
-				auPunch:stop()
-				auPunch:play()
+				soundEvents:play("punch")
 
 				if self.invul == false then
 					self.invul = true
@@ -208,7 +209,7 @@ function Player:ammoUpdate(dt)
 
 					v.toRemove = true
 					Global.score = Global.score + 50
-					auHit:stop() auHit:play()
+					soundEvents:play("hit")
 				end
 			end
 		end
@@ -336,9 +337,9 @@ function Player:keypressed(key)
 		elseif key == "left" and not love.keyboard.isDown("right") then --lewo
 			direction = -1
 		end
-		--if key == "lshift" then
-			--self:sprint()
-		--end
+		if key == "lshift" then
+			self:sprint()
+		end
 		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true

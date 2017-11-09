@@ -17,7 +17,7 @@ function Behemoth:new(objectName, behemothX, behemothY)
 		xOffset = 0,
 		iterator = 1,
 		timer = 0,
-		Quads = {
+		animationQuads = {
 			Quad( 0, 0, 8, 8, 160, 144),
 			Quad(24, 0, 8, 8, 160, 144),
 			Quad(32, 0, 8, 8, 160, 144),

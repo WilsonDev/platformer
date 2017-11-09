@@ -1,4 +1,6 @@
-require "MenuItem"
+require "entity.MenuItem"
+
+local Global = require "Global"
 
 MenuState = {}
 
@@ -42,7 +44,7 @@ end
 
 function MenuState:draw()
 	love.graphics.print(Global.title, 10, 5)
-  	love.graphics.print("(C) 2016 WILSON", 10, 285)
+  	love.graphics.print(Global.copyright, 10, 285)
 
 	for _, v in ipairs(self.menuItems) do
 		v:draw()
@@ -63,8 +65,7 @@ function MenuState:keypressed(key)
 		end
 
 		self.subState = subStates[self.itemSelected]
-		auSelect:stop()
-		auSelect:play()
+		soundEvents:play("select")
 	end
 	if key == "down" then
 		self.menuItems[self.itemSelected]:select(false)
@@ -75,7 +76,6 @@ function MenuState:keypressed(key)
 		end
 
 		self.subState = subStates[self.itemSelected]
-		auSelect:stop()
-		auSelect:play()
+		soundEvents:play("select")
 	end
 end

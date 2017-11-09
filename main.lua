@@ -1,11 +1,13 @@
 require "Debug"
-require "State"
+require "state.State"
 require "Scores"
-require "Global"
-require "MathUtils"
-require "StringUtils"
-local initScores
+require "event.SoundEvents"
 
+local MathUtils = require "utils.MathUtils"
+local StringUtils = require "utils.StringUtils"
+local Global = require "Global"
+
+local initScores
 local state = {}
 
 function love.load()
@@ -50,26 +52,31 @@ function love.keypressed(key, isrepeat)
 end
 
 function loadReasources()
+	soundEvents = SoundEvents:new(false)
+	-- soundEvents:add("hit")
+	-- soundEvents:hook("hit", hookTest)
+	-- soundEvents:invoke("hit")
+
 	love.graphics.setBackgroundColor(31, 31, 31)
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	sprite = love.graphics.newImage("images/PixelArtTest.png")
-	hud = love.graphics.newImage("images/hud.png")
-	font = love.graphics.newFont("images/visitor2.ttf", 38)
+	sprite = love.graphics.newImage("resources/images/PixelArtTest.png")
+	hud = love.graphics.newImage("resources/images/hud.png")
+	font = love.graphics.newFont("resources/images/visitor2.ttf", 38)
 	love.graphics.setFont(font)
 
 	heart = love.graphics.newQuad(32, 40, 8, 8, 160, 144)
 	clip = love.graphics.newQuad(16, 32, 8, 8, 160, 144)
 
-	auHit = love.audio.newSource("sounds/hit.wav","static")
-	auSelect = love.audio.newSource("sounds/select.wav","static")
-	auShot = love.audio.newSource("sounds/shot.wav","static")
-	auClickOn = love.audio.newSource("sounds/clickon.wav","static")
-	auClickOff = love.audio.newSource("sounds/clickoff.wav","static")
-	auPunch = love.audio.newSource("sounds/punch.wav","static")
-	auJump = love.audio.newSource("sounds/jump.wav","static")
-	auWarp = love.audio.newSource("sounds/warp.wav","static")
+	soundEvents:addSound("hit", love.audio.newSource("resources/sounds/hit.wav", "static"))
+	soundEvents:addSound("select", love.audio.newSource("resources/sounds/select.wav", "static"))
+	soundEvents:addSound("shot", love.audio.newSource("resources/sounds/shot.wav", "static"))
+	soundEvents:addSound("click_on", love.audio.newSource("resources/sounds/clickon.wav", "static"))
+	soundEvents:addSound("click_off", love.audio.newSource("resources/sounds/clickoff.wav", "static"))
+	soundEvents:addSound("punch", love.audio.newSource("resources/sounds/punch.wav", "static"))
+	soundEvents:addSound("jump", love.audio.newSource("resources/sounds/jump.wav", "static"))
+	soundEvents:addSound("warp", love.audio.newSource("resources/sounds/warp.wav", "static"))
 
-	mainTheme = love.audio.newSource("sounds/Underclocked.mp3")
+	mainTheme = love.audio.newSource("resources/sounds/Underclocked.mp3")
 	mainTheme:setLooping(true)
 	mainTheme:setVolume(0.5)
 

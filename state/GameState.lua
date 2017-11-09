@@ -1,5 +1,7 @@
 require "World"
 
+local Global = require "Global"
+
 GameState = {}
 
 function GameState:new()

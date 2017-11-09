@@ -5,6 +5,7 @@ function MenuItem:new(menuItemName, menuItemY)
 		name = menuItemName,
 		x = 0,
 		y = menuItemY,
+		height = 0, width = 0,
 		selected = false,
 		redirectTo = nil,
 		timer = 0,
@@ -18,6 +19,9 @@ function MenuItem:new(menuItemName, menuItemY)
 		else
 			object.x = (960 - string.len(menuItemName) * object.charWidth) / 2
 		end
+
+		object.width = string.len(menuItemName) * object.charWidth
+		object.height = object.charWidth
 	end)()
 
 	setmetatable(object, { __index = MenuItem })
@@ -41,6 +45,8 @@ function MenuItem:draw()
 	else
 		love.graphics.print(self.name, self.x, self.y)
 	end
+
+	-- love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
 end
 
 function MenuItem:select(selected)

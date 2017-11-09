@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Warp = {}
@@ -20,8 +21,7 @@ function Warp:update(dt)
 		Global.currentMap = Global.currentMap + 1
 		World:change("map" .. Global.currentMap)
 
-		auWarp:stop()
-		auWarp:play()
+		soundEvents:play("warp")
 	end
 end
 

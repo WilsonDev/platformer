@@ -1,6 +1,9 @@
-require "PlatformCheckpoint"
+require "entity.PlatformCheckpoint"
 
+local Global = require "Global"
+local StringUtils = require "utils.StringUtils"
 local Quad = love.graphics.newQuad
+
 local init
 
 Platform = {}
@@ -19,8 +22,9 @@ function Platform:new(objectName, platformX, platformY, platformPath, platformSi
 		lastCheckpoint = 0,
 		isMoving = false,
 		path = {}, --metoda init
-		Quad = {} --metoda init
+		animationQuads = {} --metoda init
 	}
+	
 	init(object)
 	setmetatable(object, { __index = Platform })
 	return object
@@ -28,13 +32,13 @@ end
 
 --tablica, rozmiar platformy
 function init(object)
-	table.insert(object.Quad, Quad(32, 104, 8, 8, 160, 144))
+	table.insert(object.animationQuads, Quad(32, 104, 8, 8, 160, 144))
 	if object.size > 0 then
 		for i = 1, object.size do
-			table.insert(object.Quad, Quad(40, 104, 8, 8, 160, 144))
+			table.insert(object.animationQuads, Quad(40, 104, 8, 8, 160, 144))
 		end
 	end
-	table.insert(object.Quad, Quad(48, 104, 8, 8, 160, 144))
+	table.insert(object.animationQuads, Quad(48, 104, 8, 8, 160, 144))
 
 	local checkpoints = StringUtils.split(object.stringPath, ";")
 	local lastX = object.x
@@ -173,7 +177,7 @@ function Platform:update(dt)
 end
 
 function Platform:draw()
-	for i, v in ipairs(self.Quad) do
+	for i, v in ipairs(self.animationQuads) do
 		love.graphics.draw(sprite, v, (self.x - (self.width / 2)) + 8 * (i - 1), self.y - (self.height / 2))
 		--love.graphics.setPointSize(8)
 		--love.graphics.points(self.x, self.y)

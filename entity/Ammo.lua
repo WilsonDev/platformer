@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Ammo = {}
@@ -16,7 +17,7 @@ function Ammo:new(ammoX, ammoY, ammoClass, ammoRange)
 		iterator = 1,
 		timer = 0,
 		toRemove = false,
-		Quads = {
+		animationQuads = {
 			bullet = {
 				Quad(16, 32, 8, 8, 160, 144)
 			},
@@ -24,7 +25,7 @@ function Ammo:new(ammoX, ammoY, ammoClass, ammoRange)
 				Quad(24, 32, 8, 8, 160, 144)
 			}
 		},
-		AnimationQuads = {
+		splashAnimationQuads = {
 			splashAnimation = {
 				Quad(64, 32, 8, 8, 160, 144),
 				Quad(72, 32, 8, 8, 160, 144),
@@ -45,10 +46,10 @@ end
 
 function Ammo:draw()
 	if self.toRemove == false then
-		love.graphics.draw(sprite, self.Quads[self.class][1], self.x - (self.width / 2),
+		love.graphics.draw(sprite, self.animationQuads[self.class][1], self.x - (self.width / 2),
 			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 	else
-		love.graphics.draw(sprite, self.AnimationQuads["splashAnimation"][self.iterator], self.x - (self.width / 2),
+		love.graphics.draw(sprite, self.splashAnimationQuads["splashAnimation"][self.iterator], self.x - (self.width / 2),
 			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 	end
 end

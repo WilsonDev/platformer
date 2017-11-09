@@ -8,7 +8,7 @@ function Cloud:new(cloudX, cloudY)
     x = cloudX, y = cloudY,
     width = 8, height = 8,
     xSpeed = 10,
-    Quad = {} --metoda init
+    Quads = {} --metoda init
   }
   init(object)
   setmetatable(object, { __index = Cloud })
@@ -16,12 +16,12 @@ function Cloud:new(cloudX, cloudY)
 end
 
 function init(object)
-  table.insert(object.Quad, Quad(64, 48, 8, 8, 160, 144))
-  table.insert(object.Quad, Quad(72, 48, 8, 8, 160, 144))
+  table.insert(object.Quads, Quad(64, 48, 8, 8, 160, 144))
+  table.insert(object.Quads, Quad(72, 48, 8, 8, 160, 144))
 end
 
 function Cloud:draw()
-	for i, v in ipairs(self.Quad) do
+	for i, v in ipairs(self.Quads) do
 		love.graphics.draw(sprite, v, (self.x - (self.width / 2)) + 8 * (i - 1), self.y - (self.height / 2))
 	end
 end

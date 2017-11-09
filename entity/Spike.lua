@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Spike = {}
@@ -10,7 +11,7 @@ function Spike:new(objectName, spikeX, spikeY)
 		width = 8,
 		height = 8,
 		iterator = 1,
-		Quads = {
+		animationQuads = {
 			Quad(88, 104, 8, 8, 160, 144)}
 	}
 	setmetatable(object, { __index = Spike })
@@ -25,15 +26,14 @@ function Spike:update(dt)
 			player.invul = true
 			player.invultime = 2
 			player.hitpoints = player.hitpoints - 1
-			auPunch:stop()
-			auPunch:play()
+			soundEvents:play("punch")
 		end
 		--player:jump()
 	end
 end
 
 function Spike:draw()
-	love.graphics.draw(sprite, self.Quads[self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads[self.iterator], self.x - (self.width / 2),
 			self.y - (self.height / 2))
 end
 

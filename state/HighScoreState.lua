@@ -1,4 +1,6 @@
-require "MenuItem"
+require "entity.MenuItem"
+
+local Global = require "Global"
 
 HighScoreState = {}
 
@@ -20,7 +22,7 @@ end
 
 function HighScoreState:draw()
 	love.graphics.print(Global.title, 10, 5)
-  	love.graphics.print("(C) 2016 WILSON", 10, 285)
+  	love.graphics.print(Global.copyright, 10, 285)
 
 	local prefix = ""
 	for i, score, name in Global.scores() do

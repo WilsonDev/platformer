@@ -1,4 +1,4 @@
-StringUtils = {}
+local StringUtils = {}
 
 function StringUtils.split(text, inSplitPattern)
     local outResults = {}

@@ -1,8 +1,10 @@
-require "MenuState"
-require "GameState"
-require "ControlsMenuState"
-require "HighScoreState"
-require "SubmitScoreState"
+require "state.MenuState"
+require "state.GameState"
+require "state.ControlsMenuState"
+require "state.HighScoreState"
+require "state.SubmitScoreState"
+
+local Global = require "Global"
 
 State = {}
 
@@ -46,7 +48,6 @@ function State:set(name)
 	end
 	self.name = name
 end
-
 
 function State:init()
 	self.currentState:init()

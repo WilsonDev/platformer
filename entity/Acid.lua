@@ -1,3 +1,4 @@
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Acid = {}
@@ -18,7 +19,7 @@ function Acid:new(objectName, acidX, acidY)
 		fallSpeed = 40,
 		isFallen = false,
 		isInit = true,
-		Quads = {
+		animationQuads = {
 			drop = {
 				Quad(48, 0, 8, 8, 160, 144)
 			},
@@ -50,7 +51,7 @@ function Acid:animation(dt, delay, frames)
 end
 
 function Acid:draw()
-	love.graphics.draw(sprite, self.Quads[self.state][self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.animationQuads[self.state][self.iterator], self.x - (self.width / 2),
 		self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 end
 
@@ -100,8 +101,7 @@ function Acid:update(dt)
 
 	if self:touchesObject(player) then
 		if player.invul == false then
-			auPunch:stop()
-			auPunch:play()
+			soundEvents:play("punch")
 			player.invul = true
 			player.invultime = 2
 			player.hitpoints = player.hitpoints - 1
