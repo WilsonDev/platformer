@@ -15,7 +15,6 @@ end
 
 function SoundEvents:addSound(evt_type, sound)
     local function play()
-        print(sound)
         sound:stop()
         sound:play()
     end 

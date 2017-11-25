@@ -1,4 +1,5 @@
 require "entity.Ammo"
+require "utils.Animation"
 
 local Global = require "Global"
 local Quad = love.graphics.newQuad
@@ -11,33 +12,42 @@ function Player:new(objectName, playerX, playerY)
 		x = playerX, y = playerY,
 		width = 8, height = 8,
 		xSpeed = 0, ySpeed = 0,
+		jumpSpeed = -140, runSpeed = 70,
 		state = "stand",
 		hitpoints = 3,
-		jumpSpeed = -140,
-		runSpeed = 70,
+		isSprint = false,
 		direction = 1,
 		xScale = 1,
 		xOffset = 0,
-		iterator = 1,
-		timer = 0,
-		direction = 1,
 		onGround = false,
 		jumpCount = 0, hasJumped = false,
 		shots = {}, firedShots = 0,
-		invul = false, invultime = 2, isPoked = false,
+		invul = false, invulTime = 2, isPoked = false,
 		isMoving = false,
-		animationQuads = { --Klatki animacji
+		animations = {
 			move = {
-				Quad( 0, 16, 8, 8, 160, 144),
-				Quad(24, 16, 8, 8, 160, 144),
-				Quad(32, 16, 8, 8, 160, 144),
-				Quad(40, 16, 8, 8, 160, 144)
+				operator = Animation:new(0.14, 4,
+				{
+					Quad( 0, 16, 8, 8, 160, 144),
+					Quad(24, 16, 8, 8, 160, 144),
+					Quad(32, 16, 8, 8, 160, 144),
+					Quad(40, 16, 8, 8, 160, 144)
+				})
 			},
 			stand = {
-				Quad( 8, 16, 8, 8, 160, 144),
-				Quad(16, 16, 8, 8, 160, 144),
-				Quad( 8, 16, 8, 8, 160, 144)
+				operator = Animation:new(0.35, 3,
+				{
+					Quad( 8, 16, 8, 8, 160, 144),
+					Quad(16, 16, 8, 8, 160, 144),
+					Quad( 8, 16, 8, 8, 160, 144)
+				})
 			}
+		},
+		sprintQuads = {
+			-- Quad(24, 72, 8, 8, 160, 144),
+			-- Quad(32, 72, 8, 8, 160, 144),
+			-- Quad(40, 72, 8, 8, 160, 144),
+			Quad(56, 72, 8, 8, 160, 144)
 		}
 	}
 	setmetatable(object, { __index = Player })
@@ -74,13 +84,10 @@ function Player:moveLeft()
 end
 
 function Player:sprint()
-	self.xSpeed = self.xSpeed + self.direction * 50
+	self.xSpeed = self.xSpeed + self.direction * 30
 end
 
 function Player:stop()
-	-- if self.isMoving then
-	-- 	self.iterator = 1
-	-- end
 	self.isMoving = false
 	self.xSpeed = 0
 end
@@ -103,27 +110,25 @@ function Player:shot()
 	soundEvents:play("shot")
 end
 
+function Player:getAnimationQuad()
+	return self.animations[self.state].operator:getCurrentQuad()
+end
+
 function Player:draw()
 	--Bohater
-	love.graphics.draw(sprite, self.animationQuads[self.state][self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self:getAnimationQuad(), self.x - (self.width / 2),
 		self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 	--Strzały
 	for i, v in ipairs(self.shots) do
 		v:draw()
 	end
 
-	-- love.graphics.rectangle("line", self.x - (self.width / 2), self.y - (self.height / 2), self.width, self.height)
-end
-
-function Player:animation(dt, delay, frames)
-	self.timer = self.timer + dt
-	if self.timer > delay then
-		self.timer = 0
-		self.iterator = self.iterator + 1
-		if self.iterator > frames then
-			self.iterator = 1
-		end
+	if self.isSprint and self.xSpeed ~= 0 then
+		love.graphics.draw(sprite, self.sprintQuads[1], self.x - self.direction * (self.width * math.abs(0.5 + self.direction)), 
+			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 	end
+
+	-- love.graphics.rectangle("line", self.x - (self.width / 2), self.y - (self.height / 2), self.width, self.height)
 end
 
 function Player:collide(event)
@@ -164,7 +169,7 @@ function Player:enemyColliding()
 
 				if self.invul == false then
 					self.invul = true
-					self.invultime = 2
+					self.invulTime = 2
 					self.hitpoints = self.hitpoints - 1
 				end
 
@@ -204,7 +209,6 @@ function Player:ammoUpdate(dt)
 					if u.hitpoints <= 0 then
 						Global.objects["behemoth"][u.name] = nil
 						Global.objects["slime"][u.name] = nil
-						--table.remove(Global.enemies, w)
 					end
 
 					v.toRemove = true
@@ -286,24 +290,24 @@ function Player:update(dt)
 	end
 
 	--Nietykalność
-	if self.invultime > 0 then
-		self.invultime = self.invultime - dt
-		if self.invultime <= 0 then
+	if self.invulTime > 0 then
+		self.invulTime = self.invulTime - dt
+		if self.invulTime <= 0 then
 			self.invul = false
 		end
 	end
 
 	--Zmiana animacji
-	if self.state == "move" then
-		self:animation(dt, 0.14, 4)
-	elseif self.state == "stand" then
-		self:animation(dt, 0.35, 3)
+	self.animations[self.state].operator:update(dt)
+
+	if self.direction == 1 then
+		self:moveRight()
+	elseif self.direction == -1 then
+		self:moveLeft()
 	end
 
-	if direction == 1 then
-		self:moveRight()
-	elseif direction == -1 then
-		self:moveLeft()
+	if self.isSprint then
+		self:sprint()
 	end
 
 	if not love.keyboard.isDown("left")
@@ -311,6 +315,8 @@ function Player:update(dt)
 	and not self.isPoked then
 		self:stop()
 	end
+
+	self.isSprint = love.keyboard.isDown("lshift")
 
 	self.state = self:getState()
 end
@@ -333,13 +339,11 @@ end
 function Player:keypressed(key)
 	if not self.isPoked then
 		if key == "right" and not love.keyboard.isDown("left") then --prawo
-			direction = 1
+			self.direction = 1
 		elseif key == "left" and not love.keyboard.isDown("right") then --lewo
-			direction = -1
+			self.direction = -1
 		end
-		if key == "lshift" then
-			self:sprint()
-		end
+
 		if key == "z" and not self.hasJumped then --skok
 			self:jump()
 			self.hasJumped = true
@@ -359,13 +363,11 @@ function Player:keyreleased(key)
 	end
 	if key == "right" then --prawo
 		if love.keyboard.isDown("left") then
-			direction = -1
+			self.direction = -1
 		end
-		self.iterator = 1
 	elseif key == "left" then --lewo
 		if love.keyboard.isDown("right") then
-			direction = 1
+			self.direction = 1
 		end
-		self.iterator = 1
 	end
 end

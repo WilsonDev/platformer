@@ -50,10 +50,6 @@ function init(object)
 		lastY = checkpoint[2] + lastY
 		table.insert(object.path, PlatformCheckpoint:new(i + 1, lastX, lastY))
 	end
-
-	-- for k, v in pairs(object.path) do
-	-- 	print(k, v.x, v.y)
-	-- end
 end
 
 function Platform:mapColliding(map, x, y)
