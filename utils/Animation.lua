@@ -24,11 +24,14 @@ function Animation:update(dt)
 	end
 end
 
+function Animation:setIteration(iteration)
+    self.iterator = iteration
+end
+
 function Animation:getCurrentIteration()
     return self.iterator
 end
 
 function Animation:getCurrentQuad()
-    print(self.iterator)
     return self.quads[self.iterator]
 end

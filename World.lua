@@ -52,7 +52,7 @@ function World:init(level)
 				if object.properties.power then
 					spring.power = object.properties.power
 				end
-				addToTable(Global.objects, object.properties.type, objectName, spring)		
+				addToTable(Global.objects, object.properties.type, objectName, spring)
 			end
 			if object.properties.type == 'spike' then
 				local spike = Spike:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
@@ -136,7 +136,7 @@ function World:draw()
 
 	Global.camera:unset()
 
-	if Global.p.invul then
+	if Global.p.immunity then
 		love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
 	end
 	if Global.debug then

@@ -71,6 +71,12 @@ return {
           }
         },
         {
+          id = 228,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 235,
           properties = {
             ["solid"] = ""

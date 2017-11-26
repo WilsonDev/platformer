@@ -1,3 +1,5 @@
+require "utils.Animation"
+
 local Global = require "Global"
 local Quad = love.graphics.newQuad
 
@@ -14,44 +16,46 @@ function Acid:new(objectName, acidX, acidY)
 		xScale = 1,
 		xOffset = 0,
 		state = "init",
-		iterator = 1,
-		timer = 0,
 		fallSpeed = 40,
 		isFallen = false,
 		isInit = true,
-		animationQuads = {
+		animations = {
 			drop = {
-				Quad(48, 0, 8, 8, 160, 144)
+				operator = Animation:new(1, 1,
+				{
+					Quad(48, 0, 8, 8, 160, 144)
+				})
 			},
 			splash = {
-				Quad(48, 8, 8, 8, 160, 144),
-				Quad(48, 16, 8, 8, 160, 144),
-				Quad(48, 24, 8, 8, 160, 144)
+				operator = Animation:new(0.30, 4,
+				{
+					Quad(48, 8, 8, 8, 160, 144),
+					Quad(48, 16, 8, 8, 160, 144),
+					Quad(48, 24, 8, 8, 160, 144)
+				})
 			},
 			init = {
-				Quad(56, 8, 8, 8, 160, 144),
-				Quad(56, 16, 8, 8, 160, 144),
-				Quad(56, 24, 8, 8, 160, 144)
+				operator = Animation:new(0.30, 4,
+				{
+					Quad(56, 8, 8, 8, 160, 144),
+					Quad(56, 16, 8, 8, 160, 144),
+					Quad(56, 24, 8, 8, 160, 144)
+				})
 			}
 		}
 	}
+
 	setmetatable(object, { __index = Acid })
 	return object
 end
 
-function Acid:animation(dt, delay, frames)
-	self.timer = self.timer + dt
-	if self.timer > delay then
-		self.timer = 0
-		self.iterator = self.iterator + 1
-		if self.iterator > frames then
-			self.iterator = 1
-		end
-	end
+function Acid:getCurrentAnimationOperator()
+	return self.animations[self.state].operator
 end
 
 function Acid:draw()
-	love.graphics.draw(sprite, self.animationQuads[self.state][self.iterator], self.x - (self.width / 2),
+	local animationOperator = self:getCurrentAnimationOperator()
+	love.graphics.draw(sprite, animationOperator:getCurrentQuad(), self.x - (self.width / 2),
 		self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 end
 
@@ -74,36 +78,34 @@ function Acid:update(dt)
 		local tileY = math.floor(self.y / Global.map.tileheight)
 		self.y = tileY * Global.map.tileheight + 4
 		self.isFallen = true
-		self.iterator = 1
 	end
 
 	if not self.isFallen and not self.isInit then
 		self.y = self.y + self.fallSpeed * dt
 	end
 
-	if self.state == "splash" then
-		self:animation(dt, 0.30, 4)
-	elseif self.state == "init" then
-		self:animation(dt, 0.30, 4)
-	end
 
-	if self.state == "splash" and self.iterator == 4 then
+
+	local animationOperator = self:getCurrentAnimationOperator()
+	animationOperator:update(dt)
+
+	if self.state == "splash" and animationOperator:getCurrentIteration() == 4 then
 		self.isFallen = false
 		self.isInit = true
-		self.iterator = 1
 		self.y = self.initY
+		animationOperator:setIteration(1)
 	end
 
-	if self.state == "init" and self.iterator == 4 then
+	if self.state == "init" and animationOperator:getCurrentIteration() == 4 then
 		self.isInit = false
-		self.iterator = 1
+		animationOperator:setIteration(1)
 	end
 
 	if self:touchesObject(player) then
-		if player.invul == false then
+		if player.immunity == false then
 			soundEvents:play("punch")
-			player.invul = true
-			player.invultime = 2
+			player.immunity = true
+			player.immunityTime = 2
 			player.hitpoints = player.hitpoints - 1
 		end
 	end

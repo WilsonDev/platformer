@@ -1,3 +1,5 @@
+require "utils.Animation"
+
 local Quad = love.graphics.newQuad
 
 Behemoth = {}
@@ -10,20 +12,25 @@ function Behemoth:new(objectName, behemothX, behemothY)
 		x = behemothX, y = behemothY,
 		width = 8, height = 8,
 		xSpeed = 0, ySpeed = 0,
+		state = "move",
 		hitpoints = 2,
 		runSpeed = 40,
 		onGround = false,
 		xScale = 1,
 		xOffset = 0,
-		iterator = 1,
-		timer = 0,
-		animationQuads = {
-			Quad( 0, 0, 8, 8, 160, 144),
-			Quad(24, 0, 8, 8, 160, 144),
-			Quad(32, 0, 8, 8, 160, 144),
-			Quad(40, 0, 8, 8, 160, 144)},
-		animationSpeed = 0.14
+		animations = {
+			move = {
+				operator = Animation:new(0.14, 4,
+				{
+					Quad( 0, 0, 8, 8, 160, 144),
+					Quad(24, 0, 8, 8, 160, 144),
+					Quad(32, 0, 8, 8, 160, 144),
+					Quad(40, 0, 8, 8, 160, 144)
+				})
+			}
+		}
 	}
+
 	setmetatable(object, { __index = Behemoth })
 	return object
 end

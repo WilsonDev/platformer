@@ -17,15 +17,6 @@ local Global = {
 
 	p = {},
 	objects = {},
-	-- buttons = {},
-	-- enemies = {},
-	-- pickups = {},
-	-- springs = {},
-	-- spikes = {},
-	-- platforms = {},
-	-- warps = {},
-	-- acids = {},
-	-- clouds = {},
 
 	firstMap = 5,
 	currentMap = 5, --indeks

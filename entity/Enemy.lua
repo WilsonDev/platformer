@@ -1,3 +1,5 @@
+require "utils.Animation"
+
 local Global = require "Global"
 local Quad = love.graphics.newQuad
 
@@ -9,17 +11,21 @@ function Slime:new(objectName, slimeX, slimeY)
 		x = slimeX, y = slimeY,
 		width = 8, height = 8,
 		xSpeed = 0, ySpeed = 0,
+		state = "move",
 		hitpoints = 1,
 		runSpeed = 30,
 		onGround = false,
 		xScale = 1,
 		xOffset = 0,
-		iterator = 1,
-		timer = 0,
-		animationQuads = { --Klatki animacji
-			Quad( 8, 8, 8, 8, 160, 144),
-			Quad(16, 8, 8, 8, 160, 144)},
-		animationSpeed = 0.50
+		animations = {
+			move = {
+				operator = Animation:new(0.50, 2,
+				{
+					Quad( 8, 8, 8, 8, 160, 144),
+					Quad(16, 8, 8, 8, 160, 144)
+				})
+			}
+		}
 	}
 	setmetatable(object, { __index = Slime })
 	return object
@@ -37,19 +43,16 @@ function Slime:move()
 	end
 end
 
-function Slime:animation(dt, delay, frames)
-	self.timer = self.timer + dt
-	if self.timer > delay then
-		self.timer = 0
-		self.iterator = self.iterator + 1
-		if self.iterator > frames then
-			self.iterator = 1
-		end
-	end
+function Slime:getAnimationQuad()
+	return self.animations[self.state].operator:getCurrentQuad()
+end
+
+function Slime:updateAnimations(dt)
+	self.animations[self.state].operator:update(dt)
 end
 
 function Slime:draw()
-	love.graphics.draw(sprite, self.animationQuads[self.iterator], self.x - (self.width / 2),
+	love.graphics.draw(sprite, self:getAnimationQuad(), self.x - (self.width / 2),
 			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
 end
 
@@ -132,7 +135,7 @@ function Slime:update(dt, gravity, map)
 	end
 
 	--Animacja
-	self:animation(dt, self.animationSpeed, #self.animationQuads)
+	self:updateAnimations(dt)
 
 	--Ruch
 	self:move()

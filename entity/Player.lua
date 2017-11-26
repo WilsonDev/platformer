@@ -12,7 +12,7 @@ function Player:new(objectName, playerX, playerY)
 		x = playerX, y = playerY,
 		width = 8, height = 8,
 		xSpeed = 0, ySpeed = 0,
-		jumpSpeed = -140, runSpeed = 70,
+		jumpSpeed = -130, runSpeed = 70,
 		state = "stand",
 		hitpoints = 3,
 		isSprint = false,
@@ -22,7 +22,7 @@ function Player:new(objectName, playerX, playerY)
 		onGround = false,
 		jumpCount = 0, hasJumped = false,
 		shots = {}, firedShots = 0,
-		invul = false, invulTime = 2, isPoked = false,
+		immunity = false, immunityTime = 2, isPoked = false,
 		isMoving = false,
 		animations = {
 			move = {
@@ -114,6 +114,10 @@ function Player:getAnimationQuad()
 	return self.animations[self.state].operator:getCurrentQuad()
 end
 
+function Player:updateAnimations(dt)
+	self.animations[self.state].operator:update(dt)
+end
+
 function Player:draw()
 	--Bohater
 	love.graphics.draw(sprite, self:getAnimationQuad(), self.x - (self.width / 2),
@@ -163,13 +167,13 @@ function Player:enemyColliding()
 	--Kolizja z przeciwnikiem
 	for _, v in pairs({Global.objects["behemoth"], Global.objects["slime"]}) do
 		for _, w in pairs(v) do	
-			if w:touchesObject(self) and not self.invul then
+			if w:touchesObject(self) and not self.immunity then
 				self.isPoked = true
 				soundEvents:play("punch")
 
-				if self.invul == false then
-					self.invul = true
-					self.invulTime = 2
+				if self.immunity == false then
+					self.immunity = true
+					self.immunityTime = 2
 					self.hitpoints = self.hitpoints - 1
 				end
 
@@ -290,15 +294,14 @@ function Player:update(dt)
 	end
 
 	--Nietykalność
-	if self.invulTime > 0 then
-		self.invulTime = self.invulTime - dt
-		if self.invulTime <= 0 then
-			self.invul = false
+	if self.immunityTime > 0 then
+		self.immunityTime = self.immunityTime - dt
+		if self.immunityTime <= 0 then
+			self.immunity = false
 		end
 	end
 
-	--Zmiana animacji
-	self.animations[self.state].operator:update(dt)
+	self:updateAnimations(dt)
 
 	if self.direction == 1 then
 		self:moveRight()

@@ -1,12 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="PixelArtTest" tilewidth="8" tileheight="8">
+<tileset name="PixelArtTest" tilewidth="8" tileheight="8" tilecount="360" columns="20">
  <image source="../images/PixelArtTest.png" width="160" height="144"/>
+ <tile id="0">
+  <properties>
+   <property name="behemoth" value=""/>
+  </properties>
+ </tile>
+ <tile id="6">
+  <properties>
+   <property name="acid" value=""/>
+  </properties>
+ </tile>
+ <tile id="22">
+  <properties>
+   <property name="slime" value=""/>
+  </properties>
+ </tile>
+ <tile id="41">
+  <properties>
+   <property name="spawn" value=""/>
+  </properties>
+ </tile>
+ <tile id="197">
+  <properties>
+   <property name="pickup" value=""/>
+  </properties>
+ </tile>
+ <tile id="223">
+  <properties>
+   <property name="warp" value=""/>
+  </properties>
+ </tile>
+ <tile id="227">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="228">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="229">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="231">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="255">
+  <animation>
+   <frame tileid="255" duration="500"/>
+   <frame tileid="256" duration="400"/>
+  </animation>
+ </tile>
+ <tile id="271">
+  <properties>
+   <property name="spike" value=""/>
+  </properties>
+ </tile>
+ <tile id="272">
+  <properties>
+   <property name="spring" value=""/>
+  </properties>
+ </tile>
+ <tile id="273">
+  <properties>
+   <property name="button" value=""/>
+  </properties>
+ </tile>
+ <tile id="275">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
  <tile id="285">
   <properties>
    <property name="solid" value=""/>
   </properties>
  </tile>
+ <tile id="297">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="298">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
  <tile id="305">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="314">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="315">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="316">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="317">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="318">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="337">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="338">
   <properties>
    <property name="solid" value=""/>
   </properties>

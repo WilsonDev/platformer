@@ -11,7 +11,7 @@ function Pickup:new(objectName, pickupX, pickupY, pickupValue)
 		width = 8,
 		height = 8,
 		value = pickupValue,
-		animationQuads = Quad(136, 72, 8, 8, 160, 144) --Klatki animacji
+		quads = Quad(136, 72, 8, 8, 160, 144) --Klatki animacji
 	}
 	setmetatable(object, { __index = Pickup })
 	return object
@@ -31,7 +31,7 @@ function Pickup:update(dt)
 end
 
 function Pickup:draw()
-	love.graphics.draw(sprite, self.animationQuads, self.x - (self.width / 2),
+	love.graphics.draw(sprite, self.quads, self.x - (self.width / 2),
 			self.y - (self.width / 2))
 end
 

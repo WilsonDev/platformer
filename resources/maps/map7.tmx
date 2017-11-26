@@ -32,6 +32,11 @@
     <property name="warp" value=""/>
    </properties>
   </tile>
+  <tile id="228">
+   <properties>
+    <property name="solid" value=""/>
+   </properties>
+  </tile>
   <tile id="235">
    <properties>
     <property name="solid" value=""/>

@@ -22,7 +22,7 @@ function Platform:new(objectName, platformX, platformY, platformPath, platformSi
 		lastCheckpoint = 0,
 		isMoving = false,
 		path = {}, --metoda init
-		animationQuads = {} --metoda init
+		quads = {} --metoda init
 	}
 	
 	init(object)
@@ -32,13 +32,13 @@ end
 
 --tablica, rozmiar platformy
 function init(object)
-	table.insert(object.animationQuads, Quad(32, 104, 8, 8, 160, 144))
+	table.insert(object.quads, Quad(32, 104, 8, 8, 160, 144))
 	if object.size > 0 then
 		for i = 1, object.size do
-			table.insert(object.animationQuads, Quad(40, 104, 8, 8, 160, 144))
+			table.insert(object.quads, Quad(40, 104, 8, 8, 160, 144))
 		end
 	end
-	table.insert(object.animationQuads, Quad(48, 104, 8, 8, 160, 144))
+	table.insert(object.quads, Quad(48, 104, 8, 8, 160, 144))
 
 	local checkpoints = StringUtils.split(object.stringPath, ";")
 	local lastX = object.x
@@ -173,7 +173,7 @@ function Platform:update(dt)
 end
 
 function Platform:draw()
-	for i, v in ipairs(self.animationQuads) do
+	for i, v in ipairs(self.quads) do
 		love.graphics.draw(sprite, v, (self.x - (self.width / 2)) + 8 * (i - 1), self.y - (self.height / 2))
 		--love.graphics.setPointSize(8)
 		--love.graphics.points(self.x, self.y)
