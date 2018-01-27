@@ -28,6 +28,7 @@ function GameState:update(dt)
 	self.world:update(dt)
 
 	if not Global.p:isAlive() then
+		mainTheme:stop()
 		self.isEnd = true
 	end
 end

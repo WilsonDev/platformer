@@ -63,7 +63,7 @@ end
 
 function Platform:move(dt)
 	local nextX = self.x + (self.xSpeed * dt)
-	local nextY = self.y + (self.ySpeed * dt)	
+	local nextY = self.y + (self.ySpeed * dt)
 
 	if self.isMoving then
 		local checkpointFrom, checkpointTo
@@ -117,9 +117,6 @@ function Platform:move(dt)
 			end
 
 			if d < math.max(math.abs(self.xSpeed), math.abs(self.ySpeed)) * dt then
-				--powoduje minimalne przesuniecie gracza podczas zmiany punktu
-				--self.x = checkpointTo.x
-				--self.y = checkpointTo.y
 				self.lastCheckpoint = self.currentCheckpoint
 				if checkpointFrom.id < checkpointTo.id then
 					self.currentCheckpoint = self.currentCheckpoint + 1
@@ -135,24 +132,6 @@ function Platform:move(dt)
 end
 
 function Platform:update(dt)
-	-- local halfX = math.floor(self.width / 2)
-	-- local halfY = math.floor(self.height / 2)
-
-	-- if self.xSpeed > 0 then
-	-- 	if not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y - halfY))
-	-- 	and not (self:mapColliding(Global.map, nextX + halfX + ((self.size + 1) * self.width) + 2, self.y + halfY - 1)) then
-	-- 		self.x = nextX
-	-- 	else
-	-- 		self.xSpeed = -self.xSpeed
-	-- 	end
-	-- elseif self.xSpeed < 0 then
-	-- 	if not (self:mapColliding(Global.map, nextX - halfX - 2, self.y - halfY))
-	-- 	and not (self:mapColliding(Global.map, nextX - halfX - 2, self.y + halfY - 1)) then
-	-- 		self.x = nextX
-	-- 	else
-	-- 		self.xSpeed = -self.xSpeed
-	-- 	end
-	-- end
 	self:move(dt)
 
 	if self:touchesObject(Global.p) then
@@ -175,16 +154,7 @@ end
 function Platform:draw()
 	for i, v in ipairs(self.quads) do
 		love.graphics.draw(sprite, v, (self.x - (self.width / 2)) + 8 * (i - 1), self.y - (self.height / 2))
-		--love.graphics.setPointSize(8)
-		--love.graphics.points(self.x, self.y)
 	end
-
-	-- love.graphics.setLineWidth(0.25)
-	-- for i, v in ipairs(self.path) do
-	-- 	if self.path[i + 1] ~= nil then
-	-- 		love.graphics.line(self.path[i].x, self.path[i].y, self.path[i + 1].x, self.path[i + 1].y)
-	-- 	end
-	-- end
 end
 
 function Platform:touchesObject(object)
@@ -192,9 +162,6 @@ function Platform:touchesObject(object)
 	local ay1, ay2 = self.y - self.height / 2 - 1, self.y - self.height / 2 - 1
 	local bx1, bx2 = object.x - object.width / 2, object.x + object.width / 2 - 1
 	local by1, by2 = object.y - object.height / 2, object.y + object.height / 2 - 1
-
-	--print("object1: " .. ax1 .. " " .. ax2 .. " " .. ay1 .. " " .. ay2)
-	--print("object2: " .. bx1 .. " " .. bx2 .. " " .. by1 .. " " .. by2)
 
 	return ((ax2 >= bx1) and (ax1 <= bx2) and (ay2 > by1) and (ay1 <= by2))
 end

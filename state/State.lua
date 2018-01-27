@@ -3,6 +3,7 @@ require "state.GameState"
 require "state.ControlsMenuState"
 require "state.HighScoreState"
 require "state.SubmitScoreState"
+require "state.SettingsState"
 
 local Global = require "Global"
 
@@ -12,6 +13,7 @@ local states = {
 	"menu",
 	"scores",
 	"controls",
+	"settings",
 	"submit",
 	"game"
 }
@@ -39,6 +41,9 @@ function State:set(name)
 	elseif not(self.name == name) and name == "controls" then
 		self.currentState = ControlsMenuState:new()
 		self.currentState:init()
+	elseif not(self.name == name) and name == "settings" then
+		self.currentState = SettingsState:new()
+		self.currentState:init()
 	elseif not(self.name == name) and name == "game" then
 		self.currentState = GameState:new()
 		self.currentState:init()
@@ -59,6 +64,7 @@ function State:update(dt)
 	if self.currentState.isEnd then
 		self:set("submit")
 	end
+	
 	if self.currentState.itemSelected then
 		self.lastSelectedItem = self.currentState.itemSelected
 	end
@@ -91,12 +97,24 @@ function State:keypressed(key)
 		end
 	end
 	if key == "g" then --garbage collector
+		print('GARBAGE_COLLECTOR')
 		collectgarbage()
 	end
 	if key == "p" then --pause
 		--self:set(states[1])
 	end
 	if key == "m" then
-
+		if Global.audioMute then
+			Global.audioMute = false
+			love.audio.setVolume(1.0)
+		else 
+			Global.audioMute = true;
+			love.audio.setVolume(0.0)
+		end
+	end
+	if key == "v" then
+		Global.vsync = not Global.vsync
+		print('VSYNC ' .. tostring(Global.vsync))
+		love.window.setMode(Global.windowWidth, Global.windowHeight, {vsync = Global.vsync})
 	end
 end

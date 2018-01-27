@@ -5,23 +5,25 @@ local Global = {
 	copyright = "(C) 2017 WILSON",
 
 	debug = true,
+	audioMute = false,
+
+	windowHeight = 0,
+	windowWidth = 0,
+	vsync = true,
+
 	score = 0,
 	scores = {},
 	gravity = 760, --800
 
+	scale = 0.25,
+
 	map = {},
 	camera = {},
-	scale = 0.25,
-	windowHeight = 0,
-	windowWidth = 0,
-
 	p = {},
 	objects = {},
 
 	firstMap = 5,
 	currentMap = 5, --indeks
-
-	audioMute = false
 }
 
 return Global

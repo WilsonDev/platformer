@@ -85,5 +85,4 @@ function loadReasources()
 	else
 		love.audio.setVolume(0.0)
 	end
-	mainTheme:play()
 end
