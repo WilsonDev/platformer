@@ -2,14 +2,18 @@
 
 local Global = {
 	title = "GENERIC PLATFORMER",
-	copyright = "(C) 2017 WILSON",
+	copyright = "(C) 2018 WILSON",
 
 	debug = true,
-	audioMute = false,
+	audio = {
+		value = true
+	},
 
 	windowHeight = 0,
 	windowWidth = 0,
-	vsync = true,
+	vsync = {
+		value = true
+	},
 
 	score = 0,
 	scores = {},

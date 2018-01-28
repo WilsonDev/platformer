@@ -5,7 +5,7 @@ local Global = require "Global"
 GameState = {}
 
 function GameState:new()
-	object = {
+	local object = {
 		world = {},
 		isEnd = false
 	}

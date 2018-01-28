@@ -1,23 +1,37 @@
-require "entity.MenuItem"
+require "utils.MenuItem"
 
 local Global = require "Global"
 
 MenuState = {}
 
---Istotna jest kolejność podstanów
 local subStates = {
-	"game",
-	"scores",
-	"settings",
-	"controls",
-	"exit"
+	[1] = {
+		label = "NEW",
+		state = "game"
+	},
+	[2] = {
+		label = "SCORES",
+		state = "scores"
+	},
+	[3] = {
+		label = "SETTINGS",
+		state = "settings"
+	},
+	[4] = {
+		label = "CONTROLS",
+		state = "controls"
+	},
+	[5] = {
+		label = "EXIT",
+		state = "exit"
+	}
 }
 
 function MenuState:new(stateItemSelected)
 	local object = {
 		menuItems = {},
-		itemSelected = stateItemSelected,
-		subState = subStates[stateItemSelected],
+		itemSelected = stateItemSelected or 1,
+		subState = subStates[stateItemSelected or 1].state,
 		pause = false,
 	}
 	setmetatable(object, { __index = MenuState })
@@ -25,11 +39,9 @@ function MenuState:new(stateItemSelected)
 end
 
 function MenuState:init()
-	table.insert(self.menuItems, MenuItem:new("NEW", 90))
-	table.insert(self.menuItems, MenuItem:new("SCORES", 120))
-	table.insert(self.menuItems, MenuItem:new("SETTINGS", 150))
-	table.insert(self.menuItems, MenuItem:new("CONTROLS", 180))
-	table.insert(self.menuItems, MenuItem:new("EXIT", 210))
+	for i, v in ipairs(subStates) do
+		table.insert(self.menuItems, MenuItem:new(v.label, 90 + 30 * (i - 1)))
+	end
 
 	self.menuItems[self.itemSelected]:select(true)
 end
@@ -64,7 +76,7 @@ function MenuState:keypressed(key)
 			self.itemSelected = #self.menuItems
 		end
 
-		self.subState = subStates[self.itemSelected]
+		self.subState = subStates[self.itemSelected].state
 		soundEvents:play("select")
 	end
 	if key == "down" then
@@ -75,7 +87,7 @@ function MenuState:keypressed(key)
 			self.itemSelected = 1
 		end
 
-		self.subState = subStates[self.itemSelected]
+		self.subState = subStates[self.itemSelected].state
 		soundEvents:play("select")
 	end
 end

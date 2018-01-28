@@ -9,17 +9,29 @@ local Global = require "Global"
 
 State = {}
 
-local states = {
-	"menu",
-	"scores",
-	"controls",
-	"settings",
-	"submit",
-	"game"
-}
+-- local states = {
+-- 	[1] = {
+-- 		state = MenuState:new()
+-- 	},
+-- 	[2] = {
+-- 		state = HighScoreState:new()
+-- 	},
+-- 	[3] = {
+-- 		state = ControlsMenuState:new()
+-- 	},
+-- 	[4] = {
+-- 		state = SettingsState:new()
+-- 	},
+-- 	[5] = {
+-- 		state = SubmitScoreState:new()
+-- 	},
+-- 	[6] = {
+-- 		state = GameState:new()
+-- 	}
+-- }
 
 function State:new()
-	object = {
+	local object = {
 		name = "",
 		currentState = {},
 		lastSelectedItem = 1
@@ -28,6 +40,7 @@ function State:new()
 	return object
 end
 
+-- TODO init all states
 function State:set(name)
 	if name == nil or (not(self.name == name) and name == "menu") then
 		self.currentState = MenuState:new(self.lastSelectedItem)
@@ -87,7 +100,7 @@ function State:keypressed(key)
 		elseif self.currentState.parentMenu then
 			self:set(self.currentState.parentMenu)
 		end
-  end
+	end
 	if key == "escape" then
 		mainTheme:stop()
 		if self.currentState.parentMenu then
@@ -104,17 +117,18 @@ function State:keypressed(key)
 		--self:set(states[1])
 	end
 	if key == "m" then
-		if Global.audioMute then
-			Global.audioMute = false
-			love.audio.setVolume(1.0)
-		else 
-			Global.audioMute = true;
+		if Global.audio.value then
+			Global.audio.value = false
 			love.audio.setVolume(0.0)
+		else 
+			Global.audio.value = true;
+			love.audio.setVolume(1.0)
 		end
+		print('AUDIO ' .. tostring(Global.audio.value))
 	end
 	if key == "v" then
-		Global.vsync = not Global.vsync
-		print('VSYNC ' .. tostring(Global.vsync))
-		love.window.setMode(Global.windowWidth, Global.windowHeight, {vsync = Global.vsync})
+		Global.vsync.value = not Global.vsync.value
+		print('VSYNC ' .. tostring(Global.vsync.value))
+		love.window.setMode(Global.windowWidth, Global.windowHeight, { vsync = Global.vsync.value })
 	end
 end

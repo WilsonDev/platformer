@@ -80,7 +80,7 @@ function loadReasources()
 	mainTheme:setLooping(true)
 	mainTheme:setVolume(0.5)
 
-	if not Global.audioMute then
+	if Global.audio.value then
 		love.audio.setVolume(1.0)
 	else
 		love.audio.setVolume(0.0)

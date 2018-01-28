@@ -1,4 +1,4 @@
-require "entity.MenuItem"
+require "utils.MenuItem"
 
 local Global = require "Global"
 

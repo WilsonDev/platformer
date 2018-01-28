@@ -8,7 +8,7 @@ require "entity.Spring"
 require "entity.Spike"
 require "entity.Warp"
 require "entity.Acid"
-require "entity.Platform"
+require "entity.platform.Platform"
 require "entity.Cloud"
 
 local Global = require "Global"

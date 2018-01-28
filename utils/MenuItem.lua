@@ -1,8 +1,8 @@
 MenuItem = {}
 
-function MenuItem:new(menuItemName, menuItemY)
+function MenuItem:new(menuItemLabel, menuItemY)
 	local object = {
-		name = menuItemName,
+		label = menuItemLabel,
 		x = 0,
 		y = menuItemY,
 		height = 0, width = 0,
@@ -13,14 +13,14 @@ function MenuItem:new(menuItemName, menuItemY)
 	}
 
 	(function ()
-		local _, occurence = string.gsub(menuItemName, "[1]", "")
+		local _, occurence = string.gsub(menuItemLabel, "[1]", "")
 		if occurence > 0 then
-			object.x = (960 - string.len(menuItemName) * object.charWidth + (occurence * 18)) / 2
+			object.x = (960 - string.len(menuItemLabel) * object.charWidth + (occurence * 18)) / 2
 		else
-			object.x = (960 - string.len(menuItemName) * object.charWidth) / 2
+			object.x = (960 - string.len(menuItemLabel) * object.charWidth) / 2
 		end
 
-		object.width = string.len(menuItemName) * object.charWidth
+		object.width = string.len(menuItemLabel) * object.charWidth
 		object.height = object.charWidth
 	end)()
 
@@ -40,13 +40,17 @@ function MenuItem:draw()
 	if self.selected then
 		love.graphics.push()
 		love.graphics.translate(0, math.sin(self.timer * 12) * 2.5)
-		love.graphics.print(self.name, self.x, self.y)
+		love.graphics.print(self.label, self.x, self.y)
 		love.graphics.pop()
 	else
-		love.graphics.print(self.name, self.x, self.y)
+		love.graphics.print(self.label, self.x, self.y)
 	end
 
 	-- love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
+end
+
+function MenuItem:setLabel(newLabel)
+	self.label = newLabel
 end
 
 function MenuItem:select(selected)

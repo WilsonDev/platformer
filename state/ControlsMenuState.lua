@@ -1,11 +1,11 @@
-require "entity.MenuItem"
+require "utils.MenuItem"
 
 local Global = require "Global"
 
 ControlsMenuState = {}
 
 function ControlsMenuState:new()
-	object = {
+	local object = {
 		menuItems = {},
 		parentMenu = "menu"
 	}

@@ -1,4 +1,4 @@
-require "entity.PlatformCheckpoint"
+require "entity.platform.PlatformCheckpoint"
 
 local Global = require "Global"
 local StringUtils = require "utils.StringUtils"
