@@ -1,12 +1,13 @@
 Scores = {}
 
 function Scores:new(scoresFilename, scoresPlaces)
-	object = {
+	local object = {
 		filename = scoresFilename,
 		places = scoresPlaces,
 		scores = {}
 	}
-	setmetatable(object, { __index = Scores,
+	setmetatable(object, {
+		__index = Scores,
 		__call = function(self)
 			local i = 0
 			return function()
@@ -20,6 +21,10 @@ function Scores:new(scoresFilename, scoresPlaces)
 	return object
 end
 
+function Scores:size()
+	return #self.scores
+end
+
 function Scores:load()
 	local file = love.filesystem.newFile(self.filename)
 
@@ -31,6 +36,7 @@ function Scores:load()
 		local i = line:find('\t', 1, true)
 		self.scores[#self.scores + 1] = { tonumber(line:sub(1, i - 1)), line:sub(i + 1) }
 	end
+	
 	return file:close()
 end
 

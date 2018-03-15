@@ -21,7 +21,6 @@ function SettingsState:new()
 		menuItems = {},
 		itemSelected = 1
 	}
-	print("new")
 	setmetatable(object, { __index = SettingsState })
 	return object
 end

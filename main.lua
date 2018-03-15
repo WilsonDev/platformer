@@ -1,6 +1,7 @@
 require "Debug"
 require "state.State"
 require "Scores"
+require "utils.properties.Properties"
 require "event.SoundEvents"
 
 local MathUtils = require "utils.MathUtils"
@@ -10,27 +11,49 @@ local Global = require "Global"
 local initScores
 local state = {}
 
-function love.load()
-	Global.windowHeight = love.graphics.getHeight()
-	Global.windowWidth = love.graphics.getWidth()
+local systemProperties = {
+	vsync = "vsync",
+	audio = "audio"
+}
 
-	loadReasources()
+function love.load()
+	loadResources()
+
+	--Imporotwać
+	properties = Properties:new("settings")
+	properties:load()
+
+	initProperties(properties)
+
+	if properties:get(systemProperties.audio) then
+		love.audio.setVolume(1.0)
+	else
+		love.audio.setVolume(0.0)
+	end
 
 	Global.scores = Scores:new("scores", 10)
 	Global.scores:load()
 
-	initScores()
+	initScores(Global.scores)
 
 	state = State:new()
 	state:set()
 end
 
-function initScores() 
-	if #Global.scores == 0 then
-		for i = 1,10 do
-			Global.scores:add("AAA", 0)
+function initScores(scores)
+	if scores:size() == 0 then
+		for i = 1, 10 do
+			scores:add("AAA", 0)
 		end
-		Global.scores:save()
+		scores:save()
+	end
+end
+
+function initProperties(properties)
+	if properties:size() == 0 then
+		properties:add("vsync", true)
+		properties:add("audio", true)
+		properties:save()
 	end
 end
 
@@ -51,11 +74,8 @@ function love.keypressed(key, isrepeat)
 	state:keypressed(key)
 end
 
-function loadReasources()
+function loadResources()
 	soundEvents = SoundEvents:new(false)
-	-- soundEvents:add("hit")
-	-- soundEvents:hook("hit", hookTest)
-	-- soundEvents:invoke("hit")
 
 	love.graphics.setBackgroundColor(31, 31, 31)
 	love.graphics.setDefaultFilter("nearest", "nearest")
@@ -79,10 +99,4 @@ function loadReasources()
 	mainTheme = love.audio.newSource("resources/sounds/Underclocked.mp3")
 	mainTheme:setLooping(true)
 	mainTheme:setVolume(0.5)
-
-	if Global.audio.value then
-		love.audio.setVolume(1.0)
-	else
-		love.audio.setVolume(0.0)
-	end
 end

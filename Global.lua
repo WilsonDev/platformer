@@ -9,8 +9,8 @@ local Global = {
 		value = true
 	},
 
-	windowHeight = 0,
-	windowWidth = 0,
+	windowHeight = love.graphics.getHeight(),
+	windowWidth = love.graphics.getWidth(),
 	vsync = {
 		value = true
 	},
