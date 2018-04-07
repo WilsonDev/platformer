@@ -19,7 +19,6 @@ local systemProperties = {
 function love.load()
 	loadResources()
 
-	--Imporotwać
 	properties = Properties:new("settings")
 	properties:load()
 
@@ -77,7 +76,7 @@ end
 function loadResources()
 	soundEvents = SoundEvents:new(false)
 
-	love.graphics.setBackgroundColor(31, 31, 31)
+	love.graphics.setBackgroundColor(31 / 255, 31 / 255, 31 / 255)
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	sprite = love.graphics.newImage("resources/images/PixelArtTest.png")
 	hud = love.graphics.newImage("resources/images/hud.png")
@@ -96,7 +95,7 @@ function loadResources()
 	soundEvents:addSound("jump", love.audio.newSource("resources/sounds/jump.wav", "static"))
 	soundEvents:addSound("warp", love.audio.newSource("resources/sounds/warp.wav", "static"))
 
-	mainTheme = love.audio.newSource("resources/sounds/Underclocked.mp3")
+	mainTheme = love.audio.newSource("resources/sounds/Underclocked.mp3", "stream")
 	mainTheme:setLooping(true)
 	mainTheme:setVolume(0.5)
 end

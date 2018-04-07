@@ -34,8 +34,9 @@ end
 
 function Properties:load()
 	local file = love.filesystem.newFile(self.filename)
+	local info = love.filesystem.getInfo(self.filename, info)
 
-	if not love.filesystem.exists(self.filename) or not file:open("r") then
+	if not info == nil or not file:open("r") then
 		return
 	end
 
