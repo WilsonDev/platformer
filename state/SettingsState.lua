@@ -4,17 +4,6 @@ local Global = require "Global"
 
 SettingsState = {}
 
-local options = {
-	[1] = {
-		label = "AUDIO",
-		property = Global.audio
-	},
-	[2] = {
-		label = "VSYNC",
-		property = Global.vsync
-	}
-}
-
 function SettingsState:new()
 	local object = {
 		parentMenu = "menu",
@@ -26,8 +15,8 @@ function SettingsState:new()
 end
 
 function SettingsState:init()
-	for i, v in ipairs(options) do
-		table.insert(self.menuItems, MenuItem:new(v.label .. ' ' .. tostring(v.property.value), 90 + 30 * (i - 1)))
+	for i, name, value in Global.properties() do
+		table.insert(self.menuItems, MenuItem:new(name .. ' ' .. tostring(value), 90 + 30 * (i - 1)))
 	end
 
 	self.menuItems[self.itemSelected]:select(true)
@@ -76,8 +65,11 @@ function SettingsState:keypressed(key)
 		soundEvents:play("select")
 	end
 	if key == "left" or key == "right" then
-		options[self.itemSelected].property.value = not options[self.itemSelected].property.value
-		local selectedOption = options[self.itemSelected]
-		self.menuItems[self.itemSelected]:setLabel(selectedOption.label .. ' ' .. tostring(selectedOption.property.value))
+		local name, value = unpack(Global.properties.properties[self.itemSelected])
+		local booleanValue = (tostring(value) == "true")
+		Global.properties:add(name, not booleanValue)
+		self.menuItems[self.itemSelected]:setLabel(name .. ' ' .. tostring(not booleanValue))
+
+		propertiesEvents:invoke(name)
 	end
 end

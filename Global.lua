@@ -5,15 +5,11 @@ local Global = {
 	copyright = "(C) 2018 WILSON",
 
 	debug = true,
-	audio = {
-		value = true
-	},
 
 	windowHeight = love.graphics.getHeight(),
 	windowWidth = love.graphics.getWidth(),
-	vsync = {
-		value = true
-	},
+
+	properties = {},
 
 	score = 0,
 	scores = {},

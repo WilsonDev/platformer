@@ -1,34 +1,31 @@
 require "Debug"
 require "state.State"
-require "Scores"
+require "utils.scores.Scores"
 require "utils.properties.Properties"
 require "event.SoundEvents"
 
 local MathUtils = require "utils.MathUtils"
 local StringUtils = require "utils.StringUtils"
+local SystemPropertyType = require "utils.properties.SystemPropertyType"
 local Global = require "Global"
 
 local initScores
 local state = {}
 
-local systemProperties = {
-	vsync = "vsync",
-	audio = "audio"
-}
-
 function love.load()
 	loadResources()
 
-	properties = Properties:new("settings")
-	properties:load()
+	Global.properties = Properties:new("settings")
+	Global.properties:load()
+	
+	initProperties(Global.properties)
 
-	initProperties(properties)
+	handleAudioPropertyChange()
+	handleVsyncPropertyChange()
 
-	if properties:get(systemProperties.audio) then
-		love.audio.setVolume(1.0)
-	else
-		love.audio.setVolume(0.0)
-	end
+	propertiesEvents = Events:new(false)
+	propertiesEvents:hook('AUDIO', handleAudioPropertyChange)
+	propertiesEvents:hook('VSYNC', handleVsyncPropertyChange)
 
 	Global.scores = Scores:new("scores", 10)
 	Global.scores:load()
@@ -39,6 +36,26 @@ function love.load()
 	state:set()
 end
 
+function handleAudioPropertyChange()
+	local isAudio = Global.properties:get(SystemPropertyType.AUDIO)
+	print(SystemPropertyType.AUDIO, isAudio)
+	if tostring(isAudio) == "true" then
+		love.audio.setVolume(1.0)
+	else
+		love.audio.setVolume(0.0)
+	end
+end
+
+function handleVsyncPropertyChange()
+	local isVsync = Global.properties:get(SystemPropertyType.VSYNC)
+	print(SystemPropertyType.VSYNC, isVsync)
+	if tostring(isVsync) == "true" then
+		love.window.setMode(Global.windowWidth, Global.windowHeight, { vsync = true })
+	else
+		love.window.setMode(Global.windowWidth, Global.windowHeight, { vsync = false })
+	end
+end
+
 function initScores(scores)
 	if scores:size() == 0 then
 		for i = 1, 10 do
@@ -46,14 +63,18 @@ function initScores(scores)
 		end
 		scores:save()
 	end
+	assert(scores:size() == 10, "Invalid number of scores!")
 end
 
 function initProperties(properties)
 	if properties:size() == 0 then
-		properties:add("vsync", true)
-		properties:add("audio", true)
+		for i, v in ipairs(SystemPropertyType) do
+			properties:add(v.name, v.value)
+		end
+		
 		properties:save()
 	end
+	assert(properties:size() == 2, "Invalid number of system properties!")
 end
 
 function love.update(dt)

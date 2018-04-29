@@ -1,5 +1,3 @@
-require "utils.properties.SystemProperty"
-
 Properties = {}
 
 function Properties:new(propertiesFilename)
@@ -7,18 +5,26 @@ function Properties:new(propertiesFilename)
 		filename = propertiesFilename,
 		properties = {}
 	}
-	setmetatable(object, { __index = Properties,
+	setmetatable(object, {
+		__index = Properties,
 		__call = function(self)
-			return self.properties
+			local i = 0
+			return function()
+				i = i + 1
+				if self.properties[i] then
+					return i, unpack(self.properties[i])
+				end
+			end
 		end
 	})
 	return object
 end
 
-function Properties:get(name)
-	for i = 1, #self.properties do
-		if self.properties[i].name == name then
-			return self.properties[i].value
+function Properties:get(propertyName)
+	for i = 1, self:size() do
+		local name, value = unpack(self.properties[i])
+		if name == propertyName then
+			return value
 		end
 	end
 	return
@@ -28,8 +34,16 @@ function Properties:size()
 	return #self.properties
 end
 
-function Properties:add(name, value)
-	self.properties[#self.properties + 1] = SystemProperty:new(name, value)
+function Properties:add(propertyName, propertyValue)
+	local score = { propertyName, propertyValue }
+	for i = 1, self:size() do
+		local name, value = unpack(self.properties[i])
+		if name == propertyName then
+			self.properties[i] = score
+			return
+		end
+	end
+	self.properties[#self.properties + 1] = score
 end
 
 function Properties:load()
@@ -51,14 +65,13 @@ end
 --TODO save on property change
 function Properties:save()
 	local file = love.filesystem.newFile(self.filename)
-
 	if not file:open("w") then
 		return
 	end
 
 	for i = 1, #self.properties do
-		item = self.properties[i]
-		file:write(item.name .. "\t" .. tostring(item.value) .. "\n")
+		local name, value = unpack(self.properties[i])
+		file:write(name .. "\t" .. tostring(value) .. "\n")
 	end
 	return file:close()
 end

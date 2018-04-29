@@ -62,6 +62,7 @@ function State:set(name)
 		self.currentState:init()
 	elseif not(self.name == name) and name == "exit" then
 		Global.scores:save()
+		Global.properties:save()
 		love.event.quit()
 	end
 	self.name = name
@@ -114,21 +115,7 @@ function State:keypressed(key)
 		collectgarbage()
 	end
 	if key == "p" then --pause
-		--self:set(states[1])
-	end
-	if key == "m" then
-		if Global.audio.value then
-			Global.audio.value = false
-			love.audio.setVolume(0.0)
-		else 
-			Global.audio.value = true;
-			love.audio.setVolume(1.0)
-		end
-		print('AUDIO ' .. tostring(Global.audio.value))
-	end
-	if key == "v" then
-		Global.vsync.value = not Global.vsync.value
-		print('VSYNC ' .. tostring(Global.vsync.value))
-		love.window.setMode(Global.windowWidth, Global.windowHeight, { vsync = Global.vsync.value })
+		-- self:set(states[1])
+		print('PAUSE')
 	end
 end

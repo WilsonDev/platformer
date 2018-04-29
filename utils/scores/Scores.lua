@@ -46,9 +46,9 @@ local function sortScore(a, b)
 end
 
 function Scores:add(name, score)
-	--print(#self.scores)
 	self.scores[#self.scores + 1] = { score, name }
 	table.sort(self.scores, sortScore)
+	table.remove(self.scores, self.places + 1)
 end
 
 function Scores:save()
