@@ -79,9 +79,9 @@ function State:update(dt)
 		self:set("submit")
 	end
 	
-	if self.currentState.itemSelected then
-		self.lastSelectedItem = self.currentState.itemSelected
-	end
+	-- if self.currentState.itemSelected then
+	-- 	self.lastSelectedItem = self.currentState.itemSelected
+	-- end
 end
 
 function State:draw()

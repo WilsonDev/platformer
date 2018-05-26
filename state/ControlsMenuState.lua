@@ -14,10 +14,9 @@ function ControlsMenuState:new()
 end
 
 function ControlsMenuState:init()
-	table.insert(self.menuItems, MenuItem:new("Z - JUMP", 95))
-	table.insert(self.menuItems, MenuItem:new("X - SHOT", 125))
-	table.insert(self.menuItems, MenuItem:new("R - RELOAD", 155))
-	table.insert(self.menuItems, MenuItem:new("M - MUTE/UNMUTE", 185))
+	table.insert(self.menuItems, MenuItem:new("Z - JUMP", 90))
+	table.insert(self.menuItems, MenuItem:new("X - SHOT", 120))
+	table.insert(self.menuItems, MenuItem:new("R - RELOAD", 150))
 end
 
 function ControlsMenuState:update(dt)
