@@ -19,12 +19,12 @@ function Spike:new(objectName, spikeX, spikeY)
 end
 
 function Spike:update(dt)
-	local player = Global.p
+	local player = Global.player
 
 	if self:touchesObject(player) then
-		if player.immunity == false then
-			player.immunity = true
-			player.immunityTime = 2
+		if player.immune == false then
+			player.immune = true
+			player.immuneTime = 2
 			player.hitpoints = player.hitpoints - 1
 			soundEvents:play("punch")
 		end

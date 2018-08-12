@@ -24,7 +24,7 @@ end
 local clicked = false
 
 function Button:update(dt)
-	if self:touchesObject(Global.p) then
+	if self:touchesObject(Global.player) then
 		--[[if player.ySpeed > 0 then
 			player.y = self.y - self.height + 1
 			player:collide("floor")

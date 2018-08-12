@@ -13,18 +13,16 @@ function Slime:new(objectName, slimeX, slimeY)
 		xSpeed = 0, ySpeed = 0,
 		state = "move",
 		hitpoints = 1,
-		runSpeed = 30,
+		runSpeed = 20,
 		onGround = false,
+		direction = 1,
 		xScale = 1,
 		xOffset = 0,
 		animations = {
-			move = {
-				operator = Animation:new(0.50, 2,
-				{
-					Quad( 8, 8, 8, 8, 160, 144),
-					Quad(16, 8, 8, 8, 160, 144)
-				})
-			}
+			operator = Animation:new(0.50, {
+				Quad( 8, 8, 8, 8, 160, 144),
+				Quad(16, 8, 8, 8, 160, 144)
+			})
 		}
 	}
 	setmetatable(object, { __index = Slime })
@@ -32,23 +30,22 @@ function Slime:new(objectName, slimeX, slimeY)
 end
 
 function Slime:move()
-	self.xSpeed = self.runSpeed
-	--Orientacja tekstur
-	if self.runSpeed > 0 then
-		self.xScale = 1
+	self.xSpeed = self.direction * self.runSpeed
+	self.xScale = self.direction
+	-- Texture orientation
+	if self.direction == 1 then
 		self.xOffset = 0
 	else
-		self.xScale = -1
-		self.xOffset = 8
+		self.xOffset = self.width
 	end
 end
 
 function Slime:getAnimationQuad()
-	return self.animations[self.state].operator:getCurrentQuad()
+	return self.animations.operator:getCurrentQuad()
 end
 
 function Slime:updateAnimations(dt)
-	self.animations[self.state].operator:update(dt)
+	self.animations.operator:update(dt)
 end
 
 function Slime:draw()
@@ -65,7 +62,7 @@ function Slime:collide(event)
 		self.ySpeed = 0
 	end
 	if event == "wall" then
-		self.runSpeed = -1 * self.runSpeed
+		self.direction = -1 * self.direction
 	end
 end
 
@@ -126,19 +123,40 @@ function Slime:update(dt, gravity, map)
 		end
 	end
 
-	--Sprawdzaj czy natrafi na przepaść
-	if ((self:mapColliding(Global.map, self.x - halfX, nextY + halfY))
-		and not (self:mapColliding(Global.map, self.x + halfX, nextY + halfY)))
-	or ((self:mapColliding(Global.map, self.x + halfX, nextY + halfY))
-		and not (self:mapColliding(Global.map, self.x - halfX - 1, nextY + halfY))) then
-		self.runSpeed = -1 * self.runSpeed
-	end
+	self:fallDownDetection(halfX, halfY, nextX, nextY)
 
 	--Animacja
 	self:updateAnimations(dt)
 
 	--Ruch
 	self:move()
+end
+
+--Sprawdzaj czy natrafi na przepaść
+function Slime:fallDownDetection(halfX, halfY, nextX, nextY, floors)
+	local floors = floors or 1
+	local rightCornerCondition = false
+	local leftCornerCondition = false
+
+	if self.xSpeed > 0 then
+		rightCornerCondition = self:mapColliding(Global.map, self.x - halfX, nextY + halfY)
+	elseif self.xSpeed < 0 then
+		leftCornerCondition = self:mapColliding(Global.map, self.x + halfX, nextY + halfY)
+	end	
+
+	for i = 0, floors - 1 do
+		if self.xSpeed > 0 then
+			rightCornerCondition = rightCornerCondition 
+				and not self:mapColliding(Global.map, self.x + halfX, nextY + halfY + (self.height * i))
+		elseif self.xSpeed < 0 then
+			leftCornerCondition = leftCornerCondition 
+				and not self:mapColliding(Global.map, self.x - halfX, nextY + halfY + (self.height * i))
+		end
+	end
+	
+	if rightCornerCondition or leftCornerCondition then
+		self.direction = -1 * self.direction
+	end
 end
 
 --Kolizje z obiektami

@@ -65,87 +65,91 @@ function Platform:move(dt)
 	local nextX = self.x + (self.xSpeed * dt)
 	local nextY = self.y + (self.ySpeed * dt)
 
-	if self.isMoving then
-		local checkpointFrom, checkpointTo
-		if self.currentCheckpoint == #self.path or self.lastCheckpoint > self.currentCheckpoint 
-		and self.currentCheckpoint - 1 ~= 0 then
-			checkpointFrom = self.path[self.currentCheckpoint]
-			checkpointTo = self.path[self.currentCheckpoint - 1]
+	if not self.isMoving then
+		return
+	end
+
+	local checkpointFrom, checkpointTo
+	if self.currentCheckpoint == #self.path or self.lastCheckpoint > self.currentCheckpoint 
+	and self.currentCheckpoint - 1 ~= 0 then
+		checkpointFrom = self.path[self.currentCheckpoint]
+		checkpointTo = self.path[self.currentCheckpoint - 1]
+	else
+		checkpointFrom = self.path[self.currentCheckpoint]
+		checkpointTo = self.path[self.currentCheckpoint + 1]
+	end
+
+	if checkpointTo ~= nil then
+		local xModifier = 1 
+		local yModifier = 1
+		local dxFrom = math.abs(checkpointFrom.x - checkpointTo.x)
+		local dyFrom = math.abs(checkpointFrom.y - checkpointTo.y)
+
+		local dx = self.x - checkpointTo.x
+		local dy = self.y - checkpointTo.y
+		local d = dx * dx + dy * dy
+
+		if dxFrom > dyFrom then
+			yModifier = dyFrom / dxFrom
 		else
-			checkpointFrom = self.path[self.currentCheckpoint]
-			checkpointTo = self.path[self.currentCheckpoint + 1]
+			xModifier = dxFrom / dyFrom
 		end
 
-		if checkpointTo ~= nil then
-			local xModifier = 1 
-			local yModifier = 1
-			local dxFrom = math.abs(checkpointFrom.x - checkpointTo.x)
-			local dyFrom = math.abs(checkpointFrom.y - checkpointTo.y)
-
-			local dx = self.x - checkpointTo.x
-			local dy = self.y - checkpointTo.y
-			local d = dx * dx + dy * dy
-
-			if dxFrom > dyFrom then
-				yModifier = dyFrom / dxFrom
+		if math.abs(dx) > math.abs(self.xSpeed * dt) then
+			self.xSpeed = 20
+			if dx < 0 then
+				self.xSpeed = math.abs(self.xSpeed) * xModifier
 			else
-				xModifier = dxFrom / dyFrom
+				self.xSpeed = -math.abs(self.xSpeed) * xModifier
 			end
-
-			if math.abs(dx) > math.abs(self.xSpeed * dt) then
-				self.xSpeed = 20
-				if dx < 0 then
-					self.xSpeed = math.abs(self.xSpeed) * xModifier
-				else
-					self.xSpeed = -math.abs(self.xSpeed) * xModifier
-				end
-				self.x = nextX
-			else
-				self.xSpeed = 0
-			end
-
-			if math.abs(dy) > math.abs(self.ySpeed * dt) then
-				self.ySpeed = 20
-				if dy < 0 then
-					self.ySpeed = math.abs(self.ySpeed) * yModifier
-				else
-					self.ySpeed = -math.abs(self.ySpeed) * yModifier
-				end
-				self.y = nextY
-			else
-				self.ySpeed = 0
-			end
-
-			if d < math.max(math.abs(self.xSpeed), math.abs(self.ySpeed)) * dt then
-				self.lastCheckpoint = self.currentCheckpoint
-				if checkpointFrom.id < checkpointTo.id then
-					self.currentCheckpoint = self.currentCheckpoint + 1
-				else
-					self.currentCheckpoint = self.currentCheckpoint - 1
-				end
-			end
+			self.x = nextX
 		else
 			self.xSpeed = 0
+		end
+
+		if math.abs(dy) > math.abs(self.ySpeed * dt) then
+			self.ySpeed = 20
+			if dy < 0 then
+				self.ySpeed = math.abs(self.ySpeed) * yModifier
+			else
+				self.ySpeed = -math.abs(self.ySpeed) * yModifier
+			end
+			self.y = nextY
+		else
 			self.ySpeed = 0
 		end
+
+		if d < math.max(math.abs(self.xSpeed), math.abs(self.ySpeed)) * dt then
+			self.lastCheckpoint = self.currentCheckpoint
+			if checkpointFrom.id < checkpointTo.id then
+				self.currentCheckpoint = self.currentCheckpoint + 1
+			else
+				self.currentCheckpoint = self.currentCheckpoint - 1
+			end
+		end
+	else
+		self.xSpeed = 0
+		self.ySpeed = 0
 	end
 end
 
 function Platform:update(dt)
+	local player = Global.player
+
 	self:move(dt)
 
-	if self:touchesObject(Global.p) then
-		if Global.p.ySpeed > 0 then
+	if self:touchesObject(player) then
+		if player.ySpeed > 0 then
 			self.isMoving = true
-			Global.p.y = (self.y - self.height / 2) - (Global.p.height / 2)
-			Global.p:collide("platform")
+			player.y = (self.y - self.height / 2) - (player.height / 2)
+			player:collide("platform")
 			if self.ySpeed >= 0 then
-				Global.p.ySpeed = self.ySpeed
+				player.ySpeed = self.ySpeed
 			else
-				Global.p.ySpeed = 0
+				player.ySpeed = 0
 			end
-			if not Global.p.isMoving then
-				Global.p.xSpeed = self.xSpeed
+			if not player.isMoving then
+				player.xSpeed = self.xSpeed
 			end
 		end
 	end

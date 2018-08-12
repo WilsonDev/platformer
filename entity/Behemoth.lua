@@ -1,10 +1,10 @@
 require "utils.Animation"
 
+local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Behemoth = {}
---Dziedziczenie po klasie Slime
-setmetatable(Behemoth, { __index = Slime })
+setmetatable(Behemoth, { __index = Slime }) -- Extends Slime class
 
 function Behemoth:new(objectName, behemothX, behemothY)
 	local object = {
@@ -16,21 +16,73 @@ function Behemoth:new(objectName, behemothX, behemothY)
 		hitpoints = 2,
 		runSpeed = 40,
 		onGround = false,
+		jumpCount = 0,
+		direction = 1,
+		isHunter = false,
 		xScale = 1,
 		xOffset = 0,
 		animations = {
-			move = {
-				operator = Animation:new(0.14, 4,
-				{
-					Quad( 0, 0, 8, 8, 160, 144),
-					Quad(24, 0, 8, 8, 160, 144),
-					Quad(32, 0, 8, 8, 160, 144),
-					Quad(40, 0, 8, 8, 160, 144)
-				})
-			}
+			operator = Animation:new(0.14, {
+				Quad( 0, 0, 8, 8, 160, 144),
+				Quad( 8, 0, 8, 8, 160, 144),
+				Quad(24, 0, 8, 8, 160, 144),
+				Quad(32, 0, 8, 8, 160, 144),
+				Quad( 8, 0, 8, 8, 160, 144),
+				Quad(40, 0, 8, 8, 160, 144)
+			})
 		}
 	}
-
 	setmetatable(object, { __index = Behemoth })
 	return object
+end
+
+function Behemoth:jump()
+	if self.jumpCount < 1 then
+		self.ySpeed = -130
+		self.onGround = false
+		self.jumpCount = self.jumpCount + 1;
+	end
+end
+
+function Behemoth:collide(event)
+	if event == "floor" then
+		self.ySpeed = 0
+		self.onGround = true
+		self.jumpCount = 0
+	end
+	if event == "ceiling" then
+		self.ySpeed = 0
+	end
+	if event == "wall" then
+		if self.isHunter then
+			self:jump()
+		else
+			self.direction = -1 * self.direction
+		end
+	end
+end
+
+function Behemoth:update(dt)
+	Slime.update(self, dt) -- Call the superclass function
+
+	local distanceX = Global.player.x - self.x
+	local distanceY = Global.player.y - self.y
+	local distance = math.sqrt(math.pow(distanceX, 2) + math.pow(distanceY, 2))
+
+	if distance < 50 and math.abs(distanceY) < 20 then
+		self.isHunter = true
+		if Global.player.x < self.x then
+			self.direction = -1
+		else
+			self.direction = 1
+		end
+	else
+		self.isHunter = false
+	end
+end
+
+function Behemoth:fallDownDetection(halfX, halfY, nextX, nextY)
+	if not self.isHunter then
+		Slime.fallDownDetection(self, halfX, halfY, nextX, nextY, 2) -- Call the superclass function
+	end
 end

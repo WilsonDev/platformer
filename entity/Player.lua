@@ -21,22 +21,22 @@ function Player:new(objectName, playerX, playerY)
 		xOffset = 0,
 		onGround = false,
 		jumpCount = 0, hasJumped = false,
-		shots = {}, firedShots = 0,
-		immunity = false, immunityTime = 2, isPoked = false,
+		shots = {}, firedShots = 0, selectedWeapon = "bullet",
+		immune = false, immuneTime = 2, isPoked = false,
 		isMoving = false,
 		animations = {
 			move = {
-				operator = Animation:new(0.14, 4,
-				{
+				operator = Animation:new(0.12, {
 					Quad( 0, 16, 8, 8, 160, 144),
+					Quad( 0, 24, 8, 8, 160, 144),
 					Quad(24, 16, 8, 8, 160, 144),
 					Quad(32, 16, 8, 8, 160, 144),
+					Quad( 0, 24, 8, 8, 160, 144),
 					Quad(40, 16, 8, 8, 160, 144)
 				})
 			},
 			stand = {
-				operator = Animation:new(0.35, 3,
-				{
+				operator = Animation:new(0.35, {
 					Quad( 8, 16, 8, 8, 160, 144),
 					Quad(16, 16, 8, 8, 160, 144),
 					Quad( 8, 16, 8, 8, 160, 144)
@@ -80,7 +80,7 @@ function Player:moveLeft()
 	self.direction = -1
 	self.xSpeed = self.direction * self.runSpeed
 	self.xScale = self.direction
-	self.xOffset = 8
+	self.xOffset = self.width
 end
 
 function Player:sprint()
@@ -95,7 +95,7 @@ end
 function Player:shot()
 	self.firedShots = self.firedShots + 1
 
-	bullet = Ammo:new(self.x, self.y, "bullet", 120)
+	bullet = Ammo:new(self.x, self.y, self.selectedWeapon, 120)
 	bullet.xScale = self.xScale
 	bullet.xOffset = self.xOffset
 
@@ -154,7 +154,6 @@ function Player:mapColliding(map, x, y)
 	local layer = Global.map.layers["ground"]
 	local tileX = math.floor(x / Global.map.tilewidth) + 1
 	local tileY = math.floor(y / Global.map.tileheight) + 1
-	--print(tileX .. " " .. tileY)
 	if (Global.map.width < tileX or Global.map.height < tileY or tileX <= 0 or tileY <= 0) then
 		return false
 	end
@@ -165,15 +164,16 @@ end
 
 function Player:enemyColliding()
 	--Kolizja z przeciwnikiem
-	for _, v in pairs({Global.objects["behemoth"], Global.objects["slime"]}) do
-		for _, w in pairs(v) do	
-			if w:touchesObject(self) and not self.immunity then
+	for _, v in pairs({"behemoth", "slime", "mega_behemoth"}) do
+		local enemies = Global.objects[v] or {}
+		for _, w in pairs(enemies) do
+			if w:touchesObject(self) and not self.immune then
 				self.isPoked = true
 				soundEvents:play("punch")
 
-				if self.immunity == false then
-					self.immunity = true
-					self.immunityTime = 2
+				if self.immune == false then
+					self.immune = true
+					self.immuneTime = 2
 					self.hitpoints = self.hitpoints - 1
 				end
 
@@ -206,13 +206,13 @@ function Player:ammoUpdate(dt)
 			v.toRemove = true
 		end
 
-		for _, w in pairs({Global.objects["behemoth"], Global.objects["slime"]}) do
-			for _, u in pairs(w) do 
+		for _, w in pairs({"behemoth", "slime", "mega_behemoth"}) do
+			local enemies = Global.objects[w] or {}
+			for _, u in pairs(enemies) do 
 				if v:touchesObject(u) and not v.toRemove then
 					u.hitpoints = u.hitpoints - v.damage
 					if u.hitpoints <= 0 then
-						Global.objects["behemoth"][u.name] = nil
-						Global.objects["slime"][u.name] = nil
+						Global.objects[w][u.name] = nil
 					end
 
 					v.toRemove = true
@@ -294,10 +294,10 @@ function Player:update(dt)
 	end
 
 	--Nietykalność
-	if self.immunityTime > 0 then
-		self.immunityTime = self.immunityTime - dt
-		if self.immunityTime <= 0 then
-			self.immunity = false
+	if self.immuneTime > 0 then
+		self.immuneTime = self.immuneTime - dt
+		if self.immuneTime <= 0 then
+			self.immune = false
 		end
 	end
 

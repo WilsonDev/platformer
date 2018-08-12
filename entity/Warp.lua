@@ -16,7 +16,8 @@ function Warp:new(objectName, warpX, warpY)
 end
 
 function Warp:update(dt)
-	local player = Global.p
+	local player = Global.player
+	
 	if self:touchesObject(player) then
 		Global.currentMap = Global.currentMap + 1
 		World:change("map" .. Global.currentMap)

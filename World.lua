@@ -1,8 +1,9 @@
 require "Camera"
 require "entity.Player"
 require "entity.Pickup"
-require "entity.Enemy"
+require "entity.Slime"
 require "entity.Behemoth"
+require "entity.MegaBehemoth"
 require "entity.Button"
 require "entity.Spring"
 require "entity.Spike"
@@ -40,7 +41,7 @@ function World:init(level)
 		if object.properties then
 			local objectName = object.properties.name
 			if object.properties.type == 'player' then
-				Global.p = Player:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				Global.player = Player:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
 			end
 			if object.properties.type == 'button' then
 				local button = Button:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
@@ -68,6 +69,10 @@ function World:init(level)
 			end
 			if object.properties.type == 'behemoth' then
 				local behemoth = Behemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+				addToTable(Global.objects, object.properties.type, objectName, behemoth)
+			end
+			if object.properties.type == 'mega_behemoth' then
+				local behemoth = MegaBehemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
 				addToTable(Global.objects, object.properties.type, objectName, behemoth)
 			end
 			if object.properties.type == 'platform' then
@@ -101,7 +106,7 @@ function addToTable(table, k1, k2, value)
 end
 
 function World:update(dt)
-	Global.p:update(dt)
+	Global.player:update(dt)
 	Global.map:update(dt)
 
 	for _, v in pairs(Global.objects) do
@@ -111,11 +116,11 @@ function World:update(dt)
 	end
 
 	if Global.camera.activated then
-		Global.camera:flowX(dt, Global.p.x - Global.windowWidth / Global.map.tilewidth,
-			Global.p.y - Global.windowHeight / Global.map.tileheight, 80)
+		Global.camera:flowX(dt, Global.player.x - Global.windowWidth / Global.map.tilewidth,
+			Global.player.y - Global.windowHeight / Global.map.tileheight, 80)
 	else
-		Global.camera:setPosition(Global.p.x - Global.windowWidth / Global.map.tilewidth,
-			Global.p.y - Global.windowHeight / Global.map.tileheight)
+		Global.camera:setPosition(Global.player.x - Global.windowWidth / Global.map.tilewidth,
+			Global.player.y - Global.windowHeight / Global.map.tileheight)
 	end
 end
 
@@ -132,39 +137,22 @@ function World:draw()
 		end
 	end
 
-	Global.p:draw()
+	Global.player:draw()
 
 	Global.camera:unset()
 
-	if Global.p.immunity then
+	if Global.player.immune then
 		love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
 	end
 	if Global.debug then
-		Debug:info(math.floor(Global.p.x + 0.5), math.floor(Global.p.y + 0.5), Global.score)
+		Debug:info(math.floor(Global.player.x + 0.5), math.floor(Global.player.y + 0.5), Global.score)
 	end
-	love.graphics.draw(hud, 792, 10, 0, 4, 4)
-	for i = 1, Global.p.hitpoints do
-		love.graphics.draw(sprite, heart, 940 - (i * 28), 22, 0, 4, 4)
+	love.graphics.draw(hud, love.graphics.getWidth() - 168, 10, 0, 4, 4)
+	for i = 1, Global.player.hitpoints do
+		love.graphics.draw(sprite, heart, love.graphics.getWidth() - 20 - (i * 28), 22, 0, 4, 4)
 	end
-	for i = 1, (5 - Global.p.firedShots) do
-		love.graphics.draw(sprite, clip, 940 - (i * 28), 46, 0, 4, 4)
-	end
-end
-
-function World:keyreleased(key)
-	Global.p:keyreleased(key)
-end
-
-function World:keypressed(key)
-	Global.p:keypressed(key)
-
-	if key == "l" then
-		if Global.camera.stop == false then
-			Global.camera.stop = true
-		else
-			Global.camera.stop = false
-			Global.camera.activated = true
-		end
+	for i = 1, (5 - Global.player.firedShots) do
+		love.graphics.draw(sprite, clip, love.graphics.getWidth() - 20 - (i * 28), 46, 0, 4, 4)
 	end
 end
 
@@ -182,4 +170,21 @@ function World:change(level)
 	self:init(level)
 	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (Global.windowWidth * Global.camera.scaleX),
 		(Global.map.height * Global.map.tileheight) - (Global.windowHeight * Global.camera.scaleX))
+end
+
+function World:keyreleased(key)
+	Global.player:keyreleased(key)
+end
+
+function World:keypressed(key)
+	Global.player:keypressed(key)
+
+	if key == "l" then
+		if Global.camera.stop == false then
+			Global.camera.stop = true
+		else
+			Global.camera.stop = false
+			Global.camera.activated = true
+		end
+	end
 end

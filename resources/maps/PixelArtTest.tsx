@@ -41,12 +41,27 @@
    <property name="solid" value=""/>
   </properties>
  </tile>
- <tile id="229">
+ <tile id="236">
   <properties>
    <property name="solid" value=""/>
   </properties>
  </tile>
- <tile id="231">
+ <tile id="237">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="244">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="245">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="246">
   <properties>
    <property name="solid" value=""/>
   </properties>
@@ -77,7 +92,22 @@
    <property name="solid" value=""/>
   </properties>
  </tile>
+ <tile id="283">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="284">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
  <tile id="285">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="286">
   <properties>
    <property name="solid" value=""/>
   </properties>
@@ -92,7 +122,32 @@
    <property name="solid" value=""/>
   </properties>
  </tile>
+ <tile id="303">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="304">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
  <tile id="305">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="306">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="308">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="309">
   <properties>
    <property name="solid" value=""/>
   </properties>
@@ -122,12 +177,72 @@
    <property name="solid" value=""/>
   </properties>
  </tile>
+ <tile id="321">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="322">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="323">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="324">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="325">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="326">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="328">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="329">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
  <tile id="337">
   <properties>
    <property name="solid" value=""/>
   </properties>
  </tile>
  <tile id="338">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="341">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="342">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="344">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="346">
   <properties>
    <property name="solid" value=""/>
   </properties>

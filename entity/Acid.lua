@@ -21,30 +21,26 @@ function Acid:new(objectName, acidX, acidY)
 		isInit = true,
 		animations = {
 			drop = {
-				operator = Animation:new(1, 1,
-				{
+				operator = Animation:new(1, {
 					Quad(48, 0, 8, 8, 160, 144)
 				})
 			},
 			splash = {
-				operator = Animation:new(0.30, 4,
-				{
+				operator = Animation:new(0.30, {
 					Quad(48, 8, 8, 8, 160, 144),
 					Quad(48, 16, 8, 8, 160, 144),
 					Quad(48, 24, 8, 8, 160, 144)
-				})
+				}, 4)
 			},
 			init = {
-				operator = Animation:new(0.30, 4,
-				{
+				operator = Animation:new(0.30, {
 					Quad(56, 8, 8, 8, 160, 144),
 					Quad(56, 16, 8, 8, 160, 144),
 					Quad(56, 24, 8, 8, 160, 144)
-				})
+				}, 4)
 			}
 		}
 	}
-
 	setmetatable(object, { __index = Acid })
 	return object
 end
@@ -72,7 +68,7 @@ function Acid:getState()
 end
 
 function Acid:update(dt)
-	local player = Global.p
+	local player = Global.player
 
 	if self:mapColliding(Global.map, self.x, self.y + (self.height / 2)) and not self.isFallen then
 		local tileY = math.floor(self.y / Global.map.tileheight)
@@ -83,8 +79,6 @@ function Acid:update(dt)
 	if not self.isFallen and not self.isInit then
 		self.y = self.y + self.fallSpeed * dt
 	end
-
-
 
 	local animationOperator = self:getCurrentAnimationOperator()
 	animationOperator:update(dt)
@@ -102,10 +96,10 @@ function Acid:update(dt)
 	end
 
 	if self:touchesObject(player) then
-		if player.immunity == false then
+		if player.immune == false then
 			soundEvents:play("punch")
-			player.immunity = true
-			player.immunityTime = 2
+			player.immune = true
+			player.immuneTime = 2
 			player.hitpoints = player.hitpoints - 1
 		end
 	end

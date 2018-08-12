@@ -18,7 +18,7 @@ function Pickup:new(objectName, pickupX, pickupY, pickupValue)
 end
 
 function Pickup:update(dt)
-	local player = Global.p
+	local player = Global.player
 	if self:touchesObject(player) then
 		Global.objects["pickup"][self.name] = nil
 		--table.remove(Global.pickups, self.name)

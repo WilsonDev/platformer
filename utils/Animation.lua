@@ -1,20 +1,21 @@
 Animation = {}
 
-function Animation:new(animationDelay, animationFrames, animationQuads)
-    object = {
-        frames = animationFrames,
-        delay = animationDelay,
-        iterator = 1,
-        timer = 0,
-        quads = animationQuads
-    }
+function Animation:new(animationDelay, animationQuads, animationFrames)
+	local object = {
+		delay = animationDelay,
+		iterator = 1,
+		timer = 0,
+		quads = animationQuads
+	}
 
-    setmetatable(object, { __index = Animation })
-    return object
+	object.frames = animationFrames or #object.quads
+
+	setmetatable(object, { __index = Animation })
+	return object
 end
 
 function Animation:update(dt)
-    self.timer = self.timer + dt
+	self.timer = self.timer + dt
 	if self.timer > self.delay then
 		self.timer = 0
 		self.iterator = self.iterator + 1
@@ -25,13 +26,13 @@ function Animation:update(dt)
 end
 
 function Animation:setIteration(iteration)
-    self.iterator = iteration
+	self.iterator = iteration
 end
 
 function Animation:getCurrentIteration()
-    return self.iterator
+	return self.iterator
 end
 
 function Animation:getCurrentQuad()
-    return self.quads[self.iterator]
+	return self.quads[self.iterator]
 end

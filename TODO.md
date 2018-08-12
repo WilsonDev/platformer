@@ -1,1 +1,2 @@
 - Crushing ceiling
+- Teleport platform

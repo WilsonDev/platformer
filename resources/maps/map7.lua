@@ -1,7 +1,7 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.0.3",
+  tiledversion = "1.1.5",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 90,
@@ -14,6 +14,7 @@ return {
     {
       name = "PixelArtTest",
       firstgid = 1,
+      filename = "PixelArtTest.tsx",
       tilewidth = 8,
       tileheight = 8,
       spacing = 0,
@@ -71,13 +72,19 @@ return {
           }
         },
         {
+          id = 227,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 228,
           properties = {
             ["solid"] = ""
           }
         },
         {
-          id = 235,
+          id = 236,
           properties = {
             ["solid"] = ""
           }
@@ -107,9 +114,16 @@ return {
           }
         },
         {
-          id = 264,
-          properties = {
-            ["platform"] = ""
+          id = 255,
+          animation = {
+            {
+              tileid = 255,
+              duration = 500
+            },
+            {
+              tileid = 256,
+              duration = 400
+            }
           }
         },
         {
@@ -161,6 +175,18 @@ return {
           }
         },
         {
+          id = 297,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 298,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 303,
           properties = {
             ["solid"] = ""
@@ -197,7 +223,31 @@ return {
           }
         },
         {
-          id = 320,
+          id = 314,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 315,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 316,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 317,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 318,
           properties = {
             ["solid"] = ""
           }
@@ -227,6 +277,12 @@ return {
           }
         },
         {
+          id = 325,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 326,
           properties = {
             ["solid"] = ""
@@ -240,6 +296,18 @@ return {
         },
         {
           id = 329,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 337,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 338,
           properties = {
             ["solid"] = ""
           }

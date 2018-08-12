@@ -15,9 +15,9 @@ function MenuItem:new(menuItemLabel, menuItemY)
 	(function ()
 		local _, occurence = string.gsub(menuItemLabel, "[1]", "")
 		if occurence > 0 then
-			object.x = (960 - string.len(menuItemLabel) * object.charWidth + (occurence * 18)) / 2
+			object.x = (love.graphics.getWidth() - string.len(menuItemLabel) * object.charWidth + (occurence * 18)) / 2
 		else
-			object.x = (960 - string.len(menuItemLabel) * object.charWidth) / 2
+			object.x = (love.graphics.getWidth() - string.len(menuItemLabel) * object.charWidth) / 2
 		end
 
 		object.width = string.len(menuItemLabel) * object.charWidth

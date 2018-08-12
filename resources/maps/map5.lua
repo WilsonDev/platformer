@@ -1,19 +1,20 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.0.3",
+  tiledversion = "1.1.5",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 90,
   height = 15,
   tilewidth = 8,
   tileheight = 8,
-  nextobjectid = 35,
+  nextobjectid = 54,
   properties = {},
   tilesets = {
     {
       name = "PixelArtTest",
       firstgid = 1,
+      filename = "PixelArtTest.tsx",
       tilewidth = 8,
       tileheight = 8,
       spacing = 0,
@@ -59,12 +60,6 @@ return {
           }
         },
         {
-          id = 128,
-          properties = {
-            ["cloud"] = ""
-          }
-        },
-        {
           id = 197,
           properties = {
             ["pickup"] = ""
@@ -77,7 +72,19 @@ return {
           }
         },
         {
-          id = 235,
+          id = 227,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 228,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 236,
           properties = {
             ["solid"] = ""
           }
@@ -107,9 +114,16 @@ return {
           }
         },
         {
-          id = 264,
-          properties = {
-            ["platform"] = ""
+          id = 255,
+          animation = {
+            {
+              tileid = 255,
+              duration = 500
+            },
+            {
+              tileid = 256,
+              duration = 400
+            }
           }
         },
         {
@@ -137,6 +151,12 @@ return {
           }
         },
         {
+          id = 283,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 284,
           properties = {
             ["solid"] = ""
@@ -150,6 +170,24 @@ return {
         },
         {
           id = 286,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 297,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 298,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 303,
           properties = {
             ["solid"] = ""
           }
@@ -179,7 +217,67 @@ return {
           }
         },
         {
+          id = 309,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 314,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 315,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 316,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 317,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 318,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 321,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 322,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 323,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 324,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 325,
           properties = {
             ["solid"] = ""
           }
@@ -192,6 +290,36 @@ return {
         },
         {
           id = 328,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 329,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 337,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 338,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 341,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 342,
           properties = {
             ["solid"] = ""
           }
@@ -648,6 +776,23 @@ return {
           properties = {
             ["name"] = "warp_1",
             ["type"] = "warp"
+          }
+        },
+        {
+          id = 53,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 128,
+          y = 72,
+          width = 8,
+          height = 8,
+          rotation = 0,
+          gid = 23,
+          visible = true,
+          properties = {
+            ["name"] = "slime_3",
+            ["type"] = "slime"
           }
         }
       }

@@ -22,7 +22,7 @@ function Spring:new(objectName, springX, springY)
 end
 
 function Spring:update(dt)
-	local player = Global.p
+	local player = Global.player
 
 	if self:touchesObject(player) then
 		self.iterator = 2

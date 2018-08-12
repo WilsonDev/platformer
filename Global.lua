@@ -19,7 +19,7 @@ local Global = {
 
 	map = {},
 	camera = {},
-	p = {},
+	player = {},
 	objects = {},
 
 	firstMap = 5,
