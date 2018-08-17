@@ -1,7 +1,6 @@
 require "entity.Ammo"
 require "utils.Animation"
 
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Player = {}
@@ -128,8 +127,10 @@ function Player:draw()
 	end
 
 	if self.isSprint and self.xSpeed ~= 0 then
-		love.graphics.draw(sprite, self.sprintQuads[1], self.x - self.direction * (self.width * math.abs(0.5 + self.direction)), 
-			self.y - (self.height / 2), 0, self.xScale, 1, self.xOffset)
+		love.graphics.draw(sprite, self.sprintQuads[1],
+			self.x - self.direction * (self.width * math.abs(0.5 + self.direction)),
+			self.y - (self.height / 2),
+			0, self.xScale, 1, self.xOffset)
 	end
 
 	-- love.graphics.rectangle("line", self.x - (self.width / 2), self.y - (self.height / 2), self.width, self.height)
@@ -151,10 +152,10 @@ function Player:collide(event)
 end
 
 function Player:mapColliding(map, x, y)
-	local layer = Global.map.layers["ground"]
-	local tileX = math.floor(x / Global.map.tilewidth) + 1
-	local tileY = math.floor(y / Global.map.tileheight) + 1
-	if (Global.map.width < tileX or Global.map.height < tileY or tileX <= 0 or tileY <= 0) then
+	local layer = map.layers["ground"]
+	local tileX = math.floor(x / map.tilewidth) + 1
+	local tileY = math.floor(y / map.tileheight) + 1
+	if (map.width < tileX or map.height < tileY or tileX <= 0 or tileY <= 0) then
 		return false
 	end
 	local tile = layer.data[tileY][tileX]
@@ -162,10 +163,10 @@ function Player:mapColliding(map, x, y)
 	return tile and (tile.properties or {}).solid
 end
 
-function Player:enemyColliding()
+function Player:enemyColliding(entities)
 	--Kolizja z przeciwnikiem
 	for _, v in pairs({"behemoth", "slime", "mega_behemoth"}) do
-		local enemies = Global.objects[v] or {}
+		local enemies = entities[v] or {}
 		for _, w in pairs(enemies) do
 			if w:touchesObject(self) and not self.immune then
 				self.isPoked = true
@@ -197,26 +198,26 @@ function Player:enemyColliding()
 	end
 end
 
-function Player:ammoUpdate(dt)
+function Player:ammoUpdate(dt, world)
 	for i, v in ipairs(self.shots) do
-		v:update(dt)
+		v:update(dt, world)
 
 		if (v.distance > v.range or v.distance < - v.range)
-			or v:mapColliding(map, v.x + v.xScale * 2, v.y) then
+			or v:mapColliding(world.map, v.x + v.xScale * 2, v.y) then
 			v.toRemove = true
 		end
 
 		for _, w in pairs({"behemoth", "slime", "mega_behemoth"}) do
-			local enemies = Global.objects[w] or {}
+			local enemies = world.entities[w] or {}
 			for _, u in pairs(enemies) do 
 				if v:touchesObject(u) and not v.toRemove then
 					u.hitpoints = u.hitpoints - v.damage
 					if u.hitpoints <= 0 then
-						Global.objects[w][u.name] = nil
+						world.entities[w][u.name] = nil
 					end
 
 					v.toRemove = true
-					Global.score = Global.score + 50
+					world.score = world.score + 50
 					soundEvents:play("hit")
 				end
 			end
@@ -231,30 +232,30 @@ function Player:ammoUpdate(dt)
 	end
 end
 
-function Player:update(dt)
+function Player:update(dt, world)
 	local halfX = math.floor(self.width / 2)
 	local halfY = math.floor(self.height / 2)
 
-	self.ySpeed = self.ySpeed + (Global.gravity * dt)
+	self.ySpeed = self.ySpeed + (world.gravity * dt)
 
 	--Kolizje w pionie
 	local nextY = self.y + (self.ySpeed * dt)
 	if self.ySpeed < 0 then
-		if not (self:mapColliding(Global.map, self.x - halfX, nextY - halfY))
-		and not (self:mapColliding(Global.map, self.x + halfX - 1, nextY - halfY)) then
+		if not (self:mapColliding(world.map, self.x - halfX, nextY - halfY))
+		and not (self:mapColliding(world.map, self.x + halfX - 1, nextY - halfY)) then
 			self.y = nextY
 			self.onGround = false
 		else
-			self.y = nextY + Global.map.tileheight - ((nextY - halfY) % Global.map.tileheight)
+			self.y = nextY + world.map.tileheight - ((nextY - halfY) % world.map.tileheight)
 			self:collide("ceiling")
 		end
 	elseif self.ySpeed > 0 then
-		if not (self:mapColliding(Global.map, self.x - halfX, nextY + halfY))
-		and not (self:mapColliding(Global.map, self.x + halfX - 1, nextY + halfY)) then
+		if not (self:mapColliding(world.map, self.x - halfX, nextY + halfY))
+		and not (self:mapColliding(world.map, self.x + halfX - 1, nextY + halfY)) then
 			self.y = nextY
 			self.onGround = false
 		else
-			self.y = nextY - ((nextY + halfY) % Global.map.tileheight)
+			self.y = nextY - ((nextY + halfY) % world.map.tileheight)
 			self:collide("floor")
 		end
 	end
@@ -262,31 +263,33 @@ function Player:update(dt)
 	--Kolizje w poziomie
 	local nextX = self.x + (self.xSpeed * dt)
 	if self.xSpeed > 0 then
-		if not (self:mapColliding(Global.map, nextX + halfX, self.y - halfY))
-		and not (self:mapColliding(Global.map, nextX + halfX, self.y + halfY - 1)) then
+		if not (self:mapColliding(world.map, nextX + halfX, self.y - halfY))
+		and not (self:mapColliding(world.map, nextX + halfX, self.y + halfY - 1)) then
 			self.x = nextX
 		else
-			self.x = nextX - ((nextX + halfX) % Global.map.tilewidth)
+			self.x = nextX - ((nextX + halfX) % world.map.tilewidth)
 		end
 	elseif self.xSpeed < 0 then
-		if not (self:mapColliding(Global.map, nextX - halfX, self.y - halfY))
-		and not (self:mapColliding(Global.map, nextX - halfX, self.y + halfY - 1)) then
+		if not (self:mapColliding(world.map, nextX - halfX, self.y - halfY))
+		and not (self:mapColliding(world.map, nextX - halfX, self.y + halfY - 1)) then
 			self.x = nextX
 		else
-			self.x = nextX + Global.map.tilewidth - ((nextX - halfX) % Global.map.tilewidth)
+			self.x = nextX + world.map.tilewidth - ((nextX - halfX) % world.map.tilewidth)
 		end
 	end
 
 	--Ograniczenie ruchu do wielkości mapy
-	if self.x + self.width / 2 > Global.map.tilewidth * Global.map.width then
-		self.x = Global.map.tilewidth * Global.map.width - self.width / 2
+	if self.x + halfX > world.map.tilewidth * world.map.width then
+		self.x = world.map.tilewidth * world.map.width - halfX
+	elseif self.x - halfX < 0 then
+		self.x = halfX
 	end
 
 	--Aktualizacja pocisków
-	self:ammoUpdate(dt)
+	self:ammoUpdate(dt, world)
 
 	--Kolizja z przeciwnikami
-	self:enemyColliding()
+	self:enemyColliding(world.entities)
 
 	--Ograniczenie prędkości spadania
 	if self.ySpeed > 224 then
@@ -313,9 +316,7 @@ function Player:update(dt)
 		self:sprint()
 	end
 
-	if not love.keyboard.isDown("left")
-	and not love.keyboard.isDown("right")
-	and not self.isPoked then
+	if not love.keyboard.isDown("left") and not love.keyboard.isDown("right") and not self.isPoked then
 		self:stop()
 	end
 
@@ -324,9 +325,9 @@ function Player:update(dt)
 	self.state = self:getState()
 end
 
-function Player:isAlive()
+function Player:isAlive(map)
 	return not (self.hitpoints <= 0
-		or (self.y + math.floor(self.height / 2)) > Global.map.height * Global.map.tileheight)
+		or (self.y + math.floor(self.height / 2)) > map.height * map.tileheight)
 end
 
 function Player:getState()

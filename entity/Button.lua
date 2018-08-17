@@ -1,9 +1,8 @@
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Button = {}
 
-function Button:new(objectName, buttonX, buttonY)
+function Button:new(objectName, buttonX, buttonY, buttonProperties)
 	local object = {
 		name = objectName,
 		x = buttonX,
@@ -12,7 +11,7 @@ function Button:new(objectName, buttonX, buttonY)
 		height = 8,
 		iterator = 1,
 		isPressed = false,
-		interact = "",
+		interact = buttonProperties.interact or nil,
 		animationQuads = { --Klatki animacji
 			Quad(104, 104, 8, 8, 160, 144),
 			Quad(104, 112, 8, 8, 160, 144)}
@@ -23,15 +22,15 @@ end
 
 local clicked = false
 
-function Button:update(dt)
-	if self:touchesObject(Global.player) then
+function Button:update(dt, world)
+	if self:touchesObject(world.player) then
 		--[[if player.ySpeed > 0 then
 			player.y = self.y - self.height + 1
 			player:collide("floor")
 		end]]
 		if self.isPressed == false then
 			if self.interact ~= nil then
-				Global.objects["platform"][self.interact].isMoving = true
+				world.entities["platform"][self.interact].isMoving = true
 			end
 			--table.insert(Global.enemies, Behemoth:new('behemoth_0', 0, 28))
 			self.isPressed = true
@@ -51,7 +50,7 @@ end
 
 function Button:draw()
 	love.graphics.draw(sprite, self.animationQuads[self.iterator], self.x - (self.width / 2),
-			self.y - (self.height / 2))
+		self.y - (self.height / 2))
 end
 
 function Button:touchesObject(object)

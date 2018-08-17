@@ -99,7 +99,7 @@ function loadResources()
 
 	love.graphics.setBackgroundColor(31 / 255, 31 / 255, 31 / 255)
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	sprite = love.graphics.newImage("resources/images/PixelArtTest.png")
+	sprite = love.graphics.newImage("resources/images/spritesheet.png")
 	hud = love.graphics.newImage("resources/images/hud.png")
 	font = love.graphics.newFont("resources/images/visitor2.ttf", 38)
 	love.graphics.setFont(font)

@@ -1,7 +1,7 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.0.3",
+  tiledversion = "1.1.5",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 90,
@@ -14,11 +14,12 @@ return {
     {
       name = "PixelArtTest",
       firstgid = 1,
+      filename = "tileset.tsx",
       tilewidth = 8,
       tileheight = 8,
       spacing = 0,
       margin = 0,
-      image = "../images/PixelArtTest.png",
+      image = "../images/spritesheet.png",
       imagewidth = 160,
       imageheight = 144,
       tileoffset = {
@@ -77,13 +78,37 @@ return {
           }
         },
         {
-          id = 229,
+          id = 228,
           properties = {
             ["solid"] = ""
           }
         },
         {
-          id = 231,
+          id = 236,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 237,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 244,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 245,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 246,
           properties = {
             ["solid"] = ""
           }
@@ -126,7 +151,25 @@ return {
           }
         },
         {
+          id = 283,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 284,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 285,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 286,
           properties = {
             ["solid"] = ""
           }
@@ -144,7 +187,37 @@ return {
           }
         },
         {
+          id = 303,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 304,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 305,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 306,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 308,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 309,
           properties = {
             ["solid"] = ""
           }
@@ -180,6 +253,54 @@ return {
           }
         },
         {
+          id = 321,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 322,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 323,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 324,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 325,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 326,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 328,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 329,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
           id = 337,
           properties = {
             ["solid"] = ""
@@ -187,6 +308,30 @@ return {
         },
         {
           id = 338,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 341,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 342,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 344,
+          properties = {
+            ["solid"] = ""
+          }
+        },
+        {
+          id = 346,
           properties = {
             ["solid"] = ""
           }

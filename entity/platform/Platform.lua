@@ -1,6 +1,5 @@
 require "entity.platform.PlatformCheckpoint"
 
-local Global = require "Global"
 local StringUtils = require "utils.StringUtils"
 local Quad = love.graphics.newQuad
 
@@ -8,16 +7,16 @@ local init
 
 Platform = {}
 
-function Platform:new(objectName, platformX, platformY, platformPath, platformSize)
+function Platform:new(objectName, platformX, platformY, platformProperties)
 	object = {
 		name = objectName,
 		x = platformX,
 		y = platformY,
 		width = 8,
 		height = 8,
-		size = tonumber(platformSize), --rozmiar platformy
+		size = tonumber(platformProperties.size), --rozmiar platformy
 		xSpeed = 20, ySpeed = 20,
-		stringPath = platformPath,
+		stringPath = platformProperties.path,
 		currentCheckpoint = 1,
 		lastCheckpoint = 0,
 		isMoving = false,
@@ -53,9 +52,9 @@ function init(object)
 end
 
 function Platform:mapColliding(map, x, y)
-	local layer = Global.map.layers["ground"]
-	local tileX = math.floor(x / Global.map.tilewidth) + 1
-	local tileY = math.floor(y / Global.map.tileheight) + 1
+	local layer = map.layers["ground"]
+	local tileX = math.floor(x / map.tilewidth) + 1
+	local tileY = math.floor(y / map.tileheight) + 1
 	local tile = layer.data[tileY][tileX]
 
 	return tile and (tile.properties or {}).solid
@@ -133,23 +132,21 @@ function Platform:move(dt)
 	end
 end
 
-function Platform:update(dt)
-	local player = Global.player
-
+function Platform:update(dt, world)
 	self:move(dt)
 
-	if self:touchesObject(player) then
-		if player.ySpeed > 0 then
+	if self:touchesObject(world.player) then
+		if world.player.ySpeed > 0 then
 			self.isMoving = true
-			player.y = (self.y - self.height / 2) - (player.height / 2)
-			player:collide("platform")
+			world.player.y = (self.y - self.height / 2) - (world.player.height / 2)
+			world.player:collide("platform")
 			if self.ySpeed >= 0 then
-				player.ySpeed = self.ySpeed
+				world.player.ySpeed = self.ySpeed
 			else
-				player.ySpeed = 0
+				world.player.ySpeed = 0
 			end
-			if not player.isMoving then
-				player.xSpeed = self.xSpeed
+			if not world.player.isMoving then
+				world.player.xSpeed = self.xSpeed
 			end
 		end
 	end

@@ -1,4 +1,3 @@
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Warp = {}
@@ -15,12 +14,10 @@ function Warp:new(objectName, warpX, warpY)
 	return object
 end
 
-function Warp:update(dt)
-	local player = Global.player
-	
-	if self:touchesObject(player) then
-		Global.currentMap = Global.currentMap + 1
-		World:change("map" .. Global.currentMap)
+function Warp:update(dt, world)
+	if self:touchesObject(world.player) then
+		world.currentMap = world.currentMap + 1
+		world:change("map" .. world.currentMap)
 
 		soundEvents:play("warp")
 	end

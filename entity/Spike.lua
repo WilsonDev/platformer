@@ -1,4 +1,3 @@
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Spike = {}
@@ -18,14 +17,12 @@ function Spike:new(objectName, spikeX, spikeY)
 	return object
 end
 
-function Spike:update(dt)
-	local player = Global.player
-
-	if self:touchesObject(player) then
-		if player.immune == false then
-			player.immune = true
-			player.immuneTime = 2
-			player.hitpoints = player.hitpoints - 1
+function Spike:update(dt, world)
+	if self:touchesObject(world.player) then
+		if world.player.immune == false then
+			world.player.immune = true
+			world.player.immuneTime = 2
+			world.player.hitpoints = world.player.hitpoints - 1
 			soundEvents:play("punch")
 		end
 		--player:jump()

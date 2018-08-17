@@ -1,4 +1,3 @@
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Ammo = {}
@@ -66,9 +65,9 @@ function Ammo:splashAnimation(dt, delay, frames)
 end
 
 function Ammo:mapColliding(map, x, y)
-	local layer = Global.map.layers["ground"]
-	local tileX = math.floor(x / Global.map.tilewidth) + 1
-	local tileY = math.floor(y / Global.map.tileheight) + 1
+	local layer = map.layers["ground"]
+	local tileX = math.floor(x / map.tilewidth) + 1
+	local tileY = math.floor(y / map.tileheight) + 1
 	local tile = layer.data[tileY][tileX]
 
 	return tile and (tile.properties or {}).solid

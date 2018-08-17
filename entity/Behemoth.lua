@@ -1,6 +1,5 @@
 require "utils.Animation"
 
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Behemoth = {}
@@ -62,16 +61,16 @@ function Behemoth:collide(event)
 	end
 end
 
-function Behemoth:update(dt)
-	Slime.update(self, dt) -- Call the superclass function
+function Behemoth:update(dt, world)
+	Slime.update(self, dt, world) -- Call the superclass function
 
-	local distanceX = Global.player.x - self.x
-	local distanceY = Global.player.y - self.y
+	local distanceX = world.player.x - self.x
+	local distanceY = world.player.y - self.y
 	local distance = math.sqrt(math.pow(distanceX, 2) + math.pow(distanceY, 2))
 
 	if distance < 50 and math.abs(distanceY) < 20 then
 		self.isHunter = true
-		if Global.player.x < self.x then
+		if world.player.x < self.x then
 			self.direction = -1
 		else
 			self.direction = 1
@@ -81,8 +80,8 @@ function Behemoth:update(dt)
 	end
 end
 
-function Behemoth:fallDownDetection(halfX, halfY, nextX, nextY)
+function Behemoth:fallDownDetection(map, halfX, halfY, nextX, nextY)
 	if not self.isHunter then
-		Slime.fallDownDetection(self, halfX, halfY, nextX, nextY, 2) -- Call the superclass function
+		Slime.fallDownDetection(self, map, halfX, halfY, nextX, nextY, 2) -- Call the superclass function
 	end
 end

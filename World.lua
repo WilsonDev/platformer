@@ -1,4 +1,3 @@
-require "Camera"
 require "entity.Player"
 require "entity.Pickup"
 require "entity.Slime"
@@ -11,15 +10,30 @@ require "entity.Warp"
 require "entity.Acid"
 require "entity.platform.Platform"
 require "entity.Cloud"
+require "utils.Camera"
 
 local Global = require "Global"
-local STI = require "lib/SimpleTiledImpl/sti"
-local addToTable
+local CollectionUtils = require "utils.CollectionUtils"
+local STI = require "lib.SimpleTiledImpl.sti"
 
 World = {}
 
 function World:new()
-	local object = {}
+	local object = {
+		camera = {},
+		map = {},
+		firstMap = 5,
+		currentMap = 5,
+		player = {},
+		entities = {},
+		gravity = 760, --800
+		score = 0
+	}
+
+	object.camera = Camera:new()
+	object.camera.scaleX = Global.scale
+	object.camera.scaleY = Global.scale
+
 	setmetatable(object, { __index = World })
 	return object
 end
@@ -28,163 +42,134 @@ function World:init(level)
 	self:clean()
 
 	if level == nil then
-		level = "map" .. Global.currentMap
+		level = "map" .. self.currentMap
 	end
 	-- Mapa
-	Global.map = STI("resources/maps/" .. level .. ".lua")
+	self.map = STI("resources/maps/" .. level .. ".lua")
 
-	-- Chowamy warstwę obiektów
-	Global.map.layers["objects"].visible = false
-	local objectLayer = Global.map.layers["objects"]
+	local objectLayer = self.map.layers["objects"]
+	objectLayer.visible = false -- Hide object layer
 
 	for k, object in pairs(objectLayer.objects) do
 		if object.properties then
 			local objectName = object.properties.name
-			if object.properties.type == 'player' then
-				Global.player = Player:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
+			local objectType = object.properties.type
+			local objectPosX = object.x + object.width / 2
+			local objectPosY = object.y - object.height / 2
+
+			local entity
+			if objectType == 'player' then
+				self.player = Player:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'button' then
+				entity = Button:new(objectName, objectPosX, objectPosY, object.properties)
+			elseif objectType == 'spring' then
+				entity = Spring:new(objectName, objectPosX, objectPosY, object.properties)
+			elseif objectType == 'spike' then
+				entity = Spike:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'warp' then
+				entity = Warp:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'slime' then
+				entity = Slime:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'behemoth' then
+				entity = Behemoth:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'mega_behemoth' then
+				entity = MegaBehemoth:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'platform' then
+				entity = Platform:new(objectName, objectPosX, objectPosY, object.properties)
+			elseif objectType == 'acid' then
+				entity = Acid:new(objectName, objectPosX, objectPosY)
+			elseif objectType == 'pickup' then
+				entity = Pickup:new(objectName, objectPosX, objectPosY, object.properties)
 			end
-			if object.properties.type == 'button' then
-				local button = Button:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				button.interact = object.properties.interact
-				addToTable(Global.objects, object.properties.type, objectName, button)
-			end
-			if object.properties.type == 'spring' then
-				local spring = Spring:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				if object.properties.power then
-					spring.power = object.properties.power
-				end
-				addToTable(Global.objects, object.properties.type, objectName, spring)
-			end
-			if object.properties.type == 'spike' then
-				local spike = Spike:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				addToTable(Global.objects, object.properties.type, objectName, spike)
-			end
-			if object.properties.type == 'warp' then
-				local warp = Warp:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				addToTable(Global.objects, object.properties.type, objectName, warp)
-			end
-			if object.properties.type == 'slime' then
-				local slime = Slime:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				addToTable(Global.objects, object.properties.type, objectName, slime)
-			end
-			if object.properties.type == 'behemoth' then
-				local behemoth = Behemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				addToTable(Global.objects, object.properties.type, objectName, behemoth)
-			end
-			if object.properties.type == 'mega_behemoth' then
-				local behemoth = MegaBehemoth:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				addToTable(Global.objects, object.properties.type, objectName, behemoth)
-			end
-			if object.properties.type == 'platform' then
-				local platform = Platform:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.path, object.properties.size)
-				addToTable(Global.objects, object.properties.type, objectName, platform)
-			end
-			if object.properties.type == 'acid' then
-				local acid = Acid:new(objectName, object.x + object.width / 2, object.y - object.height / 2)
-				addToTable(Global.objects, object.properties.type, objectName, acid)
-			end
-			if object.properties.type == 'pickup' then
-				local pickup = Pickup:new(objectName, object.x + object.width / 2, object.y - object.height / 2, object.properties.value)
-				addToTable(Global.objects, object.properties.type, objectName, pickup)
+
+			if entity then
+				CollectionUtils.addToTable(self.entities, objectType, objectName, entity)
 			end
 		end
 	end
 
-	-- Kamera
-	Global.camera = Camera:new()
-	Global.camera.scaleX = Global.scale
-	Global.camera.scaleY = Global.scale
-	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (Global.windowWidth * Global.camera.scaleX),
-		(Global.map.height * Global.map.tileheight) - (Global.windowHeight * Global.camera.scaleX))
-end
-
-function addToTable(table, k1, k2, value)
-	if table[k1] == nil then
-		rawset(table, k1, {})
-	end
-	rawset(table[k1], k2, value)
+	self.camera:setBounds(0, 0, (self.map.width * self.map.tilewidth) - (Global.windowWidth * self.camera.scaleX),
+		(self.map.height * self.map.tileheight) - (Global.windowHeight * self.camera.scaleX))
 end
 
 function World:update(dt)
-	Global.player:update(dt)
-	Global.map:update(dt)
+	self.player:update(dt, self)
+	self.map:update(dt)
 
-	for _, v in pairs(Global.objects) do
+	for _, v in pairs(self.entities) do
 		for _, w in pairs(v) do
-			w:update(dt)
+			w:update(dt, self)
 		end
 	end
 
-	if Global.camera.activated then
-		Global.camera:flowX(dt, Global.player.x - Global.windowWidth / Global.map.tilewidth,
-			Global.player.y - Global.windowHeight / Global.map.tileheight, 80)
+	if self.camera.activated then
+		self.camera:flowX(dt, self.player.x - Global.windowWidth / self.map.tilewidth,
+			self.player.y - Global.windowHeight / self.map.tileheight, 80)
 	else
-		Global.camera:setPosition(Global.player.x - Global.windowWidth / Global.map.tilewidth,
-			Global.player.y - Global.windowHeight / Global.map.tileheight)
+		self.camera:setPosition(self.player.x - Global.windowWidth / self.map.tilewidth,
+			self.player.y - Global.windowHeight / self.map.tileheight)
 	end
 end
 
 function World:draw()
-	Global.camera:set()
+	self.camera:set()
 
-	--removed in STI v0.18.1.0
-	--Global.map:setDrawRange(0, 0, Global.map.width * Global.map.tilewidth, Global.map.height * Global.map.tileheight)
-	Global.map:draw()
+	self.map:draw()
 
-	for _, v in pairs(Global.objects) do
+	for _, v in pairs(self.entities) do
 		for _, w in pairs(v) do
 			w:draw()
 		end
 	end
 
-	Global.player:draw()
+	self.player:draw()
 
-	Global.camera:unset()
+	self.camera:unset()
 
-	if Global.player.immune then
+	if self.player.immune then
 		love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
 	end
 	if Global.debug then
-		Debug:info(math.floor(Global.player.x + 0.5), math.floor(Global.player.y + 0.5), Global.score)
+		Debug:info(math.floor(self.player.x + 0.5), math.floor(self.player.y + 0.5), self.score)
 	end
 	love.graphics.draw(hud, love.graphics.getWidth() - 168, 10, 0, 4, 4)
-	for i = 1, Global.player.hitpoints do
+	for i = 1, self.player.hitpoints do
 		love.graphics.draw(sprite, heart, love.graphics.getWidth() - 20 - (i * 28), 22, 0, 4, 4)
 	end
-	for i = 1, (5 - Global.player.firedShots) do
+	for i = 1, (5 - self.player.firedShots) do
 		love.graphics.draw(sprite, clip, love.graphics.getWidth() - 20 - (i * 28), 46, 0, 4, 4)
 	end
 end
 
 --Czyszczenie mapy z obiektów
 function World:clean()
-	for k, v in pairs(Global.objects) do
+	for k, v in pairs(self.entities) do
 		for l, w in pairs(v) do
-			Global.objects[k][l] = nil
+			self.entities[k][l] = nil
 		end
-		Global.objects[k] = nil
+		self.entities[k] = nil
 	end
 end
 
 function World:change(level)
 	self:init(level)
-	Global.camera:setBounds(0, 0, (Global.map.width * Global.map.tilewidth) - (Global.windowWidth * Global.camera.scaleX),
-		(Global.map.height * Global.map.tileheight) - (Global.windowHeight * Global.camera.scaleX))
+	self.camera:setBounds(0, 0, (self.map.width * self.map.tilewidth) - (Global.windowWidth * self.camera.scaleX),
+		(self.map.height * self.map.tileheight) - (Global.windowHeight * self.camera.scaleX))
 end
 
 function World:keyreleased(key)
-	Global.player:keyreleased(key)
+	self.player:keyreleased(key)
 end
 
 function World:keypressed(key)
-	Global.player:keypressed(key)
+	self.player:keypressed(key)
 
 	if key == "l" then
-		if Global.camera.stop == false then
-			Global.camera.stop = true
+		if self.camera.stop == false then
+			self.camera.stop = true
 		else
-			Global.camera.stop = false
-			Global.camera.activated = true
+			self.camera.stop = false
+			self.camera.activated = true
 		end
 	end
 end

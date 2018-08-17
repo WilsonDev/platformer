@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="PixelArtTest" tilewidth="8" tileheight="8" tilecount="360" columns="20">
- <image source="../images/PixelArtTest.png" width="160" height="144"/>
+<tileset name="tileset" tilewidth="8" tileheight="8" tilecount="360" columns="20">
+ <image source="../images/spritesheet.png" width="160" height="144"/>
  <tile id="0">
   <properties>
    <property name="behemoth" value=""/>
@@ -238,6 +238,11 @@
   </properties>
  </tile>
  <tile id="344">
+  <properties>
+   <property name="solid" value=""/>
+  </properties>
+ </tile>
+ <tile id="345">
   <properties>
    <property name="solid" value=""/>
   </properties>

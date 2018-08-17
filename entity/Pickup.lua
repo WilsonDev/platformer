@@ -1,30 +1,28 @@
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Pickup = {}
 
-function Pickup:new(objectName, pickupX, pickupY, pickupValue)
+function Pickup:new(objectName, pickupX, pickupY, pickupProperties)
 	local object = {
 		name = objectName,
 		x = pickupX,
 		y = pickupY,
 		width = 8,
 		height = 8,
-		value = pickupValue,
+		value = pickupProperties.value or 0,
 		quads = Quad(136, 72, 8, 8, 160, 144) --Klatki animacji
 	}
 	setmetatable(object, { __index = Pickup })
 	return object
 end
 
-function Pickup:update(dt)
-	local player = Global.player
-	if self:touchesObject(player) then
-		Global.objects["pickup"][self.name] = nil
+function Pickup:update(dt, world)
+	if self:touchesObject(world.player) then
+		world.entities["pickup"][self.name] = nil
 		--table.remove(Global.pickups, self.name)
-		Global.score = Global.score + self.value
-		if player.hitpoints < 3 then
-			player.hitpoints = player.hitpoints + 1
+		world.score = world.score + self.value
+		if world.player.hitpoints < 3 then
+			world.player.hitpoints = world.player.hitpoints + 1
 		end
 		soundEvents:play("select")
 	end

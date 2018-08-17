@@ -1,6 +1,5 @@
 require "utils.Animation"
 
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Acid = {}
@@ -67,12 +66,10 @@ function Acid:getState()
 	return myState
 end
 
-function Acid:update(dt)
-	local player = Global.player
-
-	if self:mapColliding(Global.map, self.x, self.y + (self.height / 2)) and not self.isFallen then
-		local tileY = math.floor(self.y / Global.map.tileheight)
-		self.y = tileY * Global.map.tileheight + 4
+function Acid:update(dt, world)
+	if self:mapColliding(world.map, self.x, self.y + (self.height / 2)) and not self.isFallen then
+		local tileY = math.floor(self.y / world.map.tileheight)
+		self.y = tileY * world.map.tileheight + 4
 		self.isFallen = true
 	end
 
@@ -95,12 +92,12 @@ function Acid:update(dt)
 		animationOperator:setIteration(1)
 	end
 
-	if self:touchesObject(player) then
-		if player.immune == false then
+	if self:touchesObject(world.player) then
+		if world.player.immune == false then
 			soundEvents:play("punch")
-			player.immune = true
-			player.immuneTime = 2
-			player.hitpoints = player.hitpoints - 1
+			world.player.immune = true
+			world.player.immuneTime = 2
+			world.player.hitpoints = world.player.hitpoints - 1
 		end
 	end
 
@@ -108,9 +105,9 @@ function Acid:update(dt)
 end
 
 function Acid:mapColliding(map, x, y)
-	local layer = Global.map.layers["ground"]
-	local tileX = math.floor(x / Global.map.tilewidth) + 1
-	local tileY = math.floor(y / Global.map.tileheight) + 1
+	local layer = map.layers["ground"]
+	local tileX = math.floor(x / map.tilewidth) + 1
+	local tileY = math.floor(y / map.tileheight) + 1
 	local tile = layer.data[tileY][tileX]
 
 	return tile and (tile.properties or {}).solid

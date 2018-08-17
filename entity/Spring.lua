@@ -1,9 +1,8 @@
-local Global = require "Global"
 local Quad = love.graphics.newQuad
 
 Spring = {}
 
-function Spring:new(objectName, springX, springY)
+function Spring:new(objectName, springX, springY, springProperties)
 	local object = {
 		name = objectName,
 		x = springX,
@@ -11,7 +10,7 @@ function Spring:new(objectName, springX, springY)
 		width = 8,
 		height = 8,
 		iterator = 1,
-		power = 120,
+		power = springProperties.power or 120,
 		isPressed = false,
 		animationQuads = { --Klatki animacji
 			Quad(96, 104, 8, 8, 160, 144),
@@ -21,14 +20,12 @@ function Spring:new(objectName, springX, springY)
 	return object
 end
 
-function Spring:update(dt)
-	local player = Global.player
-
-	if self:touchesObject(player) then
+function Spring:update(dt, world)
+	if self:touchesObject(world.player) then
 		self.iterator = 2
-		player:specialJump(self.power)
+		world.player:specialJump(self.power)
 		soundEvents:play("jump")
-	elseif player.ySpeed > 0 then
+	elseif world.player.ySpeed > 0 then
 		self.iterator = 1
 	end
 end

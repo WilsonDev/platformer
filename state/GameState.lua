@@ -1,7 +1,5 @@
 require "World"
 
-local Global = require "Global"
-
 GameState = {}
 
 function GameState:new()
@@ -14,20 +12,19 @@ function GameState:new()
 end
 
 function GameState:init()
-	Global.currentMap = Global.firstMap
+	self.world.currentMap = self.world.firstMap
 	self.world = World:new()
 	self.world:init()
 
 	mainTheme:play()
 
 	self.isEnd = false
-	Global.score = 0
 end
 
 function GameState:update(dt)
 	self.world:update(dt)
 
-	if not Global.player:isAlive() then
+	if not self.world.player:isAlive(self.world.map) then
 		mainTheme:stop()
 		self.isEnd = true
 	end

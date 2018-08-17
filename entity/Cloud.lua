@@ -29,11 +29,11 @@ function Cloud:draw()
 	end
 end
 
-function Cloud:update(dt)
+function Cloud:update(dt, world)
 	local halfX = math.floor(self.width / 2)
 	self.x = self.x + (self.xSpeed * dt)
 
-	if (self.x - halfX > Global.map.tilewidth * Global.map.width) then
+	if (self.x - halfX > world.map.tilewidth * world.map.width) then
 		self.x = -16
 	end
 end

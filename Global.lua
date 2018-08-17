@@ -10,20 +10,9 @@ local Global = {
 	windowWidth = love.graphics.getWidth(),
 
 	properties = {},
-
-	score = 0,
 	scores = {},
-	gravity = 760, --800
 
-	scale = 0.25,
-
-	map = {},
-	camera = {},
-	player = {},
-	objects = {},
-
-	firstMap = 5,
-	currentMap = 5, --indeks
+	scale = 0.25
 }
 
 return Global
