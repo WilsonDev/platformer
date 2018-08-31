@@ -19,7 +19,7 @@ function Platform:new(objectName, platformX, platformY, platformProperties)
 		stringPath = platformProperties.path,
 		currentCheckpoint = 1,
 		lastCheckpoint = 0,
-		isMoving = false,
+		isMoving = true,
 		path = {}, --metoda init
 		quads = {} --metoda init
 	}
@@ -61,9 +61,6 @@ function Platform:mapColliding(map, x, y)
 end
 
 function Platform:move(dt)
-	local nextX = self.x + (self.xSpeed * dt)
-	local nextY = self.y + (self.ySpeed * dt)
-
 	if not self.isMoving then
 		return
 	end
@@ -79,7 +76,7 @@ function Platform:move(dt)
 	end
 
 	if checkpointTo ~= nil then
-		local xModifier = 1 
+		local xModifier = 1
 		local yModifier = 1
 		local dxFrom = math.abs(checkpointFrom.x - checkpointTo.x)
 		local dyFrom = math.abs(checkpointFrom.y - checkpointTo.y)
@@ -101,7 +98,8 @@ function Platform:move(dt)
 			else
 				self.xSpeed = -math.abs(self.xSpeed) * xModifier
 			end
-			self.x = nextX
+			-- nextX
+			self.x = self.x + (self.xSpeed * dt)
 		else
 			self.xSpeed = 0
 		end
@@ -113,7 +111,8 @@ function Platform:move(dt)
 			else
 				self.ySpeed = -math.abs(self.ySpeed) * yModifier
 			end
-			self.y = nextY
+			-- nextY
+			self.y = self.y + (self.ySpeed * dt)
 		else
 			self.ySpeed = 0
 		end

@@ -31,6 +31,14 @@
    <property name="warp" value=""/>
   </properties>
  </tile>
+ <tile id="226">
+  <animation>
+   <frame tileid="226" duration="200"/>
+   <frame tileid="225" duration="200"/>
+   <frame tileid="224" duration="200"/>
+   <frame tileid="223" duration="200"/>
+  </animation>
+ </tile>
  <tile id="227">
   <properties>
    <property name="solid" value=""/>
