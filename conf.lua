@@ -1,5 +1,5 @@
 function love.conf(t)
-  t.title = "Generic Platformer"
+  t.title = "2D Platformer"
 
   t.window.fullscreen = false
   t.window.width = 960

@@ -31,9 +31,6 @@ function SubmitScoreState:update(dt)
 end
 
 function SubmitScoreState:draw()
-  love.graphics.print(Global.title, 10, 5)
-  love.graphics.print(Global.copyright, 10, 285)
-
   love.graphics.print("ENTER INITIALS", 350, 100)
 
   for i, char in ipairs(self.submitName) do

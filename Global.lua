@@ -1,10 +1,10 @@
 -- Zmienne globalne
 
 local Global = {
-  title = "GENERIC PLATFORMER",
-  copyright = "(C) 2021 WILSON",
+  title = "2D PLATFORMER",
+  copyright = "(C) 2021 LUKASZ SZYPLINSKI",
 
-  debug = true,
+  debug = false,
 
   windowHeight = love.graphics.getHeight(),
   windowWidth = love.graphics.getWidth(),

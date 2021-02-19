@@ -21,6 +21,6 @@ function Debug:info(x, y)
 end
 
 function Debug:score(score)
-  local lg = love.graphics
-  lg.print("score: " .. tostring(score), (love.graphics.getWidth() - 100) / 2, 5)
+  -- local lg = love.graphics
+  -- lg.print("score: " .. tostring(score), (love.graphics.getWidth() - 100) / 2, 5)
 end

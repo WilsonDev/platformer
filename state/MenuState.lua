@@ -57,7 +57,7 @@ end
 
 function MenuState:draw()
   love.graphics.print(Global.title, 10, 5)
-    love.graphics.print(Global.copyright, 10, 285)
+  love.graphics.print(Global.copyright, 10, 285)
 
   for _, v in ipairs(self.menuItems) do
     v:draw()

@@ -105,7 +105,7 @@ function loadResources()
   love.graphics.setDefaultFilter("nearest", "nearest")
   sprite = love.graphics.newImage("resources/images/spritesheet.png")
   hud = love.graphics.newImage("resources/images/hud.png")
-  font = love.graphics.newFont("resources/images/visitor2.ttf", 38)
+  font = love.graphics.newFont("resources/fonts/visitor2.ttf", 38)
   love.graphics.setFont(font)
 
   heart = love.graphics.newQuad(32, 40, 8, 8, 160, 144)
@@ -120,7 +120,7 @@ function loadResources()
   soundEvents:addSound("jump", love.audio.newSource("resources/sounds/jump.wav", "static"))
   soundEvents:addSound("warp", love.audio.newSource("resources/sounds/warp.wav", "static"))
 
-  mainTheme = love.audio.newSource("resources/sounds/Underclocked.mp3", "stream")
+  mainTheme = love.audio.newSource("resources/music/Underclocked.mp3", "stream")
   mainTheme:setLooping(true)
   mainTheme:setVolume(0.5)
 end

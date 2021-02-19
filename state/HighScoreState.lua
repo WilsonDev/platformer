@@ -21,9 +21,6 @@ function HighScoreState:update(dt)
 end
 
 function HighScoreState:draw()
-  love.graphics.print(Global.title, 10, 5)
-  love.graphics.print(Global.copyright, 10, 285)
-
   local prefix = ""
   for i, score, name in Global.scores() do
     if i == 1 then
