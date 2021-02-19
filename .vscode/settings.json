@@ -1,2 +1,7 @@
 {
+  "editor.tabSize": 2,
+  "Lua.diagnostics.globals": [
+    "love"
+  ],
+  "Lua.runtime.version": "LuaJIT"
 }

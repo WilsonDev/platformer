@@ -1,5 +1,4 @@
-
 return {
-	AUDIO = 'AUDIO',
-	VSYNC = 'VSYNC'
+  AUDIO = 'AUDIO',
+  VSYNC = 'VSYNC'
 }
