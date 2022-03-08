@@ -2,6 +2,16 @@
 
 Simple 2D platformer written in [LÖVE](https://love2d.org)
 
+## Features
+
+- Custom spritesheet and animations
+- Move, jump, shoot (remember to reload ammunition!)
+- Different types of enemmies - bigger ones will chase you!
+- Different obstacles - spikes, acid drops
+- Moving platforms, spring platforms
+- Top 10 scores
+- Settings for Audio and VSync
+
 ## Screenshots
 
 <p align="center">
@@ -34,6 +44,10 @@ git clone https://github.com/WilsonDev/platformer.git
 cd platformer
 love .
 ```
+
+## TODO
+
+- [ ] More levels
 
 ## Licensing
 
