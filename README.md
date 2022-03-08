@@ -37,6 +37,7 @@ Simple 2D platformer written in [LÖVE](https://love2d.org)
 ## Installation
 
 - Clone the repository
+- Install [LÖVE](https://love2d.org) 
 - Run LÖVE in the project
 
 ```zsh
