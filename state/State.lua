@@ -22,7 +22,7 @@ function State:new()
 end
 
 -- TODO init all states
-function State:set(name)
+function State:set(name, additionalConfig)
   local StateToSet = STATES[STATE_NAMES.MENU]
 
   if name == STATE_NAMES.EXIT then
@@ -40,6 +40,12 @@ function State:set(name)
     lastSelectedItem = self.lastSelectedItem
   }
 
+  if (additionalConfig) then
+    for k, v in pairs(additionalConfig) do
+      config[k] = v
+    end
+  end
+
   self.currentState = StateToSet:new(config)
   self.currentState:init()
 
@@ -54,7 +60,10 @@ function State:update(dt)
   self.currentState:update(dt)
 
   if self.currentState.isEnd then
-    self:set("submit")
+    local config = {
+      score = self.currentState:getScore()
+    }
+    self:set(STATE_NAMES.SUBMIT_SCORE, config)
   end
 
   if self.currentState.itemSelected then

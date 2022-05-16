@@ -9,12 +9,13 @@ local alphabet = {
   '1', '2', '3', '4', '5', '6', '7', '8', '9'
 }
 
-function SubmitScoreState:new()
+function SubmitScoreState:new(config)
   local object = {
     charSelected = 1,
     itemSelected = 1,
     submitName = {},
-    parentMenu = "scores"
+    parentMenu = "scores",
+    score = (config and config.score) or nil
   }
   setmetatable(object, { __index = SubmitScoreState })
   return object
@@ -94,6 +95,6 @@ function SubmitScoreState:keypressed(key)
       name = name .. self.submitName[i]
     end
 
-		Global.scores:add(name, Global.score)
+		Global.scores:add(name, self.score)
 	end
 end

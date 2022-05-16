@@ -41,3 +41,7 @@ end
 function GameState:keypressed(key)
   self.world:keypressed(key)
 end
+
+function GameState:getScore()
+  return self.world.score
+end

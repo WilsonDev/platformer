@@ -61,13 +61,13 @@ function handleVsyncPropertyChange()
 end
 
 function initScores(scores)
-  if scores:size() == 0 then
+  if Global.scores:size() == 0 then
     for i = 1, 10 do
-      scores:add("AAA", 0)
+      Global.scores:add("AAA", 0)
     end
-    scores:save()
+    Global.scores:save()
   end
-  assert(scores:size() == 10, "Invalid number of scores!")
+  assert(Global.scores:size() == 10, "Invalid number of scores!")
 end
 
 function initProperties(properties)
