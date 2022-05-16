@@ -105,8 +105,8 @@ function World:draw()
   self.map:draw()
 
   for _, v in pairs(self.entities) do
-    for _, w in pairs(v) do
-      w:draw()
+    for _, entity in pairs(v) do
+      entity:draw()
     end
   end
 
@@ -119,14 +119,9 @@ function World:draw()
     love.graphics.translate(8 * (math.random() - 0.5), 8 * (math.random() - 0.5))
   end
 
-  --[[ Debug info + score --]]
-  if Global.debug then
-    Debug:info(math.floor(self.player.x + 0.5), math.floor(self.player.y + 0.5))
-  end
-  Debug:score(self.score)
-
   --[[ Draw HUD --]]
   love.graphics.draw(hud, love.graphics.getWidth() - 168, 10, 0, 4, 4)
+  love.graphics.print({ { 196 / 255, 207 / 255, 161 / 255 }, self.score }, 10, 5)
 
   for i = 1, self.player.hitpoints do
     love.graphics.draw(sprite, heart, love.graphics.getWidth() - 20 - (i * 28), 22, 0, 4, 4)
@@ -134,6 +129,11 @@ function World:draw()
 
   for i = 1, (5 - self.player.firedShots) do
     love.graphics.draw(sprite, clip, love.graphics.getWidth() - 20 - (i * 28), 46, 0, 4, 4)
+  end
+
+  --[[ Debug info --]]
+  if Global.debug then
+    Debug:info(math.floor(self.player.x + 0.5), math.floor(self.player.y + 0.5))
   end
 end
 

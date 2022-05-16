@@ -32,17 +32,22 @@ function SubmitScoreState:update(dt)
 end
 
 function SubmitScoreState:draw()
+  love.graphics.setColor(196 / 255, 207 / 255, 161 / 255)
+
   love.graphics.print("ENTER INITIALS", 350, 100)
 
   for i, char in ipairs(self.submitName) do
     love.graphics.print(char, 400 + 30 * i, 160)
   end
-  
+
+  --[[ Character underline]]
   for i = 1, 3 do
     if i == self.itemSelected then
       love.graphics.rectangle("fill", 400 + 30 * i, 190, 16, 3)
     end
   end
+
+  love.graphics.setColor(1, 1, 1)
 end
 
 function SubmitScoreState:keyreleased(key)

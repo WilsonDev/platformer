@@ -32,9 +32,12 @@ function HighScoreState:draw()
     else
       prefix = i .. "TH"
     end
+
+    love.graphics.setColor(196 / 255, 207 / 255, 161 / 255)
     love.graphics.print(prefix, 355, 10 + 30 * (i - 1))
     love.graphics.print(name, 455, 10 + 30 * (i - 1))
     love.graphics.print(score, 555, 10 + 30 * (i - 1))
+    love.graphics.setColor(1, 1, 1)
   end
 end
 

@@ -56,12 +56,16 @@ function MenuState:update(dt)
 end
 
 function MenuState:draw()
+  love.graphics.setColor(196 / 255, 207 / 255, 161 / 255)
+
   love.graphics.print(Global.title, 10, 5)
   love.graphics.print(Global.copyright, 10, 285)
 
   for _, v in ipairs(self.menuItems) do
     v:draw()
   end
+
+  love.graphics.setColor(1, 1, 1)
 end
 
 function MenuState:keyreleased(_)

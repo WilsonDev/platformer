@@ -24,9 +24,13 @@ function ControlsMenuState:update(dt)
 end
 
 function ControlsMenuState:draw()
+  love.graphics.setColor(196 / 255, 207 / 255, 161 / 255)
+
   for _, v in ipairs(self.menuItems) do
     v:draw()
   end
+
+  love.graphics.setColor(1, 1, 1)
 end
 
 function ControlsMenuState:keyreleased(key)
